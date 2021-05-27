@@ -46,10 +46,10 @@ export default class extends React.Component {
 
         return (
 
-            <div style={{ display: 'inline-block', height: '42px' }}>
+            <div style={{ display: 'inline-block', height: '42px', WebkitAppRegion: 'drag'}}>
 
-                {/* Handle */}
-                <Stack {...sharedStackProps} style={{ ...topCenterStyle, WebkitAppRegion: 'drag' }}>
+                {/* Handle decor */}
+                <Stack {...sharedStackProps} style={topCenterStyle}>
                     <DefaultButton
                         style={{ borderRadius: '20px', width: '16px', height: '8px', margin: '0px 8px' }}
                         disabled
@@ -64,6 +64,7 @@ export default class extends React.Component {
                         <TooltipHost content="Close">
                             <IconButton
                                 iconProps={{ iconName: 'CircleFill' }}
+                                style={{WebkitAppRegion: 'no-drag'}}
                                 styles={{ 
                                     root: { color: '#ff6159' },
                                     rootHovered: { color: '#ff6159' },
@@ -84,6 +85,7 @@ export default class extends React.Component {
                         <TooltipHost content="Always show on top">
                             <IconButton
                                 iconProps={{ iconName: 'Pinned' }}
+                                style={{WebkitAppRegion: 'no-drag'}}
                                 styles={{ root: { color: '#ffffff' } }}
                                 toggle={true}
                                 checked={true}
@@ -96,6 +98,7 @@ export default class extends React.Component {
                         <TooltipHost content="Close">
                             <IconButton
                                 iconProps={{ iconName: 'Cancel' }}
+                                style={{WebkitAppRegion: 'no-drag'}}
                                 styles={{ root: { color: '#ffffff' } }}
                                 onClick={() => window.close()}
                             />

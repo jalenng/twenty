@@ -89,7 +89,7 @@ export default class extends React.Component {
 
                 {/* Attributions to open-source libraries */}
                 <Stack {...level2Props}>
-                    <Text variant={'xLarge'} block> Open-source libraries </Text>
+                    <Text variant={'xLarge'} block> Open source libraries </Text>
 
                     <div style={{ display: 'inline' }}>
 

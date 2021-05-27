@@ -10,7 +10,6 @@ const sharedWindowOptions = {
     minimizable: false,
     maximizable: false,
     show: false,
-    modal: true,
     frame: false,
     transparent: true,
     webPreferences: {
@@ -52,7 +51,6 @@ ipcMain.handle('open-preferences', event => {
     global.prefsWindow = openPopup({
         width: 800,
         height: 500,
-        title: 'Preferences',
-        parent: global.mainWindow
+        title: 'Preferences'
     }, 'prefs');
 })
