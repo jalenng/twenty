@@ -7,10 +7,10 @@ and displaying UI elements is handled exclusively by React.
 */
 
 // Allow access to core Electron APIs when testing
-if (process.env.NODE_ENV === 'test') 
+if (process.env.NODE_ENV === 'test')
     window.electronRequire = require;
 
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, shell } = require('electron');
 
 
 /*---------------------------------------------------------------------------*/
@@ -64,61 +64,6 @@ window.store = {
         /* Event system */
         eventSystem: new EventSystem()
     },
-    accounts: {
-        /**
-         * Retrieve the local accounts
-         * @returns {Object}
-         */
-        getAll: () => { return ipcRenderer.sendSync('get-store', 'accounts') },
-
-        /**
-         * Authenticate the user with an existing account
-         * @param {String} email the email address of the account
-         * @param {String} password the password of the account
-         * @returns {Object} the response of the sign-in attempt
-         */
-        signIn: (email, password) => { return ipcRenderer.invoke('authenticate', email, password) },
-
-        /**
-         * Create an account and authenticate the user with it
-         * @param {String} email the email address of the new account
-         * @param {String} password the password of the new account
-         * @param {String} displayName the display name of the new account
-         * @returns {Object} the response of the sign-up attempt
-         */
-        signUp: (email, password, displayName) => {
-            return ipcRenderer.invoke('authenticate', email, password, true, displayName)
-        },
-
-        /**
-         * Sign out of the logged-in account
-         */
-        signOut: () => { return ipcRenderer.invoke('sign-out', false) },
-
-        /**
-         * Delete the logged-in account and sign out
-         * @param {String} password The existing password for confirmation
-         */
-        delete: (password) => { return ipcRenderer.invoke('sign-out', true, password) },
-
-        /**
-         * Fetch the latest account information from the backend
-         */
-        fetchInfo: () => { return ipcRenderer.invoke('fetch-account-info') },
-
-        /**
-         * Update accounts information on the backend
-         * @param {String} email The new email
-         * @param {String} displayName The new displayname
-         * @param {String} password The existing password for confirmation
-         */
-        updateInfo: (email, displayName, password) => {
-            return ipcRenderer.invoke('update-account-info', email, displayName, password)
-        },
-
-        /* Event system */
-        eventSystem: new EventSystem()
-    },
     sounds: {
         /**
          * Retrieve the local sounds
@@ -134,42 +79,6 @@ window.store = {
         /* Event system */
         eventSystem: new EventSystem()
     },
-    dataUsage: {
-        /**
-         * Retrieve the local data usage
-         * @returns {Object}
-         */
-        getAll: () => { return ipcRenderer.sendSync('get-store', 'dataUsage') },
-
-        /**
-         * Fetch data usage from the backend
-         */
-        fetch: () => { return ipcRenderer.invoke('fetch-data-usage') },
-
-        /**
-         * Update data usage on the backend
-         */
-        push: () => { return ipcRenderer.invoke('push-data-usage') },
-
-        /* Event system */
-        eventSystem: new EventSystem()
-    },
-    insights: {
-        /**
-         * Retrieve the local insights
-         * @returns {Object}
-         */
-        getAll: () => { return ipcRenderer.sendSync('get-store', 'insights') },
-
-        /**
-         * Fetch insights from the backend
-         * @returns {Object}
-         */
-        fetch: () => { return ipcRenderer.invoke('fetch-insights') },
-
-        /* Event system */
-        eventSystem: new EventSystem()
-    },
     appNames: {
         /**
          * Retrieve the dictionary of friendly app names
@@ -177,54 +86,8 @@ window.store = {
          */
         getAll: () => { return ipcRenderer.sendSync('get-store', 'appNames') },
     },
-    messages: {
-        /**
-         * Retrieve the list of in-app messages
-         * @returns {Object}
-         */
-        getAll: () => { return ipcRenderer.sendSync('get-messages') },
-
-        /**
-         * Add an in-app message
-         */
-        add: (message) => { ipcRenderer.invoke('add-message', message) },
-
-        /**
-         * Dismiss an in-app message
-         */
-        dismiss: (index) => { ipcRenderer.invoke('dismiss-message', index) },
-        
-        /* Event system */
-        eventSystem: new EventSystem()
-    },
     reset: () => { return ipcRenderer.invoke('reset-store') }
 }
-
-
-/*---------------------------------------------------------------------------*/
-/* Popup window helper functions */
-window.showPopup = {
-    /**
-     * Open the "Sign in" popup window
-     */
-    signIn: () => { ipcRenderer.invoke('show-sign-in-popup') },
-
-    /**
-     * Open the "Delete account" popup window
-     */
-    deleteAccount: () => { ipcRenderer.invoke('show-delete-account-popup') },
-
-    /**
-     * Open the "Edit account" popup window
-     */
-    editAccount: () => { ipcRenderer.invoke('show-edit-account-popup') },
-
-    /**
-     * Open the popup timer window
-     */
-    timer: () => { ipcRenderer.invoke('show-timer-popup') }
-}
-
 
 /*---------------------------------------------------------------------------*/
 /* Timer, break, and blocker system helper functions */
@@ -242,7 +105,7 @@ window.breakSys = {
 }
 
 window.blockerSys = {
-    getBlockers: () => {ipcRenderer.send('get-blockers')},
+    getBlockers: () => { ipcRenderer.send('get-blockers') },
     clear: () => { ipcRenderer.invoke('clear-blockers') },
     eventSystem: new EventSystem()
 }
@@ -250,6 +113,11 @@ window.blockerSys = {
 
 /*---------------------------------------------------------------------------*/
 /* Other functions */
+
+/**
+ * Open the preferences window
+ */
+window.openPrefs = () => { ipcRenderer.invoke('open-preferences') }
 
 /**
  * Play the selected notification sound in preferences
@@ -278,6 +146,11 @@ window.logToMain = (content) => { ipcRenderer.invoke('log-to-main', content) }
 window.restartApp = () => { ipcRenderer.invoke('restart-app') }
 
 /**
+ * Opens a link in an external browser
+ */
+window.openExternalLink = link => { shell.openExternal(link) }
+
+/**
  * A boolean that tells whether or not this app is running in a dev environment
  */
 window.isDev = ipcRenderer.sendSync('is-dev');
@@ -286,17 +159,6 @@ window.isDev = ipcRenderer.sendSync('is-dev');
  * A string that indicates the current platform the app is running on
  */
 window.platform = ipcRenderer.sendSync('get-platform');
-
-/**
- * Get the current date
- */
-window.getToday = () => {
-    const now = new Date();
-    const nowYear = now.getFullYear();
-    const nowMonth = ("00" + (now.getMonth() + 1)).substr(-2, 2);
-    const nowDate = ("00" + now.getDate()).substr(-2, 2);
-    return (`${nowYear}-${nowMonth}-${nowDate}`);
-}
 
 
 /* Listen for events from ipcRenderer and relay them accordingly */

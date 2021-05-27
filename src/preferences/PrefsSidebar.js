@@ -20,11 +20,6 @@ const navLinkGroups = [
     {
         links: [
             {
-                name: 'Account',
-                icon: 'ContactInfo',
-                key: 'account'
-            },
-            {
                 name: 'Notifications',
                 icon: 'Ringer',
                 key: 'notifications'
@@ -40,14 +35,14 @@ const navLinkGroups = [
                 key: 'startup'
             },
             {
-                name: 'Data usage',
-                icon: 'BarChartVertical',
-                key: 'data_usage'
+                name: 'Appearance',
+                icon: 'Color',
+                key: 'appearance'
             },
             {
-                name: 'Sync',
-                icon: 'CloudImportExport',
-                key: 'sync'
+                name: 'Backup',
+                icon: 'Export',
+                key: 'backup'
             },
             {
                 name: 'About',

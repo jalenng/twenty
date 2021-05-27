@@ -12,8 +12,8 @@ import Circle from 'react-circle';
 
 const chipStyle = { borderRadius: '20px', width: '40px', height: '28px' };
 const circleProps = {
-    animate: false,
-    size: 300,
+    animate: true,
+    size: 240,
     lineWidth: 20,
     roundedStroke: true,
     showPercentage: false
@@ -50,7 +50,7 @@ export default class extends React.Component {
                     <Stack vertical horizontalAlign='center'>
 
                         {/* Remaining time */}
-                        <Text variant={'xxLarge'} style={{ fontSize: '4rem' }} block>
+                        <Text variant={'xxLarge'} style={{ fontSize: '3.5rem' }} block>
                             <div id='remainingTimeText'>
                                 {this.props.text}
                             </div>

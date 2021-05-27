@@ -7,11 +7,7 @@ import {
     Text 
 } from '@fluentui/react';
 
-const divStyle = {
-    MozUserSelect: 'none',
-    WebkitUserSelect: 'none',
-    msUserSelect: 'none',
-};
+import Window from '../Window';
 
 const iconClass = mergeStyles({
     fontSize: 24,
@@ -49,7 +45,7 @@ export default class extends React.Component {
 
     render() {
         return (    
-            <div style={divStyle}>
+            <Window>
                 
                 <div style={{
                     position: 'absolute', 
@@ -76,7 +72,7 @@ export default class extends React.Component {
 
                 </div>
 
-            </div>
+            </Window>
 
         );
     }

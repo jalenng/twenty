@@ -19,8 +19,8 @@ const sharedWindowOptions = {
     maximizable: false,
     skipTaskbar: true,
     show: false,
+    transparent: true,
     title: 'iCare Notification',
-    backgroundColor: '#222222',
     webPreferences: {
         preload: path.join(__dirname, '../preload.js'),
         contextIsolation: false
@@ -30,6 +30,11 @@ const sharedWindowOptions = {
 const POPUP_SIZE = {
     width: 360,
     height: 90
+}
+
+const DIST_FROM_ANCHOR = {
+    x: 12,
+    y: 12
 }
 
 module.exports = function() {
@@ -98,11 +103,7 @@ module.exports = function() {
         // Configure bounds and visibility
         const bounds = display.bounds;
         const screenRect = isWindows ? screen.dipToScreenRect(null, bounds) : bounds;
-        const newBounds = {
-            ...screenRect,
-            width: bounds.width,
-            height: bounds.height
-        }
+
         window.setBounds(bounds);
         window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })   
         window.removeMenu()
@@ -139,8 +140,8 @@ module.exports = function() {
             const screenRect = isWindows ? screen.dipToScreenRect(null, bounds) : bounds;
             const trueScaling = display.scaleFactor / screen.getPrimaryDisplay().scaleFactor;
             newBounds = {
-                x: screenRect.x + ((bounds.width - POPUP_SIZE.width) * trueScaling),
-                y: screenRect.y + ((bounds.height - POPUP_SIZE.height) * trueScaling),
+                x: screenRect.x + ((bounds.width - POPUP_SIZE.width - DIST_FROM_ANCHOR.x) * trueScaling),
+                y: screenRect.y + ((bounds.height - POPUP_SIZE.height - DIST_FROM_ANCHOR.y) * trueScaling),
                 width: POPUP_SIZE.width,
                 height: POPUP_SIZE.height
             }

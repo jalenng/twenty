@@ -4,10 +4,7 @@ import './css/index.css';
 
 import App from './App';
 
-import SignInScreen from './account/SignInScreen';
-import SignUpScreen from './account/SignUpScreen';
-import DeleteAccountScreen from './account/DeleteAccountScreen';
-import EditAccountScreen from './account/EditAccountScreen';
+import PrefsScreen from './preferences/PrefsScreen';
 
 import FullscreenNotification from './notifications/FullscreenNotification';
 import PopupNotification from './notifications/PopupNotification';
@@ -46,9 +43,10 @@ const myTheme = createTheme({
     }
 });
 loadTheme(myTheme);
-document.body.style = 'background: #222222;';
 
 initializeIcons();
+
+// document.body.style = "background: #222222";
 
 const unselectableTextStyle = {
     MozUserSelect: 'none',
@@ -63,15 +61,11 @@ ReactDOM.render(
                 <HashRouter>
                     <Switch>
                         <Route path='/' exact component={App} />
-                        <Route path='/signin' exact component={SignInScreen} />
-                        <Route path='/signup' exact component={SignUpScreen} />
-                        <Route path='/deleteAccount' exact component={DeleteAccountScreen} />
-                        <Route path='/editAccount' exact component={EditAccountScreen} />
 
                         <Route path='/fullscreenNotification' exact component={FullscreenNotification} />
                         <Route path='/popupNotification' exact component={PopupNotification} />
 
-                        <Route path='/popupTimer' exact component={Timer} />
+                        <Route path='/prefs' exact component={PrefsScreen} />
                     </Switch>
                 </HashRouter>
             </ErrorBoundary>

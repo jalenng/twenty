@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { 
+import {
     PrimaryButton, DefaultButton,
     TooltipHost,
     Stack,
@@ -9,7 +9,7 @@ import {
 } from '@fluentui/react';;
 
 const buttonStyle = { borderRadius: '20px', width: '40px', height: '40px' };
-const buttonIconClass = mergeStyles({ fontSize: 24, height: 24, width: 24 });
+const buttonIconClass = mergeStyles({ fontSize: 22, height: 22, width: 22 });
 
 export default class extends React.Component {
 
@@ -26,7 +26,7 @@ export default class extends React.Component {
 
         // Main button is a button to clear all blockers
         if (this.props.isBlocked) {
-            mainButtonTooltip = 'Clear blockers' ;
+            mainButtonTooltip = 'Clear blockers';
             mainButtonIconName = 'Clear';
             mainButtonOnClick = blockerSys.clear;
         }
@@ -34,18 +34,17 @@ export default class extends React.Component {
         // Main button is a button to toggle the timer
         else {
             mainButtonOnClick = timer.toggle;
-            if (this.props.isPaused) {
+            if (this.props.isStopped) {
                 mainButtonTooltip = 'Start';
                 mainButtonIconName = 'Play';
             }
             else {
-                mainButtonTooltip = 'Pause';
+                mainButtonTooltip = 'Stop';
                 mainButtonIconName = 'Pause';
             }
         }
 
         let mainButtonDisabled = this.props.isIdle;
-        let secondaryButtonDisabled = this.props.isBlocked;
 
         return (
 
@@ -64,43 +63,15 @@ export default class extends React.Component {
                     />
                 </TooltipHost>
 
-                {/* Other actions */}
-                <TooltipHost content={'More'}>
+                {/* Preferences */}
+                <TooltipHost content={'Preferences'}>
                     <DefaultButton
-                        id='buttonGroup'
-                        disabled={secondaryButtonDisabled}
+                        id='prefsButton'
+                        disabled={false}
                         style={buttonStyle}
-                        onRenderText={() => { 
-                            return <FontIcon iconName='More' className={buttonIconClass} /> 
-                        }}
-                        menuProps={{
-                            items: (() => {
-                                let menu = [
-                                    {
-                                        key: 'resetTimer',
-                                        text: 'Reset timer',
-                                        iconProps: { iconName: 'Refresh' },
-                                        onClick: timer.reset,
-                                        disabled: secondaryButtonDisabled
-                                    },
-                                    {
-                                        key: 'popOutTimer',
-                                        text: 'Pop out',
-                                        iconProps: { iconName: 'MiniExpand' },
-                                        onClick: showPopup.timer,
-                                        disabled: secondaryButtonDisabled
-                                    }                                    
-                                ]
-                                if (isDev)
-                                    menu.push({
-                                        key: 'startBreak',
-                                        text: 'Start break (for testing purposes)',
-                                        iconProps: { iconName: 'FastForward' },
-                                        onClick: timer.end,
-                                        disabled: secondaryButtonDisabled
-                                    })
-                                return menu;
-                            })()
+                        onClick={openPrefs}
+                        onRenderText={() => {
+                            return <FontIcon iconName={'Settings'} className={buttonIconClass} />
                         }}
                     />
                 </TooltipHost>

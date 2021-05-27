@@ -1,14 +1,21 @@
 import React from 'react';
 
-import { 
+import {
     DefaultButton,
     Image, ImageFit,
-    Stack, 
-    Text 
+    Stack,
+    Text
 } from '@fluentui/react';
 
 import logo from '../assets/icon.png';
 import { level1Props, level2Props, level2HorizontalProps } from './PrefsStackProps';
+
+const versionComponents = [
+    { key: 'electron', text: 'Electron' },
+    { key: 'chrome', text: 'Chrome' },
+    { key: 'node', text: 'Node' },
+    { key: 'v8', text: 'v8' },
+]
 
 export default class extends React.Component {
 
@@ -20,10 +27,11 @@ export default class extends React.Component {
                 version: ''
             },
             versions: {
-                
+
             },
             contributors: [],
-            openSourceLibraries: []
+            openSourceLibraries: [],
+            license: []
         }
     }
 
@@ -38,66 +46,77 @@ export default class extends React.Component {
 
                 {/* Version info */}
                 <Stack {...level2Props}>
+
+                    {/* iCare banner */}
                     <Stack {...level2HorizontalProps}>
-                        
+
                         <Image
                             imageFit={ImageFit.centerContain}
-                            src={ logo }
+                            src={logo}
                             width={96}
                             height={96}
                         />
 
-                        <Text variant={'xxLarge'} block>  
+                        <Text variant={'xxLarge'} style={{ fontSize: '3.5rem' }} block>
                             {`${this.state.appInfo.name} ${this.state.appInfo.version}`}
                         </Text>
-                        
-                    </Stack>
-
-                    <Stack>
-
-                        <Text variant={'medium'} block>
-                            <b>Electron:&nbsp;</b> {this.state.versions.electron}
-                        </Text>
-
-                        <Text variant={'medium'} block>
-                            <b>Chrome:&nbsp;</b> {this.state.versions.chrome}
-                        </Text>
-
-                        <Text variant={'medium'} block>
-                            <b>Node:&nbsp;</b> {this.state.versions.node}
-                        </Text>
-
-                        <Text variant={'medium'} block>
-                            <b>v8:&nbsp;</b> {this.state.versions.v8}
-                        </Text>
 
                     </Stack>
 
-                </Stack>
+                    {/* Chips for Electron, Chrome, Node, and v8 engine */}
+                    <Stack {...level2HorizontalProps} >
 
-                {/* Contributors */}
-                <Stack {...level2Props}>
-                    <Text variant={'xLarge'} block> Contributors </Text>
-
-                    <Stack>
-                        {this.state.contributors.map( contributor => {
-                            return ( <Text variant={'medium'} block> {contributor} </Text> )
+                        {versionComponents.map((component) => {
+                            return (
+                                <DefaultButton
+                                    style={{ height: '52px', borderRadius: '8px'}}
+                                    disabled
+                                    onRenderText={() => {
+                                        return (
+                                            <Stack horizontalAlign='start'>
+                                                <b>{component.text}</b>
+                                                {this.state.versions[component.key]}
+                                            </Stack>
+                                        )
+                                    }}
+                                />
+                            )
                         })}
+
                     </Stack>
+
                 </Stack>
 
                 {/* Attributions to open-source libraries */}
                 <Stack {...level2Props}>
                     <Text variant={'xLarge'} block> Open-source libraries </Text>
 
-                    <div style={{
-                        display: 'grid',
-                        gridColumn: '2'
-                    }}>
-                        {this.state.openSourceLibraries.map( libName => {
-                            return ( <Text variant={'medium'} block> {libName} </Text> )
+                    <div style={{ display: 'inline' }}>
+
+                        {this.state.openSourceLibraries.map(library => {
+                            return (
+                                <DefaultButton
+                                    style={{ borderRadius: '8px', marginRight: '8px', marginBottom: '8px'}}
+                                    text={library.name}
+                                    onClick={() => openExternalLink(library.link)}
+                                />
+                            )
                         })}
+
                     </div>
+                </Stack>
+
+                {/* License */}
+                <Stack {...level2Props}>
+                    <Text variant={'xLarge'} block> License </Text>
+
+                    {this.state.license.map(paragraph => {
+                        return (
+                            <Text block variant={'medium'} style={{ paddingRight: '30px' }}> 
+                                {paragraph} 
+                            </Text>
+                        )
+                    })}
                 </Stack>
 
                 {/* Options to reset the app */}

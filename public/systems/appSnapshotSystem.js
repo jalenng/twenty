@@ -46,6 +46,7 @@ module.exports = function() {
      * @returns {[Object]} List of open windows
      */
     this.takeAppSnapshot = async function () {
+        
         let result = [];
 
         // WINDOWS: Invoke PowerShell command to get open windows
@@ -96,7 +97,7 @@ module.exports = function() {
         // Call app-snapshot-taken listeners
         this.emit('app-snapshot-taken', (callback) => callback(result));
         
-        lastSnapshot = result;
+        this.lastSnapshot = result;
 
         return result;
     }
@@ -131,21 +132,14 @@ module.exports = function() {
      * @returns the last app snapshot
      */
     this.getLastSnapshot = function () {
-        return lastSnapshot;
+        return this.lastSnapshot;
     }
 
     /**
      * Starts or stops the app snapshot system depending on user preferences
      */
     this.updateState = function () {
-        // Check if option to track app usage stats are on
-        const trackAppUsageStats = global.store.get('preferences.dataUsage.trackAppUsageStats');
-
-        // Check if any apps are set as blockers
-        const appBlockers = global.store.get('preferences.blockers.apps');
-
-        if (trackAppUsageStats || (appBlockers.length != 0)) this.startSystem();
-        else this.stopSystem();
+        this.startSystem();
     }
 
 }

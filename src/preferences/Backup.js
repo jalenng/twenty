@@ -73,19 +73,19 @@ export default class extends React.Component {
 
                     <Stack {...level2Props}>
 
-                        <Text variant={'xLarge'} block> Sync preferences </Text>
+                        <Text variant={'xLarge'} block> Backup preferences </Text>
 
                         <Stack {...level2HorizontalProps}>
 
                             <DefaultButton
-                                text='Upload'
-                                iconProps={{ iconName: 'CloudUpload' }}
+                                text='Import'
+                                iconProps={{ iconName: 'Import' }}
                                 onClick={this.handleUploadBtn}
                             />
 
                             <DefaultButton
-                                text='Download'
-                                iconProps={{ iconName: 'CloudDownload' }}
+                                text='Export'
+                                iconProps={{ iconName: 'Export' }}
                                 onClick={this.handleDownloadBtn}
                             />
 

@@ -6,7 +6,7 @@ The states of the timers and its transitions are shown here:
 0 : false :: 1 : true
 
                 +-----------------------+--------------+
-                |               isPaused               |
+                |               isStopped               |
                 +-----------------------+--------------+
                 |           0           |       1      |
 +-----------+---+-----------------------+--------------+
@@ -14,7 +14,7 @@ The states of the timers and its transitions are shown here:
 |           |   | | isIdle            | |              |
 |           |   | +-------------------+ |              |
 |           |   | |    0    |    1    | |              |  /\          |
-|           | 0 | +-------------------+ |    Paused    |  |           |
+|           | 0 | +-------------------+ |    Stopped    |  |           |
 | isBlocked |   | | Running |  Idle   | |              |  |           |
 |           |   | +-------------------+ |              |  |           | 
 |           |   |    <----Start-----    |              |  | Unblock   | Block
@@ -22,7 +22,7 @@ The states of the timers and its transitions are shown here:
 |           +---+-----------------------+--------------+  |           |
 |           |   |                       |    Blocked   |  |           |
 |           | 1 |        Blocked        |      and     |  |           \/
-|           |   |                       |    paused    |
+|           |   |                       |    stopped    |
 +-----------+---+-----------------------+--------------+
                             <-------Start--------
                             --------Pause------->
@@ -32,8 +32,8 @@ The states of the timers and its transitions are shown here:
 - Running:          the timer is counting down.
 - Idle:             the timer has finished its countdown and is waiting to restart automatically.
 - Blocked:          the timer is not counting down because of a blocker.
-- Paused:           the timer is not counting down because it was stopped manually.
-- Blocked & paused: the timer was blocked when it was paused.
+- Stopped:           the timer is not counting down because it was stopped manually.
+- Blocked & stopped: the timer was blocked when it was stopped.
 
 The timer system is also an event emitter that emits the following events:
     - timer-end: when the timer counts down to zero, or is manually ended.
@@ -44,8 +44,8 @@ const states = {
     RUNNING: 'running',
     IDLE: 'idle',
     BLOCKED: 'blocked',
-    PAUSED: 'paused',
-    BLOCKED_AND_PAUSED: 'blocked_and_paused'
+    STOPPED: 'stopped',
+    BLOCKED_AND_STOPPED: 'blocked_and_stopped'
 }
 
 module.exports = function () {
@@ -54,14 +54,17 @@ module.exports = function () {
 
     this.timeout;
 
+    // Interval for sending updated timer info
+    this.sendingInterval;
+
     // Flags and variables to track timer status
-    this.isPaused = true;
+    this.isStopped = true;
     this.isBlocked = false;
     this.isIdle = false;
 
     this.endDate = new Date();  // The Date Object indicating when the timer will end
     this.totalDuration = global.store.get('preferences.notifications.interval') * 60000; // In milliseconds
-    this.savedTime = this.totalDuration;    // Stores the remaining time when the timer is paused or blocked
+    this.savedTime = this.totalDuration;    // Stores the remaining time when the timer is stopped or blocked
     
     /**
      * Registers an event listener
@@ -85,11 +88,11 @@ module.exports = function () {
      * @returns a string indicating the state.
      */
      this.getState = function () {
-        if (this.isPaused) {
+        if (this.isStopped) {
             if (this.isBlocked)
-                return states.BLOCKED_AND_PAUSED;
+                return states.BLOCKED_AND_STOPPED;
             else
-                return states.PAUSED;
+                return states.STOPPED;
         }
         else {
             if (this.isBlocked)
@@ -110,11 +113,11 @@ module.exports = function () {
             endDate: this.endDate,
             totalDuration: this.totalDuration,
             remainingTime: (() => {
-                if (this.savedTime != null) return this.savedTime   // Use this only if the timer is paused or blocked
+                if (this.savedTime != null) return this.savedTime   // Use this only if the timer is stopped or blocked
                 else return this.endDate - new Date();      // Otherwise, calculate it dynamically
                 })(),
             isBlocked: this.isBlocked,
-            isPaused: this.isPaused,
+            isStopped: this.isStopped,
             isIdle: this.isIdle
         }
     };
@@ -143,16 +146,21 @@ module.exports = function () {
 
             // The timer should not be running here
             case states.BLOCKED:
-            case states.BLOCKED_AND_PAUSED:
-            case states.PAUSED:
+            case states.BLOCKED_AND_STOPPED:
+            case states.STOPPED:
 
                 // Save the time if it's not already saved
-                if (this.savedTime === null) this.savedTime = this.endDate - new Date();
+                // if (this.savedTime === null) this.savedTime = this.endDate - new Date();
+                // clearTimeout(this.timeout);
+
+                this.totalDuration = global.store.get('preferences.notifications.interval') * 60000;
+                this.savedTime = this.totalDuration;
                 clearTimeout(this.timeout);
 
                 break;
-
         }
+
+        this.resetSendingInterval();
     }
 
     /**
@@ -169,6 +177,21 @@ module.exports = function () {
         this.endDate.setMilliseconds(msLeft);
 
         this.savedTime = null;
+    }
+
+    /**
+     * Resets the interval for sending timer updates
+     */
+    this.resetSendingInterval = function() {
+        clearInterval(this.sendingInterval);
+        
+        if (global.mainWindow)
+            global.mainWindow.webContents.send('receive-timer-status', this.getStatus());
+
+        this.sendingInterval = setInterval( () => {
+            if (global.mainWindow)
+                global.mainWindow.webContents.send('receive-timer-status', this.getStatus());
+        }, 1000);    
     }
 
     /**
@@ -190,7 +213,7 @@ module.exports = function () {
 
         // Set flags
         this.isIdle = false;
-        this.isPaused = false;
+        this.isStopped = false;
 
         this.update();
     };
@@ -204,7 +227,7 @@ module.exports = function () {
 
         // Set flags
         this.isIdle = true;
-        this.isPaused = false;
+        this.isStopped = false;
 
         this.update();
     };
@@ -213,12 +236,12 @@ module.exports = function () {
      * Pauses the timer
      */
     // Conditions to ignore
-    this.pause = function () {
-        if (this.isPaused) return;
+    this.stop = function () {
+        if (this.isStopped) return;
 
         // Set flags
         this.isIdle = false;
-        this.isPaused = true;
+        this.isStopped = true;
         
         this.update();
     }
@@ -249,13 +272,13 @@ module.exports = function () {
 
     /**
      * Pauses the timer if the timer is running,
-     * or starts the timer when it is paused or blocked.
+     * or starts the timer when it is stopped or blocked.
      */
     this.togglePause = function () {
-        if (this.isPaused)
+        if (this.isStopped)
             this.start();
         else
-            this.pause();
+            this.stop();
     }
 
 }

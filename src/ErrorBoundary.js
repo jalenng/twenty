@@ -6,11 +6,7 @@ import {
     ActionButton, PrimaryButton 
 } from '@fluentui/react';
 
-const divStyle = {
-    MozUserSelect: 'none',
-    WebkitUserSelect: 'none',
-    msUserSelect: 'none',
-};
+import Window from './Window';
 
 export default class extends React.Component {
     constructor(props) {
@@ -31,7 +27,7 @@ export default class extends React.Component {
         if (this.state.hasError) {
             // You can render any custom fallback UI
             return (
-                <div style={divStyle}>
+                <Window>
 
                     <div style={{
                         position: 'absolute',
@@ -73,7 +69,7 @@ export default class extends React.Component {
                         />
                     </div>
 
-                </div>
+                </Window>
 
             );
         }

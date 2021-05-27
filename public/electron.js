@@ -1,16 +1,15 @@
-const { 
-    BrowserWindow, 
-    Tray, 
-    Menu, 
-    nativeImage, 
-    app, 
-    ipcMain, 
-    globalShortcut,
-    powerMonitor
+const {
+    BrowserWindow,
+    Tray,
+    Menu,
+    nativeImage,
+    app,
+    ipcMain,
+    globalShortcut
 } = require('electron');
 const windowStateKeeper = require('electron-window-state');
-const isDev = require('electron-is-dev'); 
-const path = require('path'); 
+const isDev = require('electron-is-dev');
+const path = require('path');
 
 // Initialize the stores, systems, and popup window functions
 require('./store');
@@ -22,15 +21,10 @@ const DEFAULT_WINDOW_SIZE = {
     defaultHeight: 550,
 }
 
-const MAX_WINDOW_SIZE = {
-    width: 1280,
-    height: 800,
-}
-
 global.mainWindow;
+global.prefsWindow;
 
 let mainWindowState;
-
 
 /**
  * Function to create the main window
@@ -43,16 +37,14 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         x: mainWindowState.x,
         y: mainWindowState.y,
-        width: mainWindowState.width,
-        height: mainWindowState.height,
-        minWidth: DEFAULT_WINDOW_SIZE.defaultWidth,
-        minHeight: DEFAULT_WINDOW_SIZE.defaultHeight,
-        maxWidth: MAX_WINDOW_SIZE.width,
-        maxHeight: MAX_WINDOW_SIZE.height,
+        width: 280,
+        height: 360,
         maximizable: false,
+        resizable: false,
         title: 'iCare',
-        backgroundColor: '#222222',
         show: false,
+        frame: false,
+        transparent: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: false,
@@ -68,11 +60,11 @@ function createWindow() {
     mainWindowState.manage(mainWindow);
 
     // Remove the menu and load the page
-    mainWindow.removeMenu()
+    if (!isDev) mainWindow.removeMenu()
     mainWindow.loadURL(
         isDev
-        ? 'http://localhost:3000'
-        : `file://${path.join(__dirname, '../build/index.html')}`
+            ? 'http://localhost:3000'
+            : `file://${path.join(__dirname, '../build/index.html')}`
     );
 
     // Prevent opening new windows
@@ -100,16 +92,16 @@ const gotSingleInstanceLock = app.requestSingleInstanceLock()
 if (!gotSingleInstanceLock) app.exit()
 
 // Show first instance if a second instance is requested
- app.on('second-instance', (event, commandLine, workingDirectory) => {
+app.on('second-instance', (event, commandLine, workingDirectory) => {
     if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore()
-      mainWindow.focus()
+        if (mainWindow.isMinimized()) mainWindow.restore()
+        mainWindow.focus()
     }
 })
 
 
 /*---------------------------------------------------------------------------*/
-/* App settings for when user logs in */
+/* Configure login item settings */
 
 app.setLoginItemSettings({
     openAtLogin: global.store.get('preferences.startup.startAppOnLogin'),
@@ -124,7 +116,7 @@ let appTray = null;
 app.whenReady().then(() => {
 
     createWindow()
-    
+
     /* When app is activated and no windows are open, create a window */
     app.on('activate', function () {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -146,18 +138,11 @@ app.whenReady().then(() => {
         mainWindow.focus();
     });
 
-    /* Allow keyboard shortcut to open DevTools if isDev */
-    if (isDev) {
-        globalShortcut.register('CommandOrControl+Shift+I', () => {
-            mainWindow.webContents.openDevTools()
-        });
-    }
-
 })
 
 /* Handle closing all windows behavior for macOS */
 app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.exit()
+    if (process.platform === 'darwin') app.exit()
 })
 
 /* Prevent loading of new websites */
@@ -200,27 +185,35 @@ ipcMain.on('get-about-info', (event) => {
             version: app.getVersion()
         },
         versions: process.versions,
-        contributors: [
-            'Elise Hoang',
-            'Jalen Ng',
-            'Julie Loi',
-            'Shiyun Lian',
-            'Zuby Javed'
-        ],
         openSourceLibraries: [
-            '@fluentui/react',
-            'axios',
-            'chart.js',
-            'electron',
-            'electron-is-dev',
-            'electron-store',
-            'electron-window-state',
-            'hazardous',
-            'react',
-            'react-chart',
-            'react-charts',
-            'react-circle',
-            'sound-play'
+            { name: '@fluentui/react', link: 'https://github.com/microsoft/fluentui' },
+            { name: 'electron', link: 'https://github.com/electron/electron' },
+            { name: 'electron-is-dev', link: 'https://github.com/sindresorhus/electron-is-dev' },
+            { name: 'electron-store', link: 'https://github.com/sindresorhus/electron-store' },
+            { name: 'electron-window-state', link: 'https://github.com/mawie81/electron-window-state' },
+            { name: 'hazardous', link: 'https://github.com/epsitec-sa/hazardous' },
+            { name: 'react', link: 'https://github.com/facebook/react' },
+            { name: 'react-circle', link: 'https://github.com/zzarcon/react-circle' },
+            { name: 'sound-play', link: 'https://github.com/ilehoang/sound-play' },
+        ],
+        license: [
+            `MIT License`,
+            `Copyright (c) 2021 Team Paladins`,
+            `Permission is hereby granted, free of charge, to any person obtaining a copy
+            of this software and associated documentation files (the "Software"), to deal
+            in the Software without restriction, including without limitation the rights
+            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Software, and to permit persons to whom the Software is
+            furnished to do so, subject to the following conditions:`,
+            `The above copyright notice and this permission notice shall be included in all
+            copies or substantial portions of the Software.`,
+            `THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+            SOFTWARE.`
         ]
     }
     event.returnValue = aboutInfo;

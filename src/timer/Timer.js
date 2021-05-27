@@ -17,9 +17,6 @@ export default class extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         timer.eventSystem.on('update', (event, status) => this.updateState(status));
-
-        timer.getStatus();
-        setInterval(timer.getStatus, 100);
     }
 
     componentWillUnmount() {
@@ -61,7 +58,7 @@ export default class extends React.Component {
                 return `${hours}:${minutes}`
             })(),
 
-            isPaused: status.isPaused,
+            isStopped: status.isStopped,
             isBlocked: status.isBlocked,
             isIdle: status.isIdle,
             disableButtons: status.isBlocked || status.isIdle,
@@ -73,7 +70,7 @@ export default class extends React.Component {
         let timerDisplayChipProps;
 
         // Chip shows end time
-        if (!this.state.isPaused && !this.state.isBlocked) {
+        if (!this.state.isStopped && !this.state.isBlocked) {
             timerDisplayChipProps = {
                 showChip: true,
                 chipTooltip: 'End time',
@@ -109,7 +106,7 @@ export default class extends React.Component {
 
                     <TimerControls
                         isBlocked={this.state.isBlocked}
-                        isPaused={this.state.isPaused}
+                        isStopped={this.state.isStopped}
                         isIdle={this.state.isIdle}
                     />
 

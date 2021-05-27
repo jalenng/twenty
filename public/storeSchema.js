@@ -1,3 +1,23 @@
+/*
+This schema configures and validates the app's persistent storage.
+*/
+
+/* 
+Preferences 
+    - notifications
+        * enableSound (boolean)
+        * interval (number)
+        * sound (string)
+    - blockers
+        * apps (array of strings)
+        * blockOnBattery (boolean)
+    - startup
+        * startAppOnLogin (boolean)
+        * startTimerOnAppStartup (boolean)
+    - appearance
+        * theme (string)
+        * alwaysOnTop (boolean)
+*/
 const preferencesSchema = {
     type: 'object',
 
@@ -8,10 +28,6 @@ const preferencesSchema = {
             sound: '../../sounds/Long Expected.mp3',
             soundVolume: 100
         },
-        dataUsage: {
-            trackAppUsageStats: true,
-            enableWeeklyUsageStats: true
-        },
         blockers: {
             apps: [],
             blockOnBattery: true
@@ -19,6 +35,10 @@ const preferencesSchema = {
         startup: {
             startAppOnLogin: true,
             startTimerOnAppStartup: true
+        },
+        appearance: {
+            theme: 'system',
+            alwaysOnTop: false
         }
     },
 
@@ -46,15 +66,6 @@ const preferencesSchema = {
             additionalProperties: false
         },
 
-        dataUsage: {
-            type: 'object',
-            properties: {
-                trackAppUsageStats: { type: 'boolean' },
-                enableWeeklyUsageStats: { type: 'boolean' },
-            },
-            additionalProperties: false
-        },
-
         blockers: {
             type: 'object',
             properties: {
@@ -74,12 +85,26 @@ const preferencesSchema = {
                 startTimerOnAppStartup: { type: 'boolean' }
             },
             additionalProperties: false
+        },
+
+        appearance: {
+            type: 'object',
+            properties: {
+                theme: { type: 'string' },
+                alwaysOnTop: { type: 'boolean' }
+            },
+            additionalProperties: false
         }
 
     },
     additionalProperties: false
 }
 
+/* 
+Sounds 
+    - defaultSounds (array of objects, each with properties 'key' and 'text')
+    - customSounds (array of objects, each with properties 'key' and 'text')
+*/
 const soundsSchema = {
     type: 'object',
 
@@ -148,117 +173,27 @@ const soundsSchema = {
     additionalProperties: false
 }
 
-const accountsSchema = {
-    type: 'object',
-
-    default: {
-        token: null,
-        accountInfo: {
-            email: 'Features are limited. Please sign in.',
-            displayName: 'iCare Guest'
-        }
-    },
-
-    properties: {
-        token: { type: ['null', 'string'] },
-        accountInfo: {
-            type: 'object',
-            properties: {
-                email: { type: 'string' },
-                displayName: { type: 'string' }
-            },
-            additionalProperties: false
-        }
-    },
-    additionalProperties: false
-}
-
-const dataUsageSchema = {
-    type: 'object',
-
-    default: {
-        unsynced: {
-            appUsage: [],
-            timerUsage: []
-        },
-        fetched: {
-            appUsage: [],
-            timerUsage: []
-        }
-    },
-
-    properties: {
-        unsynced: {
-            type: 'object',
-            properties: {
-                appUsage: { type: 'array' },
-                timerUsage: { type: 'array' }
-            }
-        },
-        fetched: {
-            type: 'object',
-            properties: {
-                appUsage: { type: 'array' },
-                timerUsage: { type: 'array' }
-            }
-        }
-    }
-}
-
-const insightsSchema = {
-    type: 'object',
-
-    default: {
-        cards: []
-    },
-
-    properties: {
-        cards: {
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                    header: { type: 'string'},
-                    content: { type: 'string'}
-                },
-                additionalProperties: false
-            }
-        }
-    },
-    additionalProperties: false
-}
-
+/* 
+App names (key-value set where the keys are paths to executables and the values are the friendly names)
+*/
 const appNamesSchema = {
     type: 'object',
     default: {},
     additionalProperties: { type: 'string' }
 }
 
-const messagesSchema = {
-    type: 'array',
-    default: [],
-    items: {
-        type: 'object',
-        properties: {
-            type: { type: 'number' },
-            contents: { type: 'string' }
-        },
-        additionalProperties: false
-    }
-}
-
+/* 
+Reset flag (boolean)
+*/
 const resetFlagSchema = {
     type: 'boolean',
     default: false
 }
 
+/* Exports */
 module.exports = {
     preferences: preferencesSchema,
     sounds: soundsSchema,
-    accounts: accountsSchema,
-    dataUsage: dataUsageSchema,
-    insights: insightsSchema,
     appNames: appNamesSchema,
-    messages: messagesSchema,
     resetFlag: resetFlagSchema
 }
