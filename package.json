@@ -52,7 +52,7 @@
   "devDependencies": {
     "concurrently": "^6.0.0",
     "cross-env": "^7.0.3",
-    "electron": "^12.0.1",
+    "electron": "^13.0.1",
     "electron-builder": "^22.10.5",
     "mocha": "^8.3.2",
     "nodemon": "^2.0.7",
@@ -68,7 +68,7 @@
     "react-build": "react-scripts build",
     "react-test": "react-scripts test",
     "react-eject": "react-scripts eject",
-    "electron-build": "electron-builder --x64 --ia32",
+    "electron-build": "electron-builder",
     "electron-start": "electron .",
     "electron-watch": "wait-on tcp:3000 && nodemon --exec npm run electron-start",
     "electron-test": "cross-env NODE_ENV=test mocha",

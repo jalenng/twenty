@@ -14,7 +14,7 @@ const versionComponents = [
     { key: 'electron', text: 'Electron' },
     { key: 'chrome', text: 'Chrome' },
     { key: 'node', text: 'Node' },
-    { key: 'v8', text: 'v8' },
+    { key: 'v8', text: 'V8' },
 ]
 
 export default class extends React.Component {
