@@ -6,10 +6,6 @@ import themes from './Themes';
 
 export default class extends React.Component {
 
-    static defaultProps = {
-        radius: '8px',
-    };
-
     constructor(props) {
         super(props);
         this.state = { currentThemeName: getThemeName() };
@@ -44,8 +40,7 @@ export default class extends React.Component {
                     width: '100%',
                     height: '100%',
                     position: 'absolute',
-                    zIndex: -100,
-                    borderRadius: this.props.radius,
+                    borderRadius: '8px',
                     boxSizing: 'border-box'
                 }}>
 

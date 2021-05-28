@@ -31,6 +31,11 @@ export default class extends React.Component {
 
         const themeOptions = [
             { 
+                key: 'system', 
+                text: 'System default ', 
+                iconProps: { iconName: 'Personalize' }
+            },
+            { 
                 key: 'light', 
                 text: 'Light', 
                 iconProps: { iconName: 'Sunny' }
@@ -39,11 +44,6 @@ export default class extends React.Component {
                 key: 'dark', 
                 text: 'Dark', 
                 iconProps: { iconName: 'ClearNight' }
-            },
-            { 
-                key: 'system', 
-                text: 'System default ', 
-                iconProps: { iconName: 'Personalize' }
             }
         ]
 
