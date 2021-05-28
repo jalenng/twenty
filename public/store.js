@@ -96,8 +96,8 @@ ipcMain.handle('reset-store', () => {
     dialog.showMessageBox(global.mainWindow, {
         title: 'Reset iCare',
         type: 'question',
-        message: 'Are you sure you want to reset iCare?',
-        detail: 'You will be signed out, and all unsynced data will be lost.',
+        message: 'Reset iCare?',
+        detail: 'iCare will restart, and your preferences will revert to its defaults.',
         buttons: ['Yes', 'No'],
     })
         .then(result => {

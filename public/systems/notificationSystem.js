@@ -4,38 +4,7 @@ notification windows during a break.
 */
 
 const { BrowserWindow, screen } = require('electron');
-const path = require('path'); 
-const isDev = require('electron-is-dev'); 
-const isWindows = process.platform == 'win32';
-
-// Shared notification window options
-const sharedWindowOptions = {
-    alwaysOnTop: true,
-    focusable: false,
-    resizable: false,
-    movable: false,
-    frame: false,
-    minimizable: false,
-    maximizable: false,
-    skipTaskbar: true,
-    show: false,
-    transparent: true,
-    title: 'iCare Notification',
-    webPreferences: {
-        preload: path.join(__dirname, '../preload.js'),
-        contextIsolation: false
-    }
-};
-
-const POPUP_SIZE = {
-    width: 360,
-    height: 90
-}
-
-const DIST_FROM_ANCHOR = {
-    x: 12,
-    y: 12
-}
+const { createWindow } = require('../createWindows');
 
 module.exports = function() {
 
@@ -89,29 +58,7 @@ module.exports = function() {
      */
     this.createFullscreenWindow = function(display) {
 
-        const window = new BrowserWindow({
-            ...sharedWindowOptions
-        })
-
-        // Load URL
-        window.loadURL(
-            isDev
-            ? 'http://localhost:3000#/fullscreenNotification'
-            : `file://${path.join(__dirname, '../../build/index.html#fullscreenNotification')}`
-        ); 
-
-        // Configure bounds and visibility
-        const bounds = display.bounds;
-        const screenRect = isWindows ? screen.dipToScreenRect(null, bounds) : bounds;
-
-        window.setBounds(bounds);
-        window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })   
-        window.removeMenu()
-
-        // Configure event listeners
-        window.on('close', (e) => e.preventDefault())
-
-        return window;
+        return createWindow('notification', 'fullscreenNotification', display, false)
 
     }
 
@@ -121,49 +68,7 @@ module.exports = function() {
      */
     this.createPopupWindow = function(display) {
 
-        const window = new BrowserWindow({
-            ...sharedWindowOptions
-        })
-
-        // Load URL
-        window.loadURL(
-            isDev
-            ? 'http://localhost:3000#/popupNotification'
-            : `file://${path.join(__dirname, '../../build/index.html#popupNotification')}`
-        ); 
-
-        // Configure bounds and visibility
-        const bounds = display.workArea;
-        let newBounds;
-
-        if (isWindows) {
-            const screenRect = isWindows ? screen.dipToScreenRect(null, bounds) : bounds;
-            const trueScaling = display.scaleFactor / screen.getPrimaryDisplay().scaleFactor;
-            newBounds = {
-                x: screenRect.x + ((bounds.width - POPUP_SIZE.width - DIST_FROM_ANCHOR.x) * trueScaling),
-                y: screenRect.y + ((bounds.height - POPUP_SIZE.height - DIST_FROM_ANCHOR.y) * trueScaling),
-                width: POPUP_SIZE.width,
-                height: POPUP_SIZE.height
-            }
-        }
-        else {
-            newBounds = {
-                x: bounds.x + bounds.width - POPUP_SIZE.width,
-                y: bounds.y + bounds.height - POPUP_SIZE.height,
-                width: POPUP_SIZE.width,
-                height: POPUP_SIZE.height
-            }
-        }
-
-        window.setBounds(newBounds); 
-        window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
-        window.removeMenu()
-
-        // Configure event listeners
-        window.on('close', (e) => e.preventDefault())
-        window.on('ready-to-show', () => window.show());
-
-        return window;
+        return createWindow('notification', 'popupNotification', display, true, )
 
     }
 

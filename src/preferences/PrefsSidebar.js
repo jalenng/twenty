@@ -40,11 +40,6 @@ const navLinkGroups = [
                 key: 'appearance'
             },
             {
-                name: 'Backup',
-                icon: 'Export',
-                key: 'backup'
-            },
-            {
                 name: 'About',
                 icon: 'Info',
                 key: 'about'

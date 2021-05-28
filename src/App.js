@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Stack } from '@fluentui/react';
 
-import Window from './Window';
 import TitleBar from './TitleBar';
 import Timer from './timer/Timer';
 
@@ -12,17 +11,13 @@ export default class App extends React.Component {
 
         return (
 
-            <Window>
+            <Stack>
 
-                <Stack>
+                <TitleBar />
 
-                    <TitleBar />
+                <Timer />
 
-                    <Timer />
-
-                </Stack>
-
-            </Window>
+            </Stack>
 
         );
     }

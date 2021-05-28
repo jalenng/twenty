@@ -1,17 +1,11 @@
 import React from 'react';
 
-import { 
+import {
     mergeStyles,
     FontIcon,
     Stack,
-    Text 
+    Text
 } from '@fluentui/react';
-
-const divStyle = {
-    MozUserSelect: 'none',
-    WebkitUserSelect: 'none',
-    msUserSelect: 'none',
-};
 
 const iconClass = mergeStyles({
     fontSize: 128,
@@ -23,7 +17,7 @@ const iconClass = mergeStyles({
 
 export default class extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             remainingTimeString: ''
@@ -41,25 +35,36 @@ export default class extends React.Component {
 
         })
     }
-    
+
     componentDidMount() {
-        document.body.style.backgroundColor = '#000000';
         breakSys.getStatus();
         setInterval(breakSys.getStatus, 100);
     }
 
     render() {
-        return (    
-            <div style={divStyle}>
-                
+        return (
+            <div>
+
+                {/* Black background */}
+                <div
+                    style={{
+                        background: '#000000',
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        zIndex: -100,
+                    }}
+                />
+
+                {/* Center graphic and text */}
                 <div style={{
-                position: 'absolute', 
-                left: '50%', 
-                top: '50%',
-                transform: 'translate(-50%, -50%)'
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%, -50%)',
                 }}>
 
-                    <Stack tokens={{childrenGap: 16}}>
+                    <Stack tokens={{ childrenGap: 16 }}>
                         <Stack.Item align='center'>
                             <Stack horizontal verticalAlign='center'>
                                 <FontIcon iconName='RedEye' className={iconClass} />
@@ -74,7 +79,7 @@ export default class extends React.Component {
                                 Look at something 20 feet away.
                             </Text>
                         </Stack.Item>
-                        
+
                         <Stack.Item align='center'>
                             <Text variant={'xLarge'} align='center'>
                                 {this.state.remainingTimeString}
@@ -85,20 +90,20 @@ export default class extends React.Component {
 
                 </div>
 
+                {/* Bottom text */}
                 <div style={{
-                    position: 'absolute', 
-                    left: '50%', 
+                    position: 'absolute',
+                    left: '50%',
                     top: '90%',
                     transform: 'translate(-50%, -50%)'
                 }}>
                     <Text variant={'large'} align='center'>
                         The timer will reset upon mouse movement.
-                    </Text>          
+                    </Text>
                 </div>
-                
+
             </div>
 
         );
     }
 }
-

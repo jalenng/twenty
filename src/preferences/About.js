@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-    DefaultButton,
+    DefaultButton, ActionButton,
     Image, ImageFit,
     Stack,
     Text
@@ -22,24 +22,46 @@ export default class extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            appInfo: {
-                name: '',
-                version: ''
-            },
-            versions: {
+            aboutInfo: {
+                appInfo: {
+                    name: '',
+                    version: ''
+                },
+                versions: {
 
+                },
+                openSourceLibraries: [],
+                license: []
             },
-            contributors: [],
-            openSourceLibraries: [],
-            license: []
+            licenseExpanded: false
         }
+        this.toggleLicenseExpand = this.toggleLicenseExpand.bind(this);
     }
 
     componentDidMount() {
-        this.setState(getAboutInfo());
+        this.setState({
+            ...this.state, 
+            aboutInfo: getAboutInfo()
+        });
+    }
+
+    toggleLicenseExpand() {
+        this.setState({
+            ...this.state, 
+            licenseExpanded: !this.state.licenseExpanded
+        });
     }
 
     render() {
+
+        const aboutInfo = this.state.aboutInfo;
+
+        const appInfo = aboutInfo.appInfo;
+        const versions = aboutInfo.versions;
+        const openSourceLibraries = aboutInfo.openSourceLibraries;
+        const licenseParagraphs = this.state.licenseExpanded
+            ? aboutInfo.license
+            : aboutInfo.license.slice(0, 2);
 
         return (
             <Stack {...level1Props} id='about'>
@@ -58,7 +80,7 @@ export default class extends React.Component {
                         />
 
                         <Text variant={'xxLarge'} style={{ fontSize: '3.5rem' }} block>
-                            {`${this.state.appInfo.name} ${this.state.appInfo.version}`}
+                            {`${appInfo.name} ${appInfo.version}`}
                         </Text>
 
                     </Stack>
@@ -75,7 +97,7 @@ export default class extends React.Component {
                                         return (
                                             <Stack horizontalAlign='start'>
                                                 <b>{component.text}</b>
-                                                {this.state.versions[component.key]}
+                                                {versions[component.key]}
                                             </Stack>
                                         )
                                     }}
@@ -93,7 +115,7 @@ export default class extends React.Component {
 
                     <div style={{ display: 'inline' }}>
 
-                        {this.state.openSourceLibraries.map(library => {
+                        {openSourceLibraries.map(library => {
                             return (
                                 <DefaultButton
                                     style={{ borderRadius: '8px', marginRight: '8px', marginBottom: '8px'}}
@@ -110,13 +132,25 @@ export default class extends React.Component {
                 <Stack {...level2Props}>
                     <Text variant={'xLarge'} block> License </Text>
 
-                    {this.state.license.map(paragraph => {
+                    {licenseParagraphs.map(paragraph => {
                         return (
                             <Text block variant={'medium'} style={{ paddingRight: '30px' }}> 
                                 {paragraph} 
                             </Text>
                         )
                     })}
+
+                    {/* Show more / show less button */}
+                    <ActionButton 
+                        iconProps={
+                            this.state.licenseExpanded
+                            ? { iconName: 'Movers' }
+                            : { iconName: 'Sell' }
+                        }
+                        text={this.state.licenseExpanded ? 'Show less' : 'Show more'}
+                        onClick={this.toggleLicenseExpand}
+                    />
+
                 </Stack>
 
                 {/* Options to reset the app */}

@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Stack, ScrollablePane } from '@fluentui/react';
 
-import Window from '../Window';
 import TitleBar from '../TitleBar';
 
 import PrefsSidebar from './PrefsSidebar';
@@ -10,7 +9,6 @@ import Notifications from './Notifications';
 import Blockers from './Blockers';
 import Startup from './Startup';
 import Appearance from './Appearance';
-import Backup from './Backup';
 import About from './About';
 
 const divStyle = {
@@ -23,7 +21,6 @@ const preferencePages = {
     blockers: <Blockers />,
     startup: <Startup />,
     appearance: <Appearance />,
-    backup: <Backup />,
     about: <About />
 }
     
@@ -41,37 +38,33 @@ export default class extends React.Component {
 
         return (
 
-            <Window>
+            <Stack>
+                
+                <TitleBar hidePin/>
 
-                <Stack>
-                    
-                    <TitleBar hidePin/>
-    
-                    <div style={divStyle}>
-    
-                        <ScrollablePane style={{
-                            position: 'absolute',
-                            left: '260px',
-                            top: '48px',
-                            paddingRight: '40px'
-                        }}>
-    
-                            {preferencesPage}
-    
-                        </ScrollablePane>
-    
-                        <PrefsSidebar
-                            selectedKey={selectedKey}
-                            onUpdateSelectedKey={(key) => {
-                                this.setState({ selectedKey: key });
-                            }}
-                        />
-    
-                    </div>
-    
-                </Stack>
+                <div style={divStyle}>
 
-            </Window>
+                    <ScrollablePane style={{
+                        position: 'absolute',
+                        left: '260px',
+                        top: '48px',
+                        paddingRight: '40px'
+                    }}>
+
+                        {preferencesPage}
+
+                    </ScrollablePane>
+
+                    <PrefsSidebar
+                        selectedKey={selectedKey}
+                        onUpdateSelectedKey={(key) => {
+                            this.setState({ selectedKey: key });
+                        }}
+                    />
+
+                </div>
+
+            </Stack>
 
         );
     }

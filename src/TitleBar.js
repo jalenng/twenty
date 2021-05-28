@@ -99,7 +99,11 @@ export default class extends React.Component {
                             <IconButton
                                 iconProps={{ iconName: 'Cancel' }}
                                 style={{WebkitAppRegion: 'no-drag'}}
-                                styles={{ root: { color: '#ffffff' } }}
+                                styles={{ 
+                                    root: { color: '#ffffff'},
+                                    rootHovered: { color: '#ffffff', background: '#C52631' },
+                                    rootPressed: { color: '#ffffff', background: '#f1707a' } 
+                                }}
                                 onClick={() => window.close()}
                             />
                         </TooltipHost>

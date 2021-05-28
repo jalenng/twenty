@@ -13,6 +13,7 @@ import Circle from 'react-circle';
 const chipStyle = { borderRadius: '20px', width: '40px', height: '28px' };
 const circleProps = {
     animate: true,
+    animationDuration: '1s',
     size: 240,
     lineWidth: 20,
     roundedStroke: true,

@@ -7,8 +7,6 @@ import {
     Text 
 } from '@fluentui/react';
 
-import Window from '../Window';
-
 const iconClass = mergeStyles({
     fontSize: 24,
     height: 24,
@@ -44,35 +42,32 @@ export default class extends React.Component {
     }
 
     render() {
-        return (    
-            <Window>
+        return ( 
                 
-                <div style={{
-                    position: 'absolute', 
-                    paddingTop: '12px', 
-                    paddingLeft: '18px'
-                }}>
+            <div style={{
+                position: 'absolute', 
+                paddingTop: '12px', 
+                paddingLeft: '18px'
+            }}>
 
-                    <Stack horizontal token={{childrenGap: 32}}>
-                        <Stack.Item>
-                            <FontIcon iconName='RedEye' className={iconClass} />
-                        </Stack.Item>
+                <Stack horizontal token={{childrenGap: 32}}>
+                    <Stack.Item>
+                        <FontIcon iconName='RedEye' className={iconClass} />
+                    </Stack.Item>
 
-                        <Stack.Item>
-                            <Stack>
-                                <Text variant={'large'}> <b>Time for a break. </b> </Text>
-                                <Text variant={'medium'}> Look at something 20 feet away. </Text>
-                                <Text variant={'medium'} align='center'>
-                                    {this.state.remainingTimeString}
-                                </Text>
-                            </Stack>
-                        </Stack.Item>
-                        
-                    </Stack>
+                    <Stack.Item>
+                        <Stack>
+                            <Text variant={'large'}> <b>Time for a break. </b> </Text>
+                            <Text variant={'medium'}> Look at something 20 feet away. </Text>
+                            <Text variant={'medium'} align='center'>
+                                {this.state.remainingTimeString}
+                            </Text>
+                        </Stack>
+                    </Stack.Item>
+                    
+                </Stack>
 
-                </div>
-
-            </Window>
+            </div>
 
         );
     }

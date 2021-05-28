@@ -5,96 +5,31 @@ const {
     nativeImage,
     app,
     ipcMain,
-    globalShortcut
 } = require('electron');
-const windowStateKeeper = require('electron-window-state');
 const isDev = require('electron-is-dev');
 const path = require('path');
 
-// Initialize the stores, systems, and popup window functions
+const { createWindow } = require('./createWindows');
+
+// Initialize the stores and systems
 require('./store');
 require('./initializeSystems');
-require('./popupWindows');
-
-const DEFAULT_WINDOW_SIZE = {
-    defaultWidth: 860,
-    defaultHeight: 550,
-}
 
 global.mainWindow;
 global.prefsWindow;
 
-let mainWindowState;
-
-/**
- * Function to create the main window
- */
-function createWindow() {
-
-    mainWindowState = windowStateKeeper(DEFAULT_WINDOW_SIZE);
-
-    // Instantiate the window
-    mainWindow = new BrowserWindow({
-        x: mainWindowState.x,
-        y: mainWindowState.y,
-        width: 280,
-        height: 360,
-        maximizable: false,
-        resizable: false,
-        title: 'iCare',
-        show: false,
-        frame: false,
-        transparent: true,
-        webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
-            contextIsolation: false,
-
-            // Allow dev tools (for dev) and remote module (for testing) if isDev
-            nodeIntegration: isDev,
-            devTools: isDev,
-            enableRemoteModule: isDev
-        },
-    });
-
-    // Manage the size of the main window
-    mainWindowState.manage(mainWindow);
-
-    // Remove the menu and load the page
-    if (!isDev) mainWindow.removeMenu()
-    mainWindow.loadURL(
-        isDev
-            ? 'http://localhost:3000'
-            : `file://${path.join(__dirname, '../build/index.html')}`
-    );
-
-    // Prevent opening new windows
-    mainWindow.webContents.on('new-window', (e, url) => e.preventDefault())
-
-    // Handle the close button action
-    mainWindow.on('close', (e) => {
-        if (isDev)
-            app.exit(); // Just exit the app if isDev
-        else {
-            e.preventDefault(); // Otherwise, just hide to tray
-            mainWindow.hide();
-        }
-    })
-
-    // Open the window when it is ready to be shown
-    mainWindow.on('ready-to-show', () => mainWindow.show());
-
-}
 
 /*---------------------------------------------------------------------------*/
 /* Mechanism to allow only one instance of the app at once */
 
+// Try to get the lock
 const gotSingleInstanceLock = app.requestSingleInstanceLock()
 if (!gotSingleInstanceLock) app.exit()
 
 // Show first instance if a second instance is requested
-app.on('second-instance', (event, commandLine, workingDirectory) => {
+app.on('second-instance', () => {
     if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore()
+        mainWindow.restore()
         mainWindow.focus()
     }
 })
@@ -113,9 +48,10 @@ app.setLoginItemSettings({
 /*---------------------------------------------------------------------------*/
 /* Application event handlers */
 let appTray = null;
+
 app.whenReady().then(() => {
 
-    createWindow()
+    global.mainWindow = createWindow('main');
 
     /* When app is activated and no windows are open, create a window */
     app.on('activate', function () {
@@ -142,7 +78,7 @@ app.whenReady().then(() => {
 
 /* Handle closing all windows behavior for macOS */
 app.on('window-all-closed', function () {
-    if (process.platform === 'darwin') app.exit()
+    if (process.platform === 'darwin') app.exit();
 })
 
 /* Prevent loading of new websites */
@@ -177,9 +113,19 @@ ipcMain.on('get-platform', (event) => {
     event.returnValue = process.platform;
 })
 
+// Open preferences
+ipcMain.handle('open-preferences', () => {
+    if (!global.prefsWindow || global.prefsWindow.isDestroyed()) 
+        global.prefsWindow = createWindow('preferences', 'prefs');
+    else {
+        global.prefsWindow.restore();
+        global.prefsWindow.focus();
+    }
+})
+
 // Get info about the app
 ipcMain.on('get-about-info', (event) => {
-    let aboutInfo = {
+    event.returnValue = {
         appInfo: {
             name: app.getName(),
             version: app.getVersion()
@@ -198,7 +144,7 @@ ipcMain.on('get-about-info', (event) => {
         ],
         license: [
             `MIT License`,
-            `Copyright (c) 2021 Team Paladins`,
+            `Copyright (c) 2021 Jalen Ng`,
             `Permission is hereby granted, free of charge, to any person obtaining a copy
             of this software and associated documentation files (the "Software"), to deal
             in the Software without restriction, including without limitation the rights
@@ -215,6 +161,5 @@ ipcMain.on('get-about-info', (event) => {
             OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
             SOFTWARE.`
         ]
-    }
-    event.returnValue = aboutInfo;
+    };
 })

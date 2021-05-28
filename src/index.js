@@ -9,7 +9,7 @@ import PrefsScreen from './preferences/PrefsScreen';
 import FullscreenNotification from './notifications/FullscreenNotification';
 import PopupNotification from './notifications/PopupNotification';
 
-import Timer from './timer/Timer';
+import Window from './Window';
 
 import ErrorBoundary from './ErrorBoundary';
 
@@ -59,14 +59,16 @@ ReactDOM.render(
         <React.StrictMode>
             <ErrorBoundary>
                 <HashRouter>
-                    <Switch>
-                        <Route path='/' exact component={App} />
+                    <Window>
+                        <Switch>
+                            <Route path='/' exact component={App} />
 
-                        <Route path='/fullscreenNotification' exact component={FullscreenNotification} />
-                        <Route path='/popupNotification' exact component={PopupNotification} />
+                            <Route path='/fullscreenNotification' exact component={FullscreenNotification} />
+                            <Route path='/popupNotification' exact component={PopupNotification} />
 
-                        <Route path='/prefs' exact component={PrefsScreen} />
-                    </Switch>
+                            <Route path='/prefs' exact component={PrefsScreen} />
+                        </Switch>
+                    </Window>
                 </HashRouter>
             </ErrorBoundary>
         </React.StrictMode>

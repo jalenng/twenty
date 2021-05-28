@@ -149,10 +149,6 @@ module.exports = function () {
             case states.BLOCKED_AND_STOPPED:
             case states.STOPPED:
 
-                // Save the time if it's not already saved
-                // if (this.savedTime === null) this.savedTime = this.endDate - new Date();
-                // clearTimeout(this.timeout);
-
                 this.totalDuration = global.store.get('preferences.notifications.interval') * 60000;
                 this.savedTime = this.totalDuration;
                 clearTimeout(this.timeout);
@@ -167,6 +163,7 @@ module.exports = function () {
      * Sets up the timer
      */
     this.setup = function () {
+        
         // Use JS timeouts to facilitate delay
         clearTimeout(this.timeout)
         this.timeout = setTimeout(this.end.bind(this), this.savedTime);
@@ -185,11 +182,11 @@ module.exports = function () {
     this.resetSendingInterval = function() {
         clearInterval(this.sendingInterval);
         
-        if (global.mainWindow)
+        if (global.mainWindow && !global.mainWindow.isDestroyed())
             global.mainWindow.webContents.send('receive-timer-status', this.getStatus());
 
         this.sendingInterval = setInterval( () => {
-            if (global.mainWindow)
+            if (global.mainWindow && !global.mainWindow.isDestroyed())
                 global.mainWindow.webContents.send('receive-timer-status', this.getStatus());
         }, 1000);    
     }
