@@ -3,6 +3,7 @@ const {
     Tray,
     Menu,
     nativeImage,
+    nativeTheme,
     app,
     ipcMain,
 } = require('electron');
@@ -53,6 +54,7 @@ app.whenReady().then(() => {
 
     global.mainWindow = createWindow('main');
 
+    // Pin main window if option is enabled
     global.mainWindow.setAlwaysOnTop(store.get('preferences.appearance.alwaysOnTop'));
 
     /* When app is activated and no windows are open, create a window */
@@ -92,6 +94,24 @@ app.on('web-contents-created', (event, contents) => {
 
 
 /*---------------------------------------------------------------------------*/
+/* Theming */
+
+// Update the Electron themeSource property
+nativeTheme.themeSource = store.get('preferences.appearance.theme');
+
+// Notify WebContents when the theme changes
+nativeTheme.on('updated', () => {
+    const themeName = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+
+    if (global.mainWindow && !global.mainWindow.isDestroyed()) 
+        global.mainWindow.webContents.send('theme-updated', themeName);
+
+    if (global.prefsWindow && !global.prefsWindow.isDestroyed()) 
+        global.prefsWindow.webContents.send('theme-updated', themeName);
+})
+
+
+/*---------------------------------------------------------------------------*/
 /* IPC event handlers */
 
 // Log to main process's console
@@ -113,6 +133,11 @@ ipcMain.on('is-dev', (event) => {
 // Get the name of the current platform. https://nodejs.org/api/process.html#process_process_platform
 ipcMain.on('get-platform', (event) => {
     event.returnValue = process.platform;
+})
+
+// Get the name of the current theme
+ipcMain.on('get-theme-name', (event) => {
+    event.returnValue = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
 })
 
 // Open preferences
@@ -146,7 +171,7 @@ ipcMain.on('get-about-info', (event) => {
         ],
         license: [
             `MIT License`,
-            `Copyright (c) 2021 Jalen Ng`,
+            `Copyright © 2021 Jalen Ng`,
             `Permission is hereby granted, free of charge, to any person obtaining a copy
             of this software and associated documentation files (the "Software"), to deal
             in the Software without restriction, including without limitation the rights

@@ -1,4 +1,4 @@
-const { ipcMain, dialog, app } = require('electron');
+const { ipcMain, dialog, nativeTheme, app } = require('electron');
 const Store = require('electron-store');
 const path = require('path');
 
@@ -53,6 +53,10 @@ store.onDidChange('sounds', () => {
         global.prefsWindow.webContents.send('store-changed', 'sounds');
 });
 
+// Update the Electron themeSource property when its preference is changed
+store.onDidChange('preferences.appearance.theme', (newVal, oldVal) => {
+    nativeTheme.themeSource = newVal;
+});
 
 /*---------------------------------------------------------------------------*/
 /* IPC event handlers */

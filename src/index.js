@@ -3,57 +3,25 @@ import ReactDOM from 'react-dom';
 import './css/index.css';
 
 import App from './App';
-
 import PrefsScreen from './preferences/PrefsScreen';
-
 import FullscreenNotification from './notifications/FullscreenNotification';
 import PopupNotification from './notifications/PopupNotification';
-
 import Window from './Window';
-
 import ErrorBoundary from './ErrorBoundary';
 
 import { HashRouter, Route, Switch } from 'react-router-dom';
-import { loadTheme, createTheme, initializeIcons } from '@fluentui/react';
+import { initializeIcons } from '@fluentui/react';
 
-const myTheme = createTheme({
-    palette: {
-        themePrimary: '#309fff',
-        themeLighterAlt: '#02060a',
-        themeLighter: '#081929',
-        themeLight: '#0f304d',
-        themeTertiary: '#1d5f99',
-        themeSecondary: '#2b8ce0',
-        themeDarkAlt: '#45a8ff',
-        themeDark: '#62b6ff',
-        themeDarker: '#8bc9ff',
-        neutralLighterAlt: '#3c3c3c',
-        neutralLighter: '#444444',
-        neutralLight: '#515151',
-        neutralQuaternaryAlt: '#595959',
-        neutralQuaternary: '#5f5f5f',
-        neutralTertiaryAlt: '#7a7a7a',
-        neutralTertiary: '#c8c8c8',
-        neutralSecondary: '#d0d0d0',
-        neutralPrimaryAlt: '#dadada',
-        neutralPrimary: '#ffffff',
-        neutralDark: '#f4f4f4',
-        black: '#f8f8f8',
-        white: '#1b1a19',
-    }
-});
-loadTheme(myTheme);
-
-initializeIcons();
-
-// document.body.style = "background: #222222";
-
+/* Styling for components to make sure text is unselectable */
 const unselectableTextStyle = {
     MozUserSelect: 'none',
     WebkitUserSelect: 'none',
     msUserSelect: 'none',
 }
 
+initializeIcons();
+
+/* Render the application */
 ReactDOM.render(
     <div style={unselectableTextStyle}>
         <React.StrictMode>
@@ -75,4 +43,3 @@ ReactDOM.render(
     </div>,
     document.getElementById('root')
 );
-

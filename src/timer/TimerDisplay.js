@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { 
+import {
     Text,
     DefaultButton,
     TooltipHost,
     Stack,
     getTheme
- } from '@fluentui/react';
+} from '@fluentui/react';
 
 import Circle from 'react-circle';
 
@@ -42,8 +42,8 @@ export default class extends React.Component {
                 <Circle
                     {...circleProps}
                     progress={this.props.progressBarValue}
-                    progressColor={ getTheme().palette.themePrimary }
-                    bgColor={ getTheme().palette.neutralLighter }
+                    progressColor={getTheme().palette.themePrimary}
+                    bgColor={getTheme().palette.neutralLighter}
                 />
 
                 {/* Timer information */}

@@ -4,7 +4,8 @@ import {
     TooltipHost,
     DefaultButton,
     Stack,
-    IconButton
+    IconButton,
+    getTheme
 } from '@fluentui/react';
 
 const sharedStackProps = {
@@ -43,6 +44,8 @@ export default class extends React.Component {
 
         const isMacOS = platform === 'darwin';
         const secondaryButton = this.props.secondaryButton;
+
+        const buttonIconColor = getTheme().palette.neutralPrimary;
 
         return (
 
@@ -86,7 +89,7 @@ export default class extends React.Component {
                             <IconButton
                                 iconProps={{ iconName: secondaryButton.iconName }}
                                 style={{WebkitAppRegion: 'no-drag'}}
-                                styles={{ root: { color: '#ffffff' } }}
+                                styles={{ root: { color: buttonIconColor } }}
                                 toggle={true}
                                 checked={secondaryButton.checked}
                                 onClick={secondaryButton.onClick}
@@ -101,9 +104,9 @@ export default class extends React.Component {
                                 iconProps={{ iconName: 'Cancel' }}
                                 style={{WebkitAppRegion: 'no-drag'}}
                                 styles={{ 
-                                    root: { color: '#ffffff'},
-                                    rootHovered: { color: '#ffffff', background: '#C52631' },
-                                    rootPressed: { color: '#ffffff', background: '#f1707a' } 
+                                    root: { color: buttonIconColor},
+                                    rootHovered: { color: buttonIconColor, background: '#E81123' },
+                                    rootPressed: { color: buttonIconColor, background: '#f1707a' } 
                                 }}
                                 onClick={() => window.close()}
                             />

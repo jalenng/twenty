@@ -10,7 +10,7 @@ and displaying UI elements is handled exclusively by React.
 if (process.env.NODE_ENV === 'test')
     window.electronRequire = require;
 
-const { ipcRenderer, shell } = require('electron');
+const { ipcRenderer, nativeTheme, shell } = require('electron');
 
 
 /*---------------------------------------------------------------------------*/
@@ -110,6 +110,9 @@ window.blockerSys = {
     eventSystem: new EventSystem()
 }
 
+window.themeSys = {
+    eventSystem: new EventSystem()
+}
 
 /*---------------------------------------------------------------------------*/
 /* Other functions */
@@ -151,6 +154,11 @@ window.restartApp = () => { ipcRenderer.invoke('restart-app') }
 window.openExternalLink = link => { shell.openExternal(link) }
 
 /**
+ * Gets the name of the current theme to be used
+ */
+window.getThemeName = () => { return ipcRenderer.sendSync('get-theme-name') }
+
+/**
  * A boolean that tells whether or not this app is running in a dev environment
  */
 window.isDev = ipcRenderer.sendSync('is-dev');
@@ -180,4 +188,9 @@ ipcRenderer.on('store-changed', (event, category) => {
 ipcRenderer.on('receive-blockers', (event, blockers) => {
     const fireCallbacks = (callback) => callback(event, blockers);
     window.blockerSys.eventSystem._events['update'].forEach(fireCallbacks);
+})
+
+ipcRenderer.on('theme-updated', (event, themeName) => {
+    const fireCallbacks = (callback) => callback(themeName);
+    window.themeSys.eventSystem._events['update'].forEach(fireCallbacks);
 })
