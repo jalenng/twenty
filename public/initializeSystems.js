@@ -22,6 +22,7 @@ if (global.store.get('preferences.startup.startTimerOnAppStartup'))
 
 global.appSnapshotSystem.updateState();
 
+
 /*---------------------------------------------------------------------------*/
 /* Configure event listeners and connect the various systems */
 

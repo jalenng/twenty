@@ -36,13 +36,13 @@ const topRightStyle = {
 export default class extends React.Component {
 
     static defaultProps = {
-        hideClose: false,
-        hidePin: false
+        secondaryButton: null
     };
 
     render() {
 
         const isMacOS = platform === 'darwin';
+        const secondaryButton = this.props.secondaryButton;
 
         return (
 
@@ -80,15 +80,16 @@ export default class extends React.Component {
                 {/* Top right */}
                 <Stack {...sharedStackProps} style={topRightStyle}>
 
-                    {/* Pin button */}
-                    {!this.props.hidePin &&
-                        <TooltipHost content="Always show on top">
+                    {/* Secondary button */}
+                    {secondaryButton &&
+                        <TooltipHost content={secondaryButton.tooltip}>
                             <IconButton
-                                iconProps={{ iconName: 'Pinned' }}
+                                iconProps={{ iconName: secondaryButton.iconName }}
                                 style={{WebkitAppRegion: 'no-drag'}}
                                 styles={{ root: { color: '#ffffff' } }}
                                 toggle={true}
-                                checked={true}
+                                checked={secondaryButton.checked}
+                                onClick={secondaryButton.onClick}
                             />
                         </TooltipHost>
                     }

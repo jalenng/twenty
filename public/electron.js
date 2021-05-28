@@ -28,9 +28,9 @@ if (!gotSingleInstanceLock) app.exit()
 
 // Show first instance if a second instance is requested
 app.on('second-instance', () => {
-    if (mainWindow) {
-        mainWindow.restore()
-        mainWindow.focus()
+    if (global.mainWindow && !global.mainWindow.isDestroyed()) {
+        global.mainWindow.restore()
+        global.mainWindow.focus()
     }
 })
 
@@ -53,6 +53,8 @@ app.whenReady().then(() => {
 
     global.mainWindow = createWindow('main');
 
+    global.mainWindow.setAlwaysOnTop(store.get('preferences.appearance.alwaysOnTop'));
+
     /* When app is activated and no windows are open, create a window */
     app.on('activate', function () {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -70,8 +72,8 @@ app.whenReady().then(() => {
     appTray.setToolTip('iCare');
     appTray.setContextMenu(contextMenu);
     appTray.on('click', () => {
-        mainWindow.show();
-        mainWindow.focus();
+        global.mainWindow.show();
+        global.mainWindow.focus();
     });
 
 })

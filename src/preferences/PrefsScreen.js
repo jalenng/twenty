@@ -40,7 +40,7 @@ export default class extends React.Component {
 
             <Stack>
                 
-                <TitleBar hidePin/>
+                <TitleBar/>
 
                 <div style={divStyle}>
 

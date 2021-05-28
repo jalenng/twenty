@@ -31,14 +31,26 @@ store.onDidChange('preferences.startup.startAppOnLogin', (newVal, oldVal) => {
     })
 });
 
+// Configure main window
+store.onDidChange('preferences.appearance.alwaysOnTop', (newVal, oldVal) => {
+    global.mainWindow.setAlwaysOnTop(newVal);
+});
+
 // Notify the main window when any section of the store updates
 store.onDidChange('preferences', () => {
-    global.mainWindow.webContents.send('store-changed', 'preferences');
-    global.prefsWindow.webContents.send('store-changed', 'preferences');
+    if (global.mainWindow && !global.mainWindow.isDestroyed())
+        global.mainWindow.webContents.send('store-changed', 'preferences');
+    
+    if (global.prefsWindow && !global.prefsWindow.isDestroyed())
+        global.prefsWindow.webContents.send('store-changed', 'preferences');
 });
+
 store.onDidChange('sounds', () => {
-    global.mainWindow.webContents.send('store-changed', 'sounds');
-    global.prefsWindow.webContents.send('store-changed', 'sounds');
+    if (global.mainWindow && !global.mainWindow.isDestroyed())
+        global.mainWindow.webContents.send('store-changed', 'sounds');
+        
+    if (global.prefsWindow && !global.prefsWindow.isDestroyed())
+        global.prefsWindow.webContents.send('store-changed', 'sounds');
 });
 
 
