@@ -94,6 +94,68 @@ app.on('web-contents-created', (event, contents) => {
 
 
 /*---------------------------------------------------------------------------*/
+/* Menu */
+/*
+- File
+    * Preferences (Ctrl+,)
+    * Close (Alt+F4)
+- Dev
+    * Reload (Ctrl+R)
+    * Force Reload (Ctrl+Shift+R)
+    * Toggle Developer Tools (Ctrl+Shift+I)
+- Help (F1)
+    * About iCare
+
+*/
+
+const menu = Menu.buildFromTemplate([
+    {
+        label: 'File',
+        submenu: [
+            { 
+                label: 'Preferences',
+                accelerator: 'CmdOrCtrl+,',
+                click: () => {
+                    if (!global.prefsWindow || global.prefsWindow.isDestroyed())
+                        global.prefsWindow = createWindow('preferences', 'prefs');
+                    else {
+                        global.prefsWindow.restore();
+                        global.prefsWindow.focus();
+                    }
+                }
+            },
+            { type: 'separator' },
+            { role: 'close' }
+        ]
+    },
+    ... (isDev ? [
+            {
+                label: 'Dev',
+                submenu: [
+                    { role: 'reload' },
+                    { role: 'forceReload' },
+                    { role: 'toggleDevTools' },
+                ]
+            }
+        ] : []),
+    {
+        role: 'help',
+        submenu: [
+            {
+                label: 'About',
+                click: async () => {
+                    const { shell } = require('electron')
+                    await shell.openExternal('https://electronjs.org')
+                }
+            }
+        ]
+    },
+])
+Menu.setApplicationMenu(menu)
+
+
+
+/*---------------------------------------------------------------------------*/
 /* Theming */
 
 // Update the Electron themeSource property
@@ -103,10 +165,10 @@ nativeTheme.themeSource = store.get('preferences.appearance.theme');
 nativeTheme.on('updated', () => {
     const themeName = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
 
-    if (global.mainWindow && !global.mainWindow.isDestroyed()) 
+    if (global.mainWindow && !global.mainWindow.isDestroyed())
         global.mainWindow.webContents.send('theme-updated', themeName);
 
-    if (global.prefsWindow && !global.prefsWindow.isDestroyed()) 
+    if (global.prefsWindow && !global.prefsWindow.isDestroyed())
         global.prefsWindow.webContents.send('theme-updated', themeName);
 })
 
@@ -142,7 +204,7 @@ ipcMain.on('get-theme-name', (event) => {
 
 // Open preferences
 ipcMain.handle('open-preferences', () => {
-    if (!global.prefsWindow || global.prefsWindow.isDestroyed()) 
+    if (!global.prefsWindow || global.prefsWindow.isDestroyed())
         global.prefsWindow = createWindow('preferences', 'prefs');
     else {
         global.prefsWindow.restore();

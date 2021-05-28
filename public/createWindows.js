@@ -10,6 +10,7 @@ const SHARED_OPTIONS = {
     resizable: false,
     minimizable: false,
     maximizable: false,
+    useContentSize: true,
     show: false,
     frame: false,
     transparent: true,
@@ -170,7 +171,7 @@ function createWindow(type, destination = '', display=null, isPopup=false) {
     }
 
     // Remove default menu and shortcut bindings
-    if (!isDev) window.removeMenu();
+    // if (!isDev) window.removeMenu();
     
     // On macOS, make it visible across all workspaces
     window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
