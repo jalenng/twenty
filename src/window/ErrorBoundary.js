@@ -26,6 +26,10 @@ export default class extends React.Component {
   //   // You can also log the error to an error reporting service
   // }
 
+  handleReset () {
+    store.reset()
+  }
+
   render () {
     if (this.state.hasError) {
       // You can render any custom fallback UI
@@ -70,7 +74,7 @@ export default class extends React.Component {
             <ActionButton
               iconProps={{ iconName: 'Refresh' }}
               text='Reset iCare if you are still having trouble'
-              onClick={store.reset}
+              onClick={this.handleReset}
             />
           </div>
 

@@ -54,11 +54,6 @@ class TimerSystem extends EventEmitter {
   constructor () {
     super()
 
-    this.timeout
-
-    // Interval for sending updated timer info
-    this.sendingInterval
-
     // Flags and variables to track timer status
     this.isStopped = true
     this.isBlocked = false

@@ -79,10 +79,12 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
       : `file://${path.join(__dirname, `../build/index.html#${destination}`)}`
   )
 
+  let mainWindowState
+
   switch (type) {
     case 'main':
       // Window state keeper for main window
-      const mainWindowState = windowStateKeeper({})
+      mainWindowState = windowStateKeeper({})
 
       // Update and remember the position of the main window
       window.setPosition(mainWindowState.x, mainWindowState.y)
@@ -90,15 +92,16 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
 
       // Handle the close button action
       window.on('close', (e) => {
-        if (isDev) { app.exit()} // Just exit the app if isDev
-        else {
+        if (isDev) {
+          app.exit() // Just exit the app if isDev
+        } else {
           e.preventDefault() // Otherwise, just hide to tray
-          mainWindow.hide()
+          global.mainWindow.hide()
         }
       })
 
       // If not configured to hide the app on app startup, show window when ready
-      if (!global.store.get('preferences.startup.hideOnAppStartup')) { window.on('ready-to-show', () => window.show())}
+      if (!global.store.get('preferences.startup.hideOnAppStartup')) { window.on('ready-to-show', () => window.show()) }
 
       break
 
@@ -107,7 +110,7 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
       window.on('close', (e) => e.preventDefault())
 
       // If notification is a popup window, show when ready
-      if (isPopup) { window.on('ready-to-show', () => window.show())}
+      if (isPopup) { window.on('ready-to-show', () => window.show()) }
 
       break
 
@@ -122,13 +125,9 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
   if (display) {
     let windowBounds
 
-    // If displays provided were intended for displaying fullscreen
-    if (!isPopup) {
+    if (!isPopup) { // If fullscreen intended
       windowBounds = display.bounds
-    }
-
-    // Else, displays were provided for displaying a popup
-    else {
+    } else { // Else, popup intended
       const bounds = display.workArea
 
       const popupSize = POPUP_OPTIONS.size
@@ -147,10 +146,10 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
         }
       } else {
         windowBounds = {
-          x: bounds.x + bounds.width - POPUP_SIZE.width,
-          y: bounds.y + bounds.height - POPUP_SIZE.height,
-          width: POPUP_SIZE.width,
-          height: POPUP_SIZE.height
+          x: bounds.x + bounds.width - popupSize.width,
+          y: bounds.y + bounds.height - popupSize.height,
+          width: popupSize.width,
+          height: popupSize.height
         }
       }
     }

@@ -46,6 +46,10 @@ export default class extends React.Component {
     })
   };
 
+  handleAddSound () {
+    store.sounds.add()
+  }
+
   render () {
     const defaultSoundsHeader = [{
       key: 'defaultSoundsHeader',
@@ -128,7 +132,7 @@ export default class extends React.Component {
             <TooltipHost content='Import'>
               <IconButton
                 iconProps={{ iconName: 'Add' }}
-                onClick={store.sounds.add}
+                onClick={this.handleAddSound}
               />
             </TooltipHost>
 

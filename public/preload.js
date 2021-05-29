@@ -168,26 +168,26 @@ window.platform = ipcRenderer.sendSync('get-platform')
 
 /* Listen for events from ipcRenderer and relay them accordingly */
 ipcRenderer.on('receive-timer-status', (event, timerStatus) => {
-  const fireCallbacks = (callback) => callback(event, timerStatus)
-  window.timer.eventSystem._events.update.forEach(fireCallbacks)
+  const callbacks = window.timer.eventSystem._events.update
+  if (callbacks) callbacks.forEach(callback => callback(event, timerStatus))
 })
 
 ipcRenderer.on('receive-break-status', (event, breakStatus) => {
-  const fireCallbacks = (callback) => callback(event, breakStatus)
-  window.breakSys.eventSystem._events.update.forEach(fireCallbacks)
+  const callbacks = window.breakSys.eventSystem._events.update
+  if (callbacks) callbacks.forEach(callback => callback(event, breakStatus))
 })
 
 ipcRenderer.on('store-changed', (event, category) => {
-  const fireCallbacks = (callback) => callback()
-  window.store[category].eventSystem._events.changed.forEach(fireCallbacks)
+  const callbacks = window.store[category].eventSystem._events.changed
+  if (callbacks) callbacks.forEach(callback => callback())
 })
 
 ipcRenderer.on('receive-blockers', (event, blockers) => {
-  const fireCallbacks = (callback) => callback(event, blockers)
-  window.blockerSys.eventSystem._events.update.forEach(fireCallbacks)
+  const callbacks = window.blockerSys.eventSystem._events.update
+  if (callbacks) callbacks.forEach(callback => callback(event, blockers))
 })
 
 ipcRenderer.on('theme-updated', (event, themeName) => {
-  const fireCallbacks = (callback) => callback(themeName)
-  window.themeSys.eventSystem._events.update.forEach(fireCallbacks)
+  const callbacks = window.themeSys.eventSystem._events.update
+  if (callbacks) callbacks.forEach(callback => callback(themeName))
 })

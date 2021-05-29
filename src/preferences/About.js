@@ -41,7 +41,7 @@ export default class extends React.Component {
       },
       licenseExpanded: false
     }
-    this.toggleLicenseExpand = this.toggleLicenseExpand.bind(this)
+    this.handleToggleLicenseExpand = this.handleToggleLicenseExpand.bind(this)
   }
 
   componentDidMount () {
@@ -51,11 +51,15 @@ export default class extends React.Component {
     })
   }
 
-  toggleLicenseExpand () {
+  handleToggleLicenseExpand () {
     this.setState({
       ...this.state,
       licenseExpanded: !this.state.licenseExpanded
     })
+  }
+
+  handleReset () {
+    store.reset()
   }
 
   render () {
@@ -96,6 +100,7 @@ export default class extends React.Component {
             {versionComponents.map((component) => {
               return (
                 <DefaultButton
+                  key={component.key}
                   style={{ height: '52px', borderRadius: '8px' }}
                   disabled
                   onRenderText={() => {
@@ -123,6 +128,7 @@ export default class extends React.Component {
             {openSourceLibraries.map(library => {
               return (
                 <DefaultButton
+                  key={library.name}
                   style={{ borderRadius: '8px', marginRight: '8px', marginBottom: '8px' }}
                   text={library.name}
                   onClick={() => openExternalLink(library.link)}
@@ -139,8 +145,13 @@ export default class extends React.Component {
 
           {licenseParagraphs.map(paragraph => {
             return (
-              <Text block variant='medium' style={{ paddingRight: '30px' }}>
-                {paragraph}
+              <Text
+                block
+                key={paragraph.number}
+                variant='medium'
+                style={{ paddingRight: '30px' }}
+              >
+                {paragraph.text}
               </Text>
             )
           })}
@@ -153,7 +164,7 @@ export default class extends React.Component {
                 : { iconName: 'Sell' }
             }
             text={this.state.licenseExpanded ? 'Show less' : 'Show more'}
-            onClick={this.toggleLicenseExpand}
+            onClick={this.handleToggleLicenseExpand}
           />
 
         </Stack>
@@ -167,7 +178,7 @@ export default class extends React.Component {
             <DefaultButton
               text='Reset iCare'
               iconProps={{ iconName: 'Refresh' }}
-              onClick={store.reset}
+              onClick={this.handleReset}
             />
           </Stack>
 

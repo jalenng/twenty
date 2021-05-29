@@ -42,6 +42,15 @@ const topRightStyle = {
 }
 
 export default class extends React.Component {
+  constructor (props) {
+    super(props)
+    this.handleSecondaryButton = this.handleSecondaryButton.bind(this)
+  }
+
+  handleSecondaryButton () {
+    this.props.secondaryButton.onClick()
+  }
+
   render () {
     const isMacOS = platform === 'darwin'
     const secondaryButton = this.props.secondaryButton
@@ -92,7 +101,7 @@ export default class extends React.Component {
                 styles={{ root: { color: buttonIconColor } }}
                 toggle
                 checked={secondaryButton.checked}
-                onClick={secondaryButton.onClick}
+                onClick={this.handleSecondaryButton}
               />
             </TooltipHost>}
 

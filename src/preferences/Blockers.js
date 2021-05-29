@@ -115,61 +115,53 @@ export default class extends React.Component {
 
       <Stack id='blockers' {...level1Props}>
 
-        {/* Blocker app settings */}
-        <Stack {...level2Props}>
+        {/* Blocker app settings - only show if not macOS */}
+        {!isMacOS &&
+          <Stack {...level2Props}>
 
-          <Text variant='xLarge' block> Blocker apps </Text>
+            <Text variant='xLarge' block> App blockers </Text>
 
-          {/* Notify that macOS is not supported */}
-          {isMacOS &&
             <Text variant='medium' block>
-              App blockers are currently unsupported on macOS.
-            </Text>}
+              Apps in this list will block the timer from running.
+            </Text>
 
-          {!isMacOS &&
-            <div>
-              <Text variant='medium' block>
-                Apps in this list will block the timer from running.
-              </Text>
+            {/* Add app blockers */}
+            <Stack {...level2HorizontalProps} verticalAlign='end'>
 
-              {/* Add app blockers */}
-              <Stack {...level2HorizontalProps} verticalAlign='end'>
-
-                <Dropdown
-                  label='Add an app'
-                  styles={{ dropdown: { width: 300 } }}
-                  options={openWindowsOptions}
-                  selectedKey={this.state.appDropdownSelection}
-                  placeholder='Select an app'
-                  onChange={(event, option, index) => {
-                    this.handleAppDropdown(openWindowsOptions[index].key)
-                  }}
-                />
-
-                <DefaultButton
-                  text='Add'
-                  onClick={this.handleAppAdd}
-                />
-
-              </Stack>
-
-              {/* Manage existing app blockers */}
-              <ActionButton
-                iconProps={{ iconName: 'Delete' }}
-                text='Delete'
-                onClick={this.handleAppDelete}
+              <Dropdown
+                label='Add an app'
+                styles={{ dropdown: { width: 300 } }}
+                options={openWindowsOptions}
+                selectedKey={this.state.appDropdownSelection}
+                placeholder='Select an app'
+                onChange={(event, option, index) => {
+                  this.handleAppDropdown(openWindowsOptions[index].key)
+                }}
               />
 
-              <DetailsList
-                compact
-                items={blockerApps}
-                columns={blockerAppsColumns}
-                selectionPreservedOnEmptyClick
-                selection={this.selection}
+              <DefaultButton
+                text='Add'
+                onClick={this.handleAppAdd}
               />
-            </div>}
 
-        </Stack>
+            </Stack>
+
+            {/* Manage existing app blockers */}
+            <ActionButton
+              iconProps={{ iconName: 'Delete' }}
+              text='Delete'
+              onClick={this.handleAppDelete}
+            />
+
+            <DetailsList
+              compact
+              items={blockerApps}
+              columns={blockerAppsColumns}
+              selectionPreservedOnEmptyClick
+              selection={this.selection}
+            />
+
+          </Stack>}
 
         {/* Other blocker settings */}
         <Stack {...level2Props}>

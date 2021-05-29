@@ -64,6 +64,7 @@ export default class extends React.Component {
 
               return (
                 <ActivityItem
+                  key={blocker.key}
                   activityDescription={description}
                   activityIcon={<Icon iconName='Blocked2' />}
                   isCompact
