@@ -6,6 +6,8 @@
 const { BrowserWindow, screen, app, Menu } = require('electron')
 const isDev = require('electron-is-dev')
 const path = require('path')
+
+const appName = app.getName()
 const isWindows = process.platform === 'win32'
 
 const windowStateKeeper = require('electron-window-state')
@@ -35,12 +37,12 @@ const TYPE_OPTIONS = {
   main: {
     width: 280,
     height: 360,
-    title: 'iCare'
+    title: appName
   },
   preferences: {
     width: 800,
     height: 500,
-    title: 'iCare - Preferences'
+    title: `${appName} - Preferences`
   },
   notification: {
     alwaysOnTop: true,
@@ -48,7 +50,7 @@ const TYPE_OPTIONS = {
     resizable: false,
     movable: false,
     skipTaskbar: true,
-    title: 'iCare - Notification'
+    title: `${appName} - Notification`
   }
 }
 
@@ -92,7 +94,7 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
       mainWindowState = windowStateKeeper({})
 
       // Update and remember the position of the main window
-      window.setPosition(mainWindowState.x, mainWindowState.y)
+      // window.setPosition(mainWindowState.x, mainWindowState.y)
       mainWindowState.manage(window)
 
       // Handle the close button action

@@ -78,7 +78,7 @@ export default class extends React.Component {
           >
             <ActionButton
               iconProps={{ iconName: 'Refresh' }}
-              text='Reset iCare if you are still having trouble'
+              text={`Reset ${aboutAppInfo.appInfo.name} if you are still having trouble`}
               onClick={this.handleReset}
             />
           </div>

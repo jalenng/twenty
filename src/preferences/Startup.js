@@ -33,6 +33,8 @@ export default class extends React.Component {
   }
 
   render () {
+    const appName = aboutAppInfo.appInfo.name
+
     return (
       <Stack id='startup' {...level1Props}>
 
@@ -40,7 +42,7 @@ export default class extends React.Component {
           <Text variant='xLarge' block> Startup </Text>
 
           <Toggle
-            label='Start iCare when your computer starts up'
+            label={`Start ${appName} when your computer starts up`}
             onText='On' offText='Off'
             checked={this.state.startAppOnLogin}
             onChange={(event, checked) => {
@@ -48,7 +50,7 @@ export default class extends React.Component {
             }}
           />
           <Toggle
-            label='Start the timer when iCare starts up'
+            label={`Start the timer when ${appName} starts up`}
             onText='On' offText='Off'
             checked={this.state.startTimerOnAppStartup}
             onChange={(event, checked) => {
@@ -56,7 +58,7 @@ export default class extends React.Component {
             }}
           />
           <Toggle
-            label='Hide the window when iCare starts up'
+            label={`Hide the window when ${appName} starts up`}
             onText='On' offText='Off'
             checked={this.state.hideOnAppStartup}
             onChange={(event, checked) => {

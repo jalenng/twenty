@@ -28,27 +28,9 @@ export default class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      aboutInfo: {
-        appInfo: {
-          name: '',
-          version: ''
-        },
-        versions: {
-
-        },
-        openSourceLibraries: [],
-        license: []
-      },
       licenseExpanded: false
     }
     this.handleToggleLicenseExpand = this.handleToggleLicenseExpand.bind(this)
-  }
-
-  componentDidMount () {
-    this.setState({
-      ...this.state,
-      aboutInfo: getAboutInfo()
-    })
   }
 
   handleToggleLicenseExpand () {
@@ -63,14 +45,12 @@ export default class extends React.Component {
   }
 
   render () {
-    const aboutInfo = this.state.aboutInfo
-
-    const appInfo = aboutInfo.appInfo
-    const versions = aboutInfo.versions
-    const openSourceLibraries = aboutInfo.openSourceLibraries
+    const appInfo = aboutAppInfo.appInfo
+    const versions = aboutAppInfo.versions
+    const openSourceLibraries = aboutAppInfo.openSourceLibraries
     const licenseParagraphs = this.state.licenseExpanded
-      ? aboutInfo.license
-      : aboutInfo.license.slice(0, 2)
+      ? aboutAppInfo.license
+      : aboutAppInfo.license.slice(0, 2)
 
     return (
       <Stack {...level1Props} id='about'>
@@ -78,7 +58,7 @@ export default class extends React.Component {
         {/* Version info */}
         <Stack {...level2Props}>
 
-          {/* iCare banner */}
+          {/* App banner */}
           <Stack {...level2HorizontalProps}>
 
             <Image
@@ -176,7 +156,7 @@ export default class extends React.Component {
 
           <Stack {...level2HorizontalProps}>
             <DefaultButton
-              text='Reset iCare'
+              text={`Reset ${appInfo.name}`}
               iconProps={{ iconName: 'Refresh' }}
               onClick={this.handleReset}
             />

@@ -9,7 +9,6 @@ import React from 'react'
 
 import { ThemeProvider, createTheme, loadTheme } from '@fluentui/react'
 
-import ErrorBoundary from './ErrorBoundary'
 import themes from './Themes'
 
 export default class extends React.Component {
@@ -51,9 +50,7 @@ export default class extends React.Component {
         }}
         >
 
-          <ErrorBoundary>
-            {this.props.children}
-          </ErrorBoundary>
+          {this.props.children}
 
         </div>
       </ThemeProvider>

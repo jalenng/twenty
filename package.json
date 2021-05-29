@@ -1,17 +1,17 @@
 {
-  "name": "icare-mini",
-  "productName": "iCare",
-  "description": "iCare",
+  "name": "twenty",
+  "productName": "Twenty",
+  "description": "A customizable timer that reminds you to take breaks.",
   "version": "1.0.0",
-  "repository": "https://github.com/jalenng/icare-mini",
-  "url": "https://github.com/jalenng/icare-mini#readme",
+  "repository": "https://github.com/jalenng/twenty",
+  "url": "https://github.com/jalenng/twenty#readme",
   "author": {
     "name": "Jay",
     "email": "null@null.com"
   },
   "private": true,
   "build": {
-    "appId": "jay.icare",
+    "appId": "jalennggjt.twenty",
     "publish": {
       "provider": "github"
     },

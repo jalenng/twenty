@@ -80,13 +80,13 @@ app.whenReady().then(() => {
   }
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'iCare', enabled: false },
+    { label: app.getName(), enabled: false },
     { type: 'separator' },
     { label: 'Quit', click: app.exit }
   ])
 
   appTray = new Tray(getTrayImage())
-  appTray.setToolTip('iCare')
+  appTray.setToolTip(app.getName())
   appTray.setContextMenu(contextMenu)
   appTray.on('click', () => {
     global.mainWindow.show()
@@ -125,7 +125,7 @@ app.on('web-contents-created', (event, contents) => {
   * Toggle Developer Tools (Ctrl+Shift+I)
   * Start break (Ctrl+E)
 - Help (F1)
-  * About iCare
+  * About
 
 */
 

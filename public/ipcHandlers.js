@@ -203,11 +203,12 @@ ipcMain.on('get-store', (event, key) => { event.returnValue = global.store.get(k
 
 // Show a dialog to confirm resetting the app
 ipcMain.handle('reset-store', () => {
+  const appName = app.getName()
   dialog.showMessageBox(global.mainWindow, {
-    title: 'Reset iCare',
+    title: `Reset ${appName}`,
     type: 'question',
-    message: 'Reset iCare?',
-    detail: 'iCare will restart, and your preferences will revert to its defaults.',
+    message: `Reset ${appName}?`,
+    detail: `${appName} will restart, and your preferences will revert to its defaults.`,
     buttons: ['Yes', 'No']
   })
     .then(result => {

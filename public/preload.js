@@ -126,12 +126,6 @@ window.openPrefs = () => { ipcRenderer.invoke('open-preferences') }
 window.playSound = () => { ipcRenderer.invoke('play-sound') }
 
 /**
- * Retrieves information about the app
- * @returns an object with the relevant information
- */
-window.getAboutInfo = () => { return ipcRenderer.sendSync('get-about-info') }
-
-/**
  * Get a list of open windows on the system
  */
 window.getOpenWindows = () => { return ipcRenderer.sendSync('get-open-windows') }
@@ -142,7 +136,7 @@ window.getOpenWindows = () => { return ipcRenderer.sendSync('get-open-windows') 
 window.logToMain = (content) => { ipcRenderer.invoke('log-to-main', content) }
 
 /**
- * Relaunches the iCare application
+ * Relaunches the application
  */
 window.restartApp = () => { ipcRenderer.invoke('restart-app') }
 
@@ -155,6 +149,11 @@ window.openExternalLink = link => { shell.openExternal(link) }
  * Gets the name of the current theme to be used
  */
 window.getThemeName = () => { return ipcRenderer.sendSync('get-theme-name') }
+
+/**
+ * Information about the app
+ */
+window.aboutAppInfo = ipcRenderer.sendSync('get-about-info')
 
 /**
  * A boolean that tells whether or not this app is running in a dev environment
