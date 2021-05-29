@@ -50,17 +50,6 @@ export default class extends React.Component {
     return (
       <div>
 
-        {/* Black background */}
-        <div
-          style={{
-            background: '#000000',
-            width: '100%',
-            height: '100%',
-            position: 'absolute',
-            zIndex: -100
-          }}
-        />
-
         {/* Center graphic and text */}
         <div style={{
           position: 'absolute',
