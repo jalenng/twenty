@@ -6,7 +6,7 @@ import {
     ActionButton, PrimaryButton 
 } from '@fluentui/react';
 
-import Window from './Window';
+import Window from './Container';
 
 export default class extends React.Component {
     constructor(props) {

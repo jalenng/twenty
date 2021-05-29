@@ -1,16 +1,16 @@
-/*
-The purpose of this preload script is to provide a set of methods for the 
-renderer (React code) to interact with the main process (Electron). 
- 
-This compartmentalization ensures that logic is handled exclusively by Electron,
-and displaying UI elements is handled exclusively by React.
-*/
+/**
+ * @file Provides a set of methods for the renderer to interact with the main process. 
+ * @author jalenng
+ * 
+ * This compartmentalization ensures that logic is handled exclusively by Electron,
+ * and displaying UI elements is handled exclusively by React.
+ */
 
 // Allow access to core Electron APIs when testing
 if (process.env.NODE_ENV === 'test')
     window.electronRequire = require;
 
-const { ipcRenderer, nativeTheme, shell } = require('electron');
+const { ipcRenderer, shell } = require('electron');
 
 
 /*---------------------------------------------------------------------------*/

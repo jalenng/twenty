@@ -19,45 +19,32 @@ const path = require('path');
 const { screen } = require('electron');
 const soundPlayer = require('sound-play');
 
+const EventEmitter = require('./EventEmitter');
+
 const BREAK_DURATION = 20000;
 const POPUP_NOTIF_DURATION = 5000;
 
-var oldMousePos;
-var checkMousePositionInterval;
+class BreakSystem extends EventEmitter {
 
-var mainTimeout;
-var intermediateTimeout;
+    constructor() {
+        super();
+        
+        this.isOnBreak = false;
+        this.totalDuration = 0;
+        this.endTime = new Date();
 
-module.exports = function(){
-
-    this._events = {};
-
-    this.isOnBreak = false;
-    this.totalDuration = 0;
-    this.endTime = new Date();
-
-    /**
-     * Registers an event listener
-     */
-    this.on = function(name, listener) {
-        if (!this._events[name]) this._events[name] = [];
-        this._events[name].push(listener);
-    }
-    
-    /**
-     * Emits an event and invokes the functions of its listeners
-     * @param {string} eventName    name of event to emit
-     * @param {(callback) => any} fireCallbacks 
-     */
-    this.emit = function (eventName, fireCallbacks=callback => callback()) {
-        this._events[eventName].forEach(fireCallbacks);
-    }
+        this.oldMousePos;
+        this.checkMousePositionInterval;
+        
+        this.mainTimeout;
+        this.intermediateTimeout;
+    };
 
     /**
      * Gets the status of the break system
      * @returns an object
      */
-    this.getStatus = function() {
+    getStatus() {
 
         let remainingTime = this.isOnBreak
                 ? this.endTime - new Date()
@@ -76,7 +63,7 @@ module.exports = function(){
     /**
      * Starts the break. Calls this.setupTimes in the process.
      */
-    this.start = function() {
+    start() {
 
         if (this.isOnBreak) return;
 
@@ -88,14 +75,14 @@ module.exports = function(){
         this.setupTimes();
                     
         // Set interval to continuously check mouse position
-        oldMousePos = screen.getCursorScreenPoint();
-        checkMousePositionInterval = setInterval(() => {
+        this.oldMousePos = screen.getCursorScreenPoint();
+        this.checkMousePositionInterval = setInterval(() => {
             var newMousePos = screen.getCursorScreenPoint();
-            var mouseMoved = newMousePos.x != oldMousePos.x || newMousePos.y != oldMousePos.y;
+            var mouseMoved = newMousePos.x != this.oldMousePos.x || newMousePos.y != this.oldMousePos.y;
 
             if (mouseMoved) {
                 this.setupTimes();
-                oldMousePos = newMousePos;
+                this.oldMousePos = newMousePos;
             }
 
         }, 100);            
@@ -107,7 +94,7 @@ module.exports = function(){
     /**
      * Initializes the end time and timeout
      */
-    this.setupTimes = function() {
+    setupTimes() {
 
         this.emit('break-times-set')
 
@@ -116,11 +103,11 @@ module.exports = function(){
         
         this.totalDuration = BREAK_DURATION;
         
-        clearTimeout(mainTimeout)
-        clearTimeout(intermediateTimeout)
+        clearTimeout(this.mainTimeout)
+        clearTimeout(this.intermediateTimeout)
 
-        mainTimeout = setTimeout(this.end.bind(this), BREAK_DURATION);
-        intermediateTimeout = setTimeout(() => {
+        this.mainTimeout = setTimeout(this.end.bind(this), BREAK_DURATION);
+        this.intermediateTimeout = setTimeout(() => {
             // Call break-intermediate listeners after POPUP_NOTIF_DURATION
             this.emit('break-intermediate')
         }, POPUP_NOTIF_DURATION);
@@ -129,16 +116,15 @@ module.exports = function(){
     /**
      * Ends the break and emits the 'break-end' event
      */
-    this.end = function() {
-
+    end() {
         if (this.isOnBreak) {
 
             if (global.store.get('preferences.notifications.enableSound') === true) 
                 this.playSound();
 
-            clearTimeout(mainTimeout)
-            clearTimeout(intermediateTimeout)
-            clearInterval(checkMousePositionInterval)
+            clearTimeout(this.mainTimeout)
+            clearTimeout(this.intermediateTimeout)
+            clearInterval(this.checkMousePositionInterval)
 
             this.emit('break-end')
 
@@ -150,7 +136,7 @@ module.exports = function(){
     /**
      * Plays the sound stored in the store under preferences.notifications.sound
      */
-    this.playSound = function() {
+    playSound() {
         let soundKey = global.store.get('preferences.notifications.sound');
         let volume = global.store.get('preferences.notifications.soundVolume') / 100;
 
@@ -161,3 +147,6 @@ module.exports = function(){
     }
 
 }
+
+/** Exports */
+module.exports = BreakSystem;

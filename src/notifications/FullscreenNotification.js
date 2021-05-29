@@ -1,3 +1,8 @@
+/**
+ * @file The fullscreen timer notification
+ * @author jalenng
+ */
+
 import React from 'react';
 
 import {

@@ -1,3 +1,8 @@
+/**
+ * @file The "Notifications" tab in Preferences
+ * @author jalenng
+ */
+
 import React from 'react';
 
 import { 

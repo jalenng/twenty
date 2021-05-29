@@ -1,13 +1,17 @@
+/**
+ * @file Entry point for Electron's renderer processes
+ * @author jalenng
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
 
 import App from './App';
-import PrefsScreen from './preferences/PrefsScreen';
+import Preferences from './Preferences';
 import FullscreenNotification from './notifications/FullscreenNotification';
 import PopupNotification from './notifications/PopupNotification';
-import Window from './Window';
-import ErrorBoundary from './ErrorBoundary';
+import Container from './window/Container';
 
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import { initializeIcons } from '@fluentui/react';
@@ -25,20 +29,18 @@ initializeIcons();
 ReactDOM.render(
     <div style={unselectableTextStyle}>
         <React.StrictMode>
-            <ErrorBoundary>
+            <Container>
                 <HashRouter>
-                    <Window>
-                        <Switch>
-                            <Route path='/' exact component={App} />
+                    <Switch>
+                        <Route path='/' exact component={App} />
 
-                            <Route path='/fullscreenNotification' exact component={FullscreenNotification} />
-                            <Route path='/popupNotification' exact component={PopupNotification} />
+                        <Route path='/fullscreenNotification' exact component={FullscreenNotification} />
+                        <Route path='/popupNotification' exact component={PopupNotification} />
 
-                            <Route path='/prefs' exact component={PrefsScreen} />
-                        </Switch>
-                    </Window>
+                        <Route path='/preferences' exact component={Preferences} />
+                    </Switch>
                 </HashRouter>
-            </ErrorBoundary>
+            </Container>
         </React.StrictMode>
     </div>,
     document.getElementById('root')

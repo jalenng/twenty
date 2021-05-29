@@ -1,7 +1,12 @@
-const { ipcMain, app, nativeTheme } = require('electron');
+/**
+ * @file Contains all the main process's IPC handlers.
+ * @author jalenng
+ */
+
+const { ipcMain, app, nativeTheme, dialog } = require('electron');
 const isDev = require('electron-is-dev');
 
-const { createWindow } = require('./createWindows');
+const { createWindow } = require('./windowCreator');
 
 /*---------------------------------------------------------------------------*/
 /* Main */
@@ -19,7 +24,7 @@ ipcMain.handle('log-to-main', (event, content) => {
 // Open preferences
 ipcMain.handle('open-preferences', () => {
     if (!global.prefsWindow || global.prefsWindow.isDestroyed())
-        global.prefsWindow = createWindow('preferences', 'prefs');
+        global.prefsWindow = createWindow('preferences', 'preferences');
     else {
         global.prefsWindow.restore();
         global.prefsWindow.focus();
@@ -81,6 +86,55 @@ ipcMain.on('get-platform', (event) => {
 // Get the name of the current theme
 ipcMain.on('get-theme-name', (event) => {
     event.returnValue = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+})
+
+
+/*---------------------------------------------------------------------------*/
+/* System-related */
+
+// Reset the timer
+ipcMain.handle('timer-reset', () => {
+    global.timerSystem.reset();
+})
+
+// End the timer (and start the break)
+ipcMain.handle('timer-end', () => {
+    global.timerSystem.end();
+})
+
+// Toggle pause/play
+ipcMain.handle('timer-toggle', () => {
+    global.timerSystem.togglePause();
+})
+
+// Block the timer from running
+ipcMain.handle('timer-block', () => {
+    global.timerSystem.block();
+})
+
+// Get break status
+ipcMain.on('get-break-status', (event) => {
+    event.reply('receive-break-status', global.breakSystem.getStatus());
+});
+
+// Play sound file
+ipcMain.handle('play-sound', () => {
+    global.breakSystem.playSound();
+});
+
+// Get list of open windows
+ipcMain.on('get-open-windows', async (event) => {
+    event.returnValue = appSnapshotSystem.getLastSnapshot();
+});
+
+// Get timer status
+ipcMain.on('get-blockers', (event) => {
+    event.reply('receive-blockers', global.blockerSystem.getBlockers());
+});
+
+// Clear blockers
+ipcMain.handle('clear-blockers', () => {
+    global.blockerSystem.clear();
 })
 
 

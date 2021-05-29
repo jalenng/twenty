@@ -1,3 +1,8 @@
+/**
+ * @file Holds the color palettes for the different themes.
+ * @author jalenng
+ */
+
 module.exports = {
     dark: {
         palette: {

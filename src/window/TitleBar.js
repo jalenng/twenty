@@ -1,3 +1,8 @@
+/**
+ * @file Provides a draggable title bar with a Close button and optional secondary button.
+ * @author jalenng
+ */
+
 import React from 'react';
 
 import {

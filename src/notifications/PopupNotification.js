@@ -1,3 +1,8 @@
+/**
+ * @file The popup timer notification
+ * @author jalenng
+ */
+
 import React from 'react';
 
 import { 

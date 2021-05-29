@@ -1,21 +1,18 @@
-const {
-    BrowserWindow,
-    Tray,
-    Menu,
-    nativeImage,
-    nativeTheme,
-    app,
-} = require('electron');
+/**
+ * @file Entry point for Electron's main process.
+ * @author jalenng
+ */
+
+const { BrowserWindow, Tray, Menu, nativeImage, nativeTheme, app } = require('electron');
 const path = require('path');
 
 const isDev = require('electron-is-dev');
-const isMacOS = process.platform === 'darwin';
 
-const { createWindow } = require('./createWindows');
+const { createWindow } = require('./windowCreator');
 
 /* Initialize the stores and systems */
-require('./store');
-require('./initializeSystems');
+require('./store/storeInitializer');
+require('./systems/systemsInitializer');
 
 require('./ipcHandlers');
 
@@ -76,7 +73,7 @@ app.whenReady().then(() => {
         const percentage = timerStatus.remainingTime / timerStatus.totalDuration * 100;
         const percentageMultOfFive = Math.round(percentage / 5) * 5;
 
-        const folder = isMacOS 
+        const folder = process.platform === 'darwin' 
             ? 'template'
             : nativeTheme.shouldUseDarkColors
                 ? 'white'
@@ -111,7 +108,7 @@ app.whenReady().then(() => {
 
 /* Handle closing all windows behavior for macOS */
 app.on('window-all-closed', function () {
-    if (isMacOS) app.exit();
+    if (process.platform === 'darwin') app.exit();
 })
 
 /* Prevent loading of new websites */
@@ -181,7 +178,6 @@ const menu = Menu.buildFromTemplate([
     },
 ])
 Menu.setApplicationMenu(menu)
-
 
 
 /*---------------------------------------------------------------------------*/

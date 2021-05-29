@@ -7,46 +7,21 @@
  *  - blockers-cleared: when all blockers have been dismissed or cleared
  */
 
-module.exports = function() {
+const EventEmitter = require('./EventEmitter');
 
-    this._events = {};
+class BlockerSystem extends EventEmitter {
 
-    this.dismissedBlockers = [];
-    this.blockers = [];
-
-    /**
-     * @callback requestCallback
-     */
-
-    /**
-     * Registers an event listener
-     * @param {string} name - The name of the event
-     * @param {requestCallback} listener - The function to invoke when the event is emitted
-     */
-    this.on = function (name, listener) {
-        if (!this._events[name]) this._events[name] = [];
-        this._events[name].push(listener);
-    }
-
-    /**
-     * @callback emitFunction
-     * @param {requestCallback} callback
-     */
-
-    /**
-     * Emits an event and invokes the functions of its listeners
-     * @param {string} eventName - The name of the event to emit
-     * @param {emitFunction} [fireCallbacks = callback => callback()] - The function that invokes the callbacks
-     */
-     this.emit = function (eventName, fireCallbacks = callback => callback()) {
-        this._events[eventName].forEach(fireCallbacks);
+    constructor() {
+        super();
+        this.dismissedBlockers = [];
+        this.blockers = [];
     }
 
     /**
      * Adds a blocker to the list of blockers
      * @param {Object} blocker - The blocker to add
      */
-    this.add = function (blocker) {
+    add(blocker) {
 
         // Check if blocker already exists in the main list and dismissed list
         const combinedList = this.dismissedBlockers.concat(this.blockers)
@@ -66,7 +41,7 @@ module.exports = function() {
      * @param {string} type - The type of the blockers to remove
      * @param {string} key - The key of the blockers to remove
      */
-    this.remove = function (type, key) {
+    remove(type, key) {
         const filterFunction = blocker => {
             return !(blocker.key === key && blocker.type === type);
         };
@@ -78,7 +53,7 @@ module.exports = function() {
     /**
      * Clears the list of blockers
      */
-    this.clear = function () {
+    clear() {
         this.dismissedBlockers = this.dismissedBlockers.concat(this.blockers);
         this.blockers = [];
         this.notifyBlockersCleared();
@@ -87,7 +62,7 @@ module.exports = function() {
     /**
      * Update the blockers list according to the list of open processes
      */
-    this.processAppSnapshot = function (openProcesses) {
+    processAppSnapshot(openProcesses) {
         this.addOpenBlockedApps(openProcesses);
         this.removeClosedBlockedApps(openProcesses);
     }
@@ -96,7 +71,7 @@ module.exports = function() {
      * Removes the app blockers in the blocker list for the apps that are not open
      * @param {Object[]} openProcesses - The list of open processes to filter from
      */
-    this.removeClosedBlockedApps = function(openProcesses) {
+    removeClosedBlockedApps(openProcesses) {
         const blockedApps = global.store.get('preferences.blockers.apps')
 
         const filterFunction = blocker => {
@@ -123,7 +98,7 @@ module.exports = function() {
      * to the blocker list.
      * @param {Object[]} openProcesses 
      */
-    this.addOpenBlockedApps = function (openProcesses) {
+    addOpenBlockedApps(openProcesses) {
 
         const appNamesDict  = global.store.get('appNames');
         let blockedApps = global.store.get('preferences.blockers.apps')
@@ -148,16 +123,19 @@ module.exports = function() {
      * Gets the present blockers
      * @returns {Object[]} - the list of blockers
      */
-    this.getBlockers = () => { return this.blockers }
+    getBlockers() { return this.blockers }
 
     /**
      * Emits the blockers-cleared event
      */
-    this.notifyBlockersCleared = () => { this.emit('blockers-cleared') };
+    notifyBlockersCleared() { this.emit('blockers-cleared') };
 
     /**
      * Emits the blocker-detected event
      */
-    this.notifyBlockerDetected = () => { this.emit('blocker-detected') };
+    notifyBlockerDetected() { this.emit('blocker-detected') };
 
 }
+
+/** Exports */
+module.exports = BlockerSystem;

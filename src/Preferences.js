@@ -1,15 +1,20 @@
+/**
+ * @file Provides an interface for configuring app settings.
+ * @author jalenng
+ */
+
 import React from 'react';
 
 import { Stack, ScrollablePane } from '@fluentui/react';
 
-import TitleBar from '../TitleBar';
+import TitleBar from './window/TitleBar';
 
-import PrefsSidebar from './PrefsSidebar';
-import Notifications from './Notifications';
-import Blockers from './Blockers';
-import Startup from './Startup';
-import Appearance from './Appearance';
-import About from './About';
+import PrefsSidebar from './preferences/PrefsSidebar';
+import Notifications from './preferences/Notifications';
+import Blockers from './preferences/Blockers';
+import Startup from './preferences/Startup';
+import Appearance from './preferences/Appearance';
+import About from './preferences/About';
 
 const divStyle = {
     paddingLeft: '30px',

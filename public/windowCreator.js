@@ -170,6 +170,13 @@ function createWindow(type, destination = '', display = null, isPopup = false) {
 
     }
 
+    window.on('system-context-menu', (event, point) => {
+        event.preventDefault();
+        Menu.buildFromTemplate([
+            { role: 'close' }
+        ]).popup();
+    })
+
     // On macOS, make it visible across all workspaces
     window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
 

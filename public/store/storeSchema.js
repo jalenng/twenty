@@ -1,5 +1,5 @@
 /**
- * @file This schema configures and validates the app's persistent storage.
+ * @file This schema defines and validates the structure of the app's persistent storage.
  * @author jalenng 
  */
 

@@ -1,3 +1,8 @@
+/**
+ * @file The "About" tab in Preferences
+ * @author jalenng
+ */
+
 import React from 'react';
 
 import {

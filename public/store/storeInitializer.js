@@ -1,28 +1,27 @@
-const { ipcMain, dialog, nativeTheme, app } = require('electron');
+/**
+ * @file Configures and initializes the persistent storage for the application.
+ * @author jalenng
+ */
+
+const { nativeTheme, app } = require('electron');
 const Store = require('electron-store');
-const path = require('path');
-const fs = require('fs');
 
 const storeSchema = require('./storeSchema');
 
-/* Create the store */
-const storeOptions = {
+/*---------------------------------------------------------------------------*/
+/* Store initialization */
+
+global.store = new Store({
     schema: storeSchema,
     watch: true
-}
-
-global.store = new Store(storeOptions);
-
-// store.clear()
+});
 
 // Reset entire store if the reset flag is enabled
 if (store.get('resetFlag')) store.clear();
 
-/*---------------------------------------------------------------------------*/
 
-/**
- * Handler for store change events
- */
+/*---------------------------------------------------------------------------*/
+/** Handler for store change events */
 
 // Configure the system's login items when "Start app on login" is changed
 store.onDidChange('preferences.startup.startAppOnLogin', (newVal, oldVal) => {

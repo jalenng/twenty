@@ -4,17 +4,19 @@
  */
 
 const { BrowserWindow, screen } = require('electron');
-const { createWindow } = require('../createWindows');
+const { createWindow } = require('../windowCreator');
 
-module.exports = function() {
+class NotificationSystem {
 
-    this.fullscreenWindows = [];
-    this.popupWindows = [];
+    constructor() {
+        this.fullscreenWindows = [];
+        this.popupWindows = [];
+    }
 
     /**
-     * Creates notification windows
+     * Creates the notification windows
      */
-    this.createWindows = function() {
+    createWindows() {
         // Get displays and create notification windows
         const displays = screen.getAllDisplays();
         this.fullscreenWindows = displays.map(this.createFullscreenWindow.bind(this));
@@ -24,7 +26,7 @@ module.exports = function() {
     /**
      * Closes all the notification windows
      */
-    this.closeWindows = function() {
+    closeWindows() {
         this.fullscreenWindows.map(this.closeNotificationWindow);
         this.popupWindows.map(this.closeNotificationWindow);
         this.fullscreenWindows = [];
@@ -32,17 +34,17 @@ module.exports = function() {
     }
 
     /**
-     * Show the fullscreen and hide the popup notification windows
+     * Show the fullscreen windows and hide the popup windows
      */
-    this.maximize = function() {
+    maximize() {
         this.fullscreenWindows.map(window => window.show());
         this.popupWindows.map(window => window.hide());
     }
 
     /**
-     * Hide the fullscreen and show the popup notification windows
+     * Hide the fullscreen window and show the popup windows
      */
-    this.minimize = function() {
+    minimize() {
         try {
             this.fullscreenWindows.map(window => window.hide());
             this.popupWindows.map(window => window.show());
@@ -53,32 +55,33 @@ module.exports = function() {
     }
 
     /**
-     * Pushes a fullscreen notification window
-     * @param {Display} display the display to bound the window to
+     * Creates a fullscreen notification window
+     * @param {Display} display - The display to bound the window by
+     * @returns {Electron.BrowserWindow} 
      */
-    this.createFullscreenWindow = function(display) {
-
+    createFullscreenWindow(display) {
         return createWindow('notification', 'fullscreenNotification', display, false)
-
     }
 
     /**
-     * Pushes a popup notification window
-     * @param {Display} display the display to bound the window to
+     * Creates a popup notification window
+     * @param {Display} display - The display to bound the window by
+     * @returns {Electron.BrowserWindow} 
      */
-    this.createPopupWindow = function(display) {
-
+    createPopupWindow(display) {
         return createWindow('notification', 'popupNotification', display, true, )
-
     }
 
     /**
      * Closes a notification window
-     * @param {BrowserWindow} window 
+     * @param {BrowserWindow} window - The window to close
      */
-    this.closeNotificationWindow = function(window) {
+    closeNotificationWindow(window) {
         window.removeAllListeners('close');
         window.close();
     }
 
 }
+
+/** Exports */
+module.exports = NotificationSystem;

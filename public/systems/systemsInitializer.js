@@ -1,10 +1,10 @@
-const { ipcMain, powerMonitor } = require('electron');
+const { powerMonitor } = require('electron');
 
-const TimerSystem = require('./systems/timerSystem');
-const BreakSystem = require('./systems/breakSystem');
-const NotificationSystem = require('./systems/notificationSystem');
-const AppSnapshotSystem = require('./systems/appSnapshotSystem');
-const BlockerSystem = require('./systems/blockerSystem');
+const TimerSystem = require('./timerSystem');
+const BreakSystem = require('./breakSystem');
+const NotificationSystem = require('./notificationSystem');
+const AppSnapshotSystem = require('./appSnapshotSystem');
+const BlockerSystem = require('./blockerSystem');
 
 // Instantiate the systems
 global.timerSystem = new TimerSystem();
@@ -91,52 +91,3 @@ powerMonitor.on('on-ac', () => {
     if (global.store.get('preferences.blockers.blockOnBattery'))
         blockerSystem.remove('other', 'batteryPower');
 });
-
-
-/*---------------------------------------------------------------------------*/
-/* IPC event handlers */
-
-// Reset the timer
-ipcMain.handle('timer-reset', () => {
-    global.timerSystem.reset();
-})
-
-// End the timer (and start the break)
-ipcMain.handle('timer-end', () => {
-    global.timerSystem.end();
-})
-
-// Toggle pause/play
-ipcMain.handle('timer-toggle', () => {
-    global.timerSystem.togglePause();
-})
-
-// Block the timer from running
-ipcMain.handle('timer-block', () => {
-    global.timerSystem.block();
-})
-
-// Get break status
-ipcMain.on('get-break-status', (event) => {
-    event.reply('receive-break-status', global.breakSystem.getStatus());
-});
-
-// Play sound file
-ipcMain.handle('play-sound', () => {
-    global.breakSystem.playSound();
-});
-
-// Get list of open windows
-ipcMain.on('get-open-windows', async (event) => {
-    event.returnValue = appSnapshotSystem.getLastSnapshot();
-});
-
-// Get timer status
-ipcMain.on('get-blockers', (event) => {
-    event.reply('receive-blockers', global.blockerSystem.getBlockers());
-});
-
-// Clear blockers
-ipcMain.handle('clear-blockers', () => {
-    global.blockerSystem.clear();
-})
