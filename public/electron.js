@@ -115,14 +115,17 @@ app.on('web-contents-created', (event, contents) => {
 /* Menu */
 /*
 - File
-    * Preferences (Ctrl+,)
-    * Close (Alt+F4)
+  * Preferences (Ctrl+,)
+  * Close (Alt+F4)
+- Timer
+  * Start/Stop (Ctrl+S)
 - Dev
-    * Reload (Ctrl+R)
-    * Force Reload (Ctrl+Shift+R)
-    * Toggle Developer Tools (Ctrl+Shift+I)
+  * Reload (Ctrl+R)
+  * Force Reload (Ctrl+Shift+R)
+  * Toggle Developer Tools (Ctrl+Shift+I)
+  * Start break (Ctrl+E)
 - Help (F1)
-    * About iCare
+  * About iCare
 
 */
 
@@ -144,13 +147,29 @@ const menu = Menu.buildFromTemplate([
       { role: 'close' }
     ]
   },
+  {
+    label: 'Timer',
+    submenu: [
+      {
+        label: 'Start/Stop',
+        accelerator: 'CmdOrCtrl+s',
+        click: () => { global.timerSystem.togglePause() }
+      }
+    ]
+  },
   ...(isDev
     ? [{
         label: 'Dev',
         submenu: [
           { role: 'reload' },
           { role: 'forceReload' },
-          { role: 'toggleDevTools' }
+          { role: 'toggleDevTools' },
+          { type: 'separator' },
+          {
+            label: 'Test break',
+            accelerator: 'CmdOrCtrl+e',
+            click: () => { global.timerSystem.end() }
+          }
         ]
       }]
     : []),
