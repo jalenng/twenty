@@ -30,8 +30,7 @@ if (!gotSingleInstanceLock) app.exit()
 // Show first instance if a second instance is requested
 app.on('second-instance', () => {
   if (global.mainWindow && !global.mainWindow.isDestroyed()) {
-    global.mainWindow.restore()
-    global.mainWindow.focus()
+    global.mainWindow.show()
   }
 })
 

@@ -6,7 +6,7 @@
   "repository": "https://github.com/jalenng/twenty",
   "url": "https://github.com/jalenng/twenty#readme",
   "author": {
-    "name": "Jay",
+    "name": "Jalen Ng",
     "email": "null@null.com"
   },
   "private": true,
@@ -19,7 +19,7 @@
       "build/**/*",
       "node_modules/**/*",
       "sounds/**/*",
-      "trayAssets/**/*"
+      "tray_assets/**/*"
     ],
     "directories": {
       "buildResources": "assets"
