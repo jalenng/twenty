@@ -1,6 +1,7 @@
 const { ipcMain, dialog, nativeTheme, app } = require('electron');
 const Store = require('electron-store');
 const path = require('path');
+const fs = require('fs');
 
 const storeSchema = require('./storeSchema');
 
@@ -9,6 +10,7 @@ const storeOptions = {
     schema: storeSchema,
     watch: true
 }
+
 global.store = new Store(storeOptions);
 
 // store.clear()
@@ -57,70 +59,3 @@ store.onDidChange('sounds', () => {
 store.onDidChange('preferences.appearance.theme', (newVal, oldVal) => {
     nativeTheme.themeSource = newVal;
 });
-
-/*---------------------------------------------------------------------------*/
-/* IPC event handlers */
-
-// Retrieve from the local store
-ipcMain.on('get-store', (event, key) => event.returnValue = store.get(key));
-
-// Update the local preferences
-ipcMain.handle('set-prefs', (event, key, value) => {
-    store.set(`preferences.${key}`, value);
-});
-
-// Show a dialog to import a custom sound
-ipcMain.handle('add-custom-sound', (event) => {
-    dialog.showOpenDialog(global.mainWindow, {
-        title: 'Choose custom sound',
-        filters: [{
-            name: 'Audio files',
-            extensions: ['wav', 'mp3']
-        }],
-        defaultPath: app.getPath('music'),
-        properties: ['openFile', 'dontAddToRecent']
-    })
-        .then(result => {
-            // If user did not cancel the dialog
-            if (!result.canceled) {
-                var filePath = result.filePaths[0];
-
-                // Create new sound object from selected file
-                var newSound = {
-                    key: filePath,
-                    text: path.basename(filePath)
-                }
-                var newCustomSounds = store.get('sounds.customSounds');
-
-                // Concatenate with existing list of custom sounds
-                newCustomSounds = newCustomSounds.concat(newSound);
-
-                // Update custom sounds with updated array
-                store.set('sounds.customSounds', newCustomSounds);
-
-                // Set new sound as default notification sound
-                store.set('preferences.notifications.sound', filePath);
-
-            }
-        }).catch(err => {
-            console.log(err);
-        })
-});
-
-// Show a dialog to confirm resetting the app
-ipcMain.handle('reset-store', () => {
-    dialog.showMessageBox(global.mainWindow, {
-        title: 'Reset iCare',
-        type: 'question',
-        message: 'Reset iCare?',
-        detail: 'iCare will restart, and your preferences will revert to its defaults.',
-        buttons: ['Yes', 'No'],
-    })
-        .then(result => {
-            if (result.response == 0) {
-                store.set('resetFlag', true);
-                app.relaunch();
-                app.exit();
-            }
-        })
-})

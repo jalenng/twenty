@@ -124,7 +124,6 @@ module.exports = function () {
 
     /**
      * Updates the timer.
-     * @returns 
      */
     this.update = function () {
         switch (this.getState()) {

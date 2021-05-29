@@ -1,16 +1,17 @@
-/*
-The break system handles the timing and logic of the breaks. 
-
-The states of the break system are as follows:
-    - isOnBreak
-        - true <---> false
-
-The break system is also an event emitter that emits the following events:
-    - break-start: when the break begins
-    - break-times-set: when the break countdown resets (due to the user moving their mouse)
-    - break-intermediate: when the break reaches an intermediate mark (5 seconds)
-    - break-end: when the break countdown reaches to zero
-*/
+/**
+ * @file Handles the timing and logic of the breaks. 
+ * @author jalenng
+ * 
+ * The states of the break system are as follows:
+ *  - isOnBreak
+ *      - true <---> false
+ * 
+ * The break system is also an event emitter that emits the following events:
+ *  - break-start: when the break begins
+ *  - break-times-set: when the break countdown resets (due to the user moving their mouse)
+ *  - break-intermediate: when the break reaches an intermediate mark (5 seconds)
+ *  - break-end: when the break countdown reaches to zero
+ */
 
 require ('hazardous');
 const path = require('path'); 

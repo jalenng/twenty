@@ -105,8 +105,8 @@ export default class extends React.Component {
                                 style={{WebkitAppRegion: 'no-drag'}}
                                 styles={{ 
                                     root: { color: buttonIconColor},
-                                    rootHovered: { color: buttonIconColor, background: '#E81123' },
-                                    rootPressed: { color: buttonIconColor, background: '#f1707a' } 
+                                    rootHovered: { color: '#ffffff', background: '#E81123' },
+                                    rootPressed: { color: '#ffffff', background: '#f1707a' } 
                                 }}
                                 onClick={() => window.close()}
                             />

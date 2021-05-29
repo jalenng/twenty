@@ -1,7 +1,7 @@
-/*
-The notification system handles the opening, closing, and updating of the 
-notification windows during a break. 
-*/
+/**
+ * @file Handles the opening, closing, and updating of the notification windows during a break. 
+ * @author jalenng
+ */
 
 const { BrowserWindow, screen } = require('electron');
 const { createWindow } = require('../createWindows');

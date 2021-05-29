@@ -1,4 +1,4 @@
-const { BrowserWindow, screen, app } = require('electron');
+const { BrowserWindow, screen, app, Menu } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const isWindows = process.platform == 'win32';
@@ -65,7 +65,7 @@ const POPUP_OPTIONS = {
  *                      Effective only if display is provided. Optional.
  * @returns a BrowserWindow object of the newly created window
  */
-function createWindow(type, destination = '', display=null, isPopup=false) {
+function createWindow(type, destination = '', display = null, isPopup = false) {
 
     // Initialize window
     let window = new BrowserWindow({
@@ -100,7 +100,7 @@ function createWindow(type, destination = '', display=null, isPopup=false) {
             })
 
             // If not configured to hide the app on app startup, show window when ready
-            if (!global.store.get('preferences.startup.hideOnAppStartup')) 
+            if (!global.store.get('preferences.startup.hideOnAppStartup'))
                 window.on('ready-to-show', () => window.show());
 
             break;
@@ -138,13 +138,13 @@ function createWindow(type, destination = '', display=null, isPopup=false) {
 
             const popupSize = POPUP_OPTIONS.size;
             const popupGapFromEdge = POPUP_OPTIONS.gapFromEdge;
-    
+
             if (isWindows) {
 
                 // Perform additional processing on Windows due to DPI differences
                 const screenRect = isWindows ? screen.dipToScreenRect(null, bounds) : bounds;
                 const trueScaling = display.scaleFactor / screen.getPrimaryDisplay().scaleFactor;
-                
+
                 windowBounds = {
                     x: screenRect.x + ((bounds.width - popupSize.width - popupGapFromEdge) * trueScaling),
                     y: screenRect.y + ((bounds.height - popupSize.height - popupGapFromEdge) * trueScaling),
@@ -166,13 +166,10 @@ function createWindow(type, destination = '', display=null, isPopup=false) {
         }
 
         // Set bounds
-        window.setBounds(windowBounds); 
+        window.setBounds(windowBounds);
 
     }
 
-    // Remove default menu and shortcut bindings
-    // if (!isDev) window.removeMenu();
-    
     // On macOS, make it visible across all workspaces
     window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
 

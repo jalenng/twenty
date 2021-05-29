@@ -24,6 +24,14 @@ global.appSnapshotSystem.updateState();
 
 
 /*---------------------------------------------------------------------------*/
+/* If timer has stopped and the notification interval updates, update the timer with the new value. */
+
+global.store.onDidChange('preferences.notifications.interval', () => {
+    if (global.timerSystem.isStopped) global.timerSystem.update();
+});
+
+
+/*---------------------------------------------------------------------------*/
 /* Configure event listeners and connect the various systems */
 
 // Start break when timer ends

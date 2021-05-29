@@ -1,10 +1,11 @@
-/*
-The blocker system handles the logic of the timer-blocking feature. 
-
-The break system is also an event emitter that emits the following events:
-    - blocker-detected: when a new blocker is detected
-    - blockers-cleared: when all blockers have been dismissed or cleared
-*/
+/**
+ * @file Handles the logic of the timer-blocking feature. 
+ * @author jalenng
+ *
+ * The break system is also an event emitter that emits the following events:
+ *  - blocker-detected: when a new blocker is detected
+ *  - blockers-cleared: when all blockers have been dismissed or cleared
+ */
 
 module.exports = function() {
 
@@ -14,7 +15,13 @@ module.exports = function() {
     this.blockers = [];
 
     /**
+     * @callback requestCallback
+     */
+
+    /**
      * Registers an event listener
+     * @param {string} name - The name of the event
+     * @param {requestCallback} listener - The function to invoke when the event is emitted
      */
     this.on = function (name, listener) {
         if (!this._events[name]) this._events[name] = [];
@@ -22,17 +29,22 @@ module.exports = function() {
     }
 
     /**
-     * Emits an event and invokes the functions of its listeners
-     * @param {string} eventName    name of event to emit
-     * @param {(callback) => any} fireCallbacks 
+     * @callback emitFunction
+     * @param {requestCallback} callback
      */
-    this.emit = function (eventName, fireCallbacks=callback => callback()) {
+
+    /**
+     * Emits an event and invokes the functions of its listeners
+     * @param {string} eventName - The name of the event to emit
+     * @param {emitFunction} [fireCallbacks = callback => callback()] - The function that invokes the callbacks
+     */
+     this.emit = function (eventName, fireCallbacks = callback => callback()) {
         this._events[eventName].forEach(fireCallbacks);
     }
 
     /**
      * Adds a blocker to the list of blockers
-     * @param {Object} blocker 
+     * @param {Object} blocker - The blocker to add
      */
     this.add = function (blocker) {
 
@@ -50,9 +62,9 @@ module.exports = function() {
     }
 
     /**
-     * Removes a blocker to the list of blockers by type and key
-     * @param {string} type 
-     * @param {string} key 
+     * Removes a blocker from the list if a given type and key match
+     * @param {string} type - The type of the blockers to remove
+     * @param {string} key - The key of the blockers to remove
      */
     this.remove = function (type, key) {
         const filterFunction = blocker => {
@@ -82,7 +94,7 @@ module.exports = function() {
 
     /**
      * Removes the app blockers in the blocker list for the apps that are not open
-     * @param {[Object]} openProcesses 
+     * @param {Object[]} openProcesses - The list of open processes to filter from
      */
     this.removeClosedBlockedApps = function(openProcesses) {
         const blockedApps = global.store.get('preferences.blockers.apps')
@@ -109,7 +121,7 @@ module.exports = function() {
     /**
      * Create a new app blocker for every open app that is in the 'Blocker apps' list, and add it
      * to the blocker list.
-     * @param {[Object]} openProcesses 
+     * @param {Object[]} openProcesses 
      */
     this.addOpenBlockedApps = function (openProcesses) {
 
@@ -134,7 +146,7 @@ module.exports = function() {
 
     /**
      * Gets the present blockers
-     * @returns the list of blockers
+     * @returns {Object[]} - the list of blockers
      */
     this.getBlockers = () => { return this.blockers }
 
