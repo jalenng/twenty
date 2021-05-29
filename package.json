@@ -58,6 +58,7 @@
     "nodemon": "^2.0.7",
     "react-scripts": "^4.0.3",
     "spectron": "^14.0.0",
+    "standard": "^16.0.3",
     "supertest": "^6.1.3",
     "wait-on": "^5.3.0"
   },
@@ -74,7 +75,8 @@
     "electron-test": "cross-env NODE_ENV=test mocha",
     "build": "npm run react-build && npm run electron-build",
     "dev": "concurrently \"npm:react-start\" \"npm:electron-watch\"",
-    "test": "concurrently -s first -k \"npm:react-start\" \"npm:electron-test\""
+    "test": "concurrently -s first -k \"npm:react-start\" \"npm:electron-test\"",
+    "lint": "standard"
   },
   "browserslist": {
     "production": [

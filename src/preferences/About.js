@@ -3,178 +3,177 @@
  * @author jalenng
  */
 
-import React from 'react';
+/* eslint-disable no-undef */
+
+import React from 'react'
 
 import {
-    DefaultButton, ActionButton,
-    Image, ImageFit,
-    Stack,
-    Text
-} from '@fluentui/react';
+  DefaultButton, ActionButton,
+  Image, ImageFit,
+  Stack,
+  Text
+} from '@fluentui/react'
 
-import logo from '../assets/icon.png';
-import { level1Props, level2Props, level2HorizontalProps } from './PrefsStackProps';
+import logo from '../assets/icon.png'
+import { level1Props, level2Props, level2HorizontalProps } from './PrefsStackProps'
 
 const versionComponents = [
-    { key: 'electron', text: 'Electron' },
-    { key: 'chrome', text: 'Chrome' },
-    { key: 'node', text: 'Node' },
-    { key: 'v8', text: 'V8' },
+  { key: 'electron', text: 'Electron' },
+  { key: 'chrome', text: 'Chrome' },
+  { key: 'node', text: 'Node' },
+  { key: 'v8', text: 'V8' }
 ]
 
 export default class extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      aboutInfo: {
+        appInfo: {
+          name: '',
+          version: ''
+        },
+        versions: {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            aboutInfo: {
-                appInfo: {
-                    name: '',
-                    version: ''
-                },
-                versions: {
-
-                },
-                openSourceLibraries: [],
-                license: []
-            },
-            licenseExpanded: false
-        }
-        this.toggleLicenseExpand = this.toggleLicenseExpand.bind(this);
+        },
+        openSourceLibraries: [],
+        license: []
+      },
+      licenseExpanded: false
     }
+    this.toggleLicenseExpand = this.toggleLicenseExpand.bind(this)
+  }
 
-    componentDidMount() {
-        this.setState({
-            ...this.state, 
-            aboutInfo: getAboutInfo()
-        });
-    }
+  componentDidMount () {
+    this.setState({
+      ...this.state,
+      aboutInfo: getAboutInfo()
+    })
+  }
 
-    toggleLicenseExpand() {
-        this.setState({
-            ...this.state, 
-            licenseExpanded: !this.state.licenseExpanded
-        });
-    }
+  toggleLicenseExpand () {
+    this.setState({
+      ...this.state,
+      licenseExpanded: !this.state.licenseExpanded
+    })
+  }
 
-    render() {
+  render () {
+    const aboutInfo = this.state.aboutInfo
 
-        const aboutInfo = this.state.aboutInfo;
+    const appInfo = aboutInfo.appInfo
+    const versions = aboutInfo.versions
+    const openSourceLibraries = aboutInfo.openSourceLibraries
+    const licenseParagraphs = this.state.licenseExpanded
+      ? aboutInfo.license
+      : aboutInfo.license.slice(0, 2)
 
-        const appInfo = aboutInfo.appInfo;
-        const versions = aboutInfo.versions;
-        const openSourceLibraries = aboutInfo.openSourceLibraries;
-        const licenseParagraphs = this.state.licenseExpanded
-            ? aboutInfo.license
-            : aboutInfo.license.slice(0, 2);
+    return (
+      <Stack {...level1Props} id='about'>
 
-        return (
-            <Stack {...level1Props} id='about'>
+        {/* Version info */}
+        <Stack {...level2Props}>
 
-                {/* Version info */}
-                <Stack {...level2Props}>
+          {/* iCare banner */}
+          <Stack {...level2HorizontalProps}>
 
-                    {/* iCare banner */}
-                    <Stack {...level2HorizontalProps}>
+            <Image
+              imageFit={ImageFit.centerContain}
+              src={logo}
+              width={96}
+              height={96}
+            />
 
-                        <Image
-                            imageFit={ImageFit.centerContain}
-                            src={logo}
-                            width={96}
-                            height={96}
-                        />
+            <Text variant='xxLarge' style={{ fontSize: '3.5rem' }} block>
+              {`${appInfo.name} ${appInfo.version}`}
+            </Text>
 
-                        <Text variant={'xxLarge'} style={{ fontSize: '3.5rem' }} block>
-                            {`${appInfo.name} ${appInfo.version}`}
-                        </Text>
+          </Stack>
 
-                    </Stack>
+          {/* Chips for Electron, Chrome, Node, and v8 engine */}
+          <Stack {...level2HorizontalProps}>
 
-                    {/* Chips for Electron, Chrome, Node, and v8 engine */}
-                    <Stack {...level2HorizontalProps} >
+            {versionComponents.map((component) => {
+              return (
+                <DefaultButton
+                  style={{ height: '52px', borderRadius: '8px' }}
+                  disabled
+                  onRenderText={() => {
+                    return (
+                      <Stack horizontalAlign='start'>
+                        <b>{component.text}</b>
+                        {versions[component.key]}
+                      </Stack>
+                    )
+                  }}
+                />
+              )
+            })}
 
-                        {versionComponents.map((component) => {
-                            return (
-                                <DefaultButton
-                                    style={{ height: '52px', borderRadius: '8px'}}
-                                    disabled
-                                    onRenderText={() => {
-                                        return (
-                                            <Stack horizontalAlign='start'>
-                                                <b>{component.text}</b>
-                                                {versions[component.key]}
-                                            </Stack>
-                                        )
-                                    }}
-                                />
-                            )
-                        })}
+          </Stack>
 
-                    </Stack>
+        </Stack>
 
-                </Stack>
+        {/* Attributions to open-source libraries */}
+        <Stack {...level2Props}>
+          <Text variant='xLarge' block> Open source libraries </Text>
 
-                {/* Attributions to open-source libraries */}
-                <Stack {...level2Props}>
-                    <Text variant={'xLarge'} block> Open source libraries </Text>
+          <div style={{ display: 'inline' }}>
 
-                    <div style={{ display: 'inline' }}>
+            {openSourceLibraries.map(library => {
+              return (
+                <DefaultButton
+                  style={{ borderRadius: '8px', marginRight: '8px', marginBottom: '8px' }}
+                  text={library.name}
+                  onClick={() => openExternalLink(library.link)}
+                />
+              )
+            })}
 
-                        {openSourceLibraries.map(library => {
-                            return (
-                                <DefaultButton
-                                    style={{ borderRadius: '8px', marginRight: '8px', marginBottom: '8px'}}
-                                    text={library.name}
-                                    onClick={() => openExternalLink(library.link)}
-                                />
-                            )
-                        })}
+          </div>
+        </Stack>
 
-                    </div>
-                </Stack>
+        {/* License */}
+        <Stack {...level2Props}>
+          <Text variant='xLarge' block> License </Text>
 
-                {/* License */}
-                <Stack {...level2Props}>
-                    <Text variant={'xLarge'} block> License </Text>
+          {licenseParagraphs.map(paragraph => {
+            return (
+              <Text block variant='medium' style={{ paddingRight: '30px' }}>
+                {paragraph}
+              </Text>
+            )
+          })}
 
-                    {licenseParagraphs.map(paragraph => {
-                        return (
-                            <Text block variant={'medium'} style={{ paddingRight: '30px' }}> 
-                                {paragraph} 
-                            </Text>
-                        )
-                    })}
+          {/* Show more / show less button */}
+          <ActionButton
+            iconProps={
+              this.state.licenseExpanded
+                ? { iconName: 'Movers' }
+                : { iconName: 'Sell' }
+            }
+            text={this.state.licenseExpanded ? 'Show less' : 'Show more'}
+            onClick={this.toggleLicenseExpand}
+          />
 
-                    {/* Show more / show less button */}
-                    <ActionButton 
-                        iconProps={
-                            this.state.licenseExpanded
-                            ? { iconName: 'Movers' }
-                            : { iconName: 'Sell' }
-                        }
-                        text={this.state.licenseExpanded ? 'Show less' : 'Show more'}
-                        onClick={this.toggleLicenseExpand}
-                    />
+        </Stack>
 
-                </Stack>
+        {/* Options to reset the app */}
+        <Stack {...level2Props}>
 
-                {/* Options to reset the app */}
-                <Stack {...level2Props}>
+          <Text variant='xLarge' block> Reset app </Text>
 
-                    <Text variant={'xLarge'} block> Reset app </Text>
+          <Stack {...level2HorizontalProps}>
+            <DefaultButton
+              text='Reset iCare'
+              iconProps={{ iconName: 'Refresh' }}
+              onClick={store.reset}
+            />
+          </Stack>
 
-                    <Stack {...level2HorizontalProps}>
-                        <DefaultButton
-                            text='Reset iCare'
-                            iconProps={{ iconName: 'Refresh' }}
-                            onClick={store.reset}
-                        />
-                    </Stack>
+        </Stack>
 
-                </Stack>
-
-            </Stack>
-        )
-    }
+      </Stack>
+    )
+  }
 }
-

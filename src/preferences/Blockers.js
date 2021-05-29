@@ -3,189 +3,189 @@
  * @author jalenng
  */
 
-import React from 'react';
+/* eslint-disable no-undef */
+
+import React from 'react'
 
 import {
-    ActionButton,
-    DefaultButton,
-    DetailsList,
-    Dropdown,
-    Stack,
-    Text,
-    Toggle,
-    Selection
-} from '@fluentui/react';
+  ActionButton,
+  DefaultButton,
+  DetailsList,
+  Dropdown,
+  Stack,
+  Text,
+  Toggle,
+  Selection
+} from '@fluentui/react'
 
-import { level1Props, level2Props, level2HorizontalProps } from './PrefsStackProps';
+import { level1Props, level2Props, level2HorizontalProps } from './PrefsStackProps'
 
 export default class extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            appDropdownSelection: null,
-            blockers: store.preferences.getAll().blockers
-        };
-        this.handleAppDropdown = this.handleAppDropdown.bind(this);
-        this.handleAppAdd = this.handleAppAdd.bind(this);
-        this.handleAppDelete = this.handleAppDelete.bind(this);
-        this.selection = new Selection();
-    };
-
-    componentDidMount() {
-        // Update this component's state when preferences are updated
-        store.preferences.eventSystem.on('changed', () => this.updateState())
-    };
-
-    updateState() {
-        let state = this.state;
-        state.blockers = store.preferences.getAll().blockers;
-        this.setState(state);
-    };
-
-    // Update the state to reflect the selected value of the app dropdown menu
-    handleAppDropdown(value) {
-        let state = this.state;
-        state.appDropdownSelection = value;
-        this.setState(state);
-    };
-
-    // Add the selected value of the app dropbown menu to the list of blocker apps
-    handleAppAdd() {
-        // Ignore if there is no selection
-        const selection = this.state.appDropdownSelection;
-        if (selection === null) return 
-
-        let appBlockers = this.state.blockers.apps;
-
-        // Check if app is already in the list
-        const foundExistingEntry = appBlockers.find(blocker => blocker === selection);
-        if (foundExistingEntry != undefined) return;
-
-        // Go ahead and append it to the list
-        appBlockers.push(this.state.appDropdownSelection);
-        store.preferences.set('blockers.apps', appBlockers);
+  constructor (props) {
+    super(props)
+    this.state = {
+      appDropdownSelection: null,
+      blockers: store.preferences.getAll().blockers
     }
+    this.handleAppDropdown = this.handleAppDropdown.bind(this)
+    this.handleAppAdd = this.handleAppAdd.bind(this)
+    this.handleAppDelete = this.handleAppDelete.bind(this)
+    this.selection = new Selection()
+  };
 
-    // Delete the checked value of the blocker apps list
-    handleAppDelete() {
-        let selectionKeys = this.selection.getSelection().map(selection => selection.key);
-        let appBlockers = this.state.blockers.apps;
-        appBlockers = appBlockers.filter(path => {
-            return selectionKeys.indexOf(path) === -1
-        })
-        store.preferences.set('blockers.apps', appBlockers);
-    }
+  componentDidMount () {
+    // Update this component's state when preferences are updated
+    store.preferences.eventSystem.on('changed', () => this.updateState())
+  };
 
-    render() {
-        const appNames = store.appNames.getAll();
+  updateState () {
+    const state = this.state
+    state.blockers = store.preferences.getAll().blockers
+    this.setState(state)
+  };
 
-        // Map the list of objects about each window to a list of selectable options...
-        let openWindowsOptions = getOpenWindows().map(process => {
-            return {
-                key: process.path,
-                text: appNames[process.path],
-            }
-        })
-            // ...then sort the list alphabetically.
-            .sort((a, b) => {
-                var textA = a.text.toUpperCase();
-                var textB = b.text.toUpperCase();
-                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-            });
+  // Update the state to reflect the selected value of the app dropdown menu
+  handleAppDropdown (value) {
+    const state = this.state
+    state.appDropdownSelection = value
+    this.setState(state)
+  };
 
-        // Columns of the list of blocker apps
-        let blockerAppsColumns = [
-            { key: '1', name: 'Name', fieldName: 'name', isResizable: true },
-            { key: '2', name: 'Path', fieldName: 'key', isResizable: true }
-        ];
+  // Add the selected value of the app dropbown menu to the list of blocker apps
+  handleAppAdd () {
+    // Ignore if there is no selection
+    const selection = this.state.appDropdownSelection
+    if (selection === null) return
 
-        let blockerApps = this.state.blockers.apps.map( path => {
-            console.log(path)
-            return {
-                key: path,
-                name: appNames[path],
-            }
-        });
+    const appBlockers = this.state.blockers.apps
 
-        const isMacOS = platform === 'darwin';
+    // Check if app is already in the list
+    const foundExistingEntry = appBlockers.find(blocker => blocker === selection)
+    if (foundExistingEntry !== undefined) return
 
-        return (
+    // Go ahead and append it to the list
+    appBlockers.push(this.state.appDropdownSelection)
+    store.preferences.set('blockers.apps', appBlockers)
+  }
 
-            <Stack id='blockers' {...level1Props}>
+  // Delete the checked value of the blocker apps list
+  handleAppDelete () {
+    const selectionKeys = this.selection.getSelection().map(selection => selection.key)
+    let appBlockers = this.state.blockers.apps
+    appBlockers = appBlockers.filter(path => {
+      return selectionKeys.indexOf(path) === -1
+    })
+    store.preferences.set('blockers.apps', appBlockers)
+  }
 
-                {/* Blocker app settings */}
-                <Stack {...level2Props}>
+  render () {
+    const appNames = store.appNames.getAll()
 
-                    <Text variant={'xLarge'} block> Blocker apps </Text>
+    // Map the list of objects about each window to a list of selectable options...
+    const openWindowsOptions = getOpenWindows().map(process => {
+      return {
+        key: process.path,
+        text: appNames[process.path]
+      }
+    })
+      // ...then sort the list alphabetically.
+      .sort((a, b) => {
+        const textA = a.text.toUpperCase()
+        const textB = b.text.toUpperCase()
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
+      })
 
-                    {/* Notify that macOS is not supported*/}
-                    {isMacOS &&
-                        <Text variant={'medium'} block> 
-                            App blockers are currently unsupported on macOS.
-                        </Text>
-                    }
+    // Columns of the list of blocker apps
+    const blockerAppsColumns = [
+      { key: '1', name: 'Name', fieldName: 'name', isResizable: true },
+      { key: '2', name: 'Path', fieldName: 'key', isResizable: true }
+    ]
 
-                    {!isMacOS && 
-                        <div>
-                            <Text variant={'medium'} block> 
-                                Apps in this list will block the timer from running. 
-                            </Text>
+    const blockerApps = this.state.blockers.apps.map(path => {
+      console.log(path)
+      return {
+        key: path,
+        name: appNames[path]
+      }
+    })
 
-                            {/* Add app blockers */}
-                            <Stack {...level2HorizontalProps} verticalAlign='end'>
+    const isMacOS = platform === 'darwin'
 
-                                <Dropdown label='Add an app'
-                                    styles={{ dropdown: { width: 300 } }}
-                                    options={openWindowsOptions}
-                                    selectedKey={this.state.appDropdownSelection}
-                                    placeholder='Select an app'
-                                    onChange={(event, option, index) => {
-                                        this.handleAppDropdown(openWindowsOptions[index].key)
-                                    }}
-                                />
+    return (
 
-                                <DefaultButton
-                                    text='Add'
-                                    onClick={this.handleAppAdd}
-                                />
+      <Stack id='blockers' {...level1Props}>
 
-                            </Stack>
+        {/* Blocker app settings */}
+        <Stack {...level2Props}>
 
-                            {/* Manage existing app blockers */}
-                            <ActionButton
-                                iconProps={{ iconName: 'Delete' }}
-                                text='Delete'
-                                onClick={this.handleAppDelete}
-                            />
+          <Text variant='xLarge' block> Blocker apps </Text>
 
-                            <DetailsList
-                                compact={true}
-                                items={blockerApps}
-                                columns={blockerAppsColumns}
-                                selectionPreservedOnEmptyClick={true}
-                                selection={this.selection}
-                            />
-                        </div>
-                    }
+          {/* Notify that macOS is not supported */}
+          {isMacOS &&
+            <Text variant='medium' block>
+              App blockers are currently unsupported on macOS.
+            </Text>}
 
-                </Stack>
+          {!isMacOS &&
+            <div>
+              <Text variant='medium' block>
+                Apps in this list will block the timer from running.
+              </Text>
 
-                {/* Other blocker settings */}
-                <Stack {...level2Props}>
+              {/* Add app blockers */}
+              <Stack {...level2HorizontalProps} verticalAlign='end'>
 
-                    <Text variant={'xLarge'} block> Other blockers </Text>
+                <Dropdown
+                  label='Add an app'
+                  styles={{ dropdown: { width: 300 } }}
+                  options={openWindowsOptions}
+                  selectedKey={this.state.appDropdownSelection}
+                  placeholder='Select an app'
+                  onChange={(event, option, index) => {
+                    this.handleAppDropdown(openWindowsOptions[index].key)
+                  }}
+                />
 
-                    <Toggle
-                        label='Block timer when on battery power'
-                        onText='On' offText='Off'
-                        checked={this.state.blockers.blockOnBattery}
-                        onChange={(event, checked) => store.preferences.set('blockers.blockOnBattery', checked)}
-                    />
+                <DefaultButton
+                  text='Add'
+                  onClick={this.handleAppAdd}
+                />
 
-                </Stack>
+              </Stack>
 
-            </Stack>
-        )
-    }
+              {/* Manage existing app blockers */}
+              <ActionButton
+                iconProps={{ iconName: 'Delete' }}
+                text='Delete'
+                onClick={this.handleAppDelete}
+              />
+
+              <DetailsList
+                compact
+                items={blockerApps}
+                columns={blockerAppsColumns}
+                selectionPreservedOnEmptyClick
+                selection={this.selection}
+              />
+            </div>}
+
+        </Stack>
+
+        {/* Other blocker settings */}
+        <Stack {...level2Props}>
+
+          <Text variant='xLarge' block> Other blockers </Text>
+
+          <Toggle
+            label='Block timer when on battery power'
+            onText='On' offText='Off'
+            checked={this.state.blockers.blockOnBattery}
+            onChange={(event, checked) => store.preferences.set('blockers.blockOnBattery', checked)}
+          />
+
+        </Stack>
+
+      </Stack>
+    )
+  }
 }

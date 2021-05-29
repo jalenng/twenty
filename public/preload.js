@@ -1,120 +1,118 @@
 /**
- * @file Provides a set of methods for the renderer to interact with the main process. 
+ * @file Provides a set of methods for the renderer to interact with the main process.
  * @author jalenng
- * 
+ *
  * This compartmentalization ensures that logic is handled exclusively by Electron,
  * and displaying UI elements is handled exclusively by React.
  */
 
 // Allow access to core Electron APIs when testing
-if (process.env.NODE_ENV === 'test')
-    window.electronRequire = require;
+if (process.env.NODE_ENV === 'test') {
+  window.electronRequire = require
+}
 
-const { ipcRenderer, shell } = require('electron');
+const { ipcRenderer, shell } = require('electron')
 
-
-/*---------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------- */
 /* Event system */
 
 const EventSystem = function () {
-
-    this._events = {}
-    /**
-     * Register an event listener
-     * @param {string} name 
-     * @param {} listener 
-     */
-    this.on = (name, listener) => {
-        if (!this._events[name]) {
-            this._events[name] = [];
-        }
-        this._events[name].push(listener);
+  this._events = {}
+  /**
+   * Register an event listener
+   * @param {string} name
+   * @param {} listener
+   */
+  this.on = (name, listener) => {
+    if (!this._events[name]) {
+      this._events[name] = []
     }
+    this._events[name].push(listener)
+  }
 }
 
-
-/*---------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------- */
 /* Store helper functions */
 
 window.store = {
-    preferences: {
-        /**
-         * Retrieve the local preferences
-         * @returns {Object}
-         */
-        getAll: () => { return ipcRenderer.sendSync('get-store', 'preferences') },
+  preferences: {
+    /**
+     * Retrieve the local preferences
+     * @returns {Object}
+     */
+    getAll: () => { return ipcRenderer.sendSync('get-store', 'preferences') },
 
-        /**
-         * Update the local preferences
-         * @param {String} key The key of the preference. e.g. 'notifications.sound'
-         * @param {String} value The new value 
-         */
-        set: (key, value) => { ipcRenderer.invoke('set-prefs', key, value) },
+    /**
+     * Update the local preferences
+     * @param {String} key The key of the preference. e.g. 'notifications.sound'
+     * @param {String} value The new value
+     */
+    set: (key, value) => { ipcRenderer.invoke('set-prefs', key, value) },
 
-        /**
-         * Fetch user preferences from the backend
-         */
-        fetch: () => { return ipcRenderer.invoke('fetch-prefs') },
+    /**
+     * Fetch user preferences from the backend
+     */
+    fetch: () => { return ipcRenderer.invoke('fetch-prefs') },
 
-        /**
-         * Update user preferences on the backend
-         */
-        push: () => { return ipcRenderer.invoke('push-prefs') },
+    /**
+     * Update user preferences on the backend
+     */
+    push: () => { return ipcRenderer.invoke('push-prefs') },
 
-        /* Event system */
-        eventSystem: new EventSystem()
-    },
-    sounds: {
-        /**
-         * Retrieve the local sounds
-         * @returns {Object}
-         */
-        getAll: () => { return ipcRenderer.sendSync('get-store', 'sounds') },
+    /* Event system */
+    eventSystem: new EventSystem()
+  },
+  sounds: {
+    /**
+     * Retrieve the local sounds
+     * @returns {Object}
+     */
+    getAll: () => { return ipcRenderer.sendSync('get-store', 'sounds') },
 
-        /**
-         * Show a dialog to import a custom sound
-         */
-        add: () => { ipcRenderer.invoke('add-custom-sound') },
+    /**
+     * Show a dialog to import a custom sound
+     */
+    add: () => { ipcRenderer.invoke('add-custom-sound') },
 
-        /* Event system */
-        eventSystem: new EventSystem()
-    },
-    appNames: {
-        /**
-         * Retrieve the dictionary of friendly app names
-         * @returns {Object}
-         */
-        getAll: () => { return ipcRenderer.sendSync('get-store', 'appNames') },
-    },
-    reset: () => { return ipcRenderer.invoke('reset-store') }
+    /* Event system */
+    eventSystem: new EventSystem()
+  },
+  appNames: {
+    /**
+     * Retrieve the dictionary of friendly app names
+     * @returns {Object}
+     */
+    getAll: () => { return ipcRenderer.sendSync('get-store', 'appNames') }
+  },
+  reset: () => { return ipcRenderer.invoke('reset-store') }
 }
 
-/*---------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------- */
 /* Timer, break, and blocker system helper functions */
 window.timer = {
-    toggle: () => { ipcRenderer.invoke('timer-toggle') },
-    end: () => { ipcRenderer.invoke('timer-end') },
-    reset: () => { ipcRenderer.invoke('timer-reset') },
-    getStatus: () => { ipcRenderer.send('get-timer-status') },
-    eventSystem: new EventSystem()
+  toggle: () => { ipcRenderer.invoke('timer-toggle') },
+  end: () => { ipcRenderer.invoke('timer-end') },
+  reset: () => { ipcRenderer.invoke('timer-reset') },
+  getStatus: () => { ipcRenderer.send('get-timer-status') },
+  eventSystem: new EventSystem()
 }
 
 window.breakSys = {
-    getStatus: () => { ipcRenderer.send('get-break-status') },
-    eventSystem: new EventSystem()
+  getStatus: () => { ipcRenderer.send('get-break-status') },
+  eventSystem: new EventSystem()
 }
 
 window.blockerSys = {
-    getBlockers: () => { ipcRenderer.send('get-blockers') },
-    clear: () => { ipcRenderer.invoke('clear-blockers') },
-    eventSystem: new EventSystem()
+  getBlockers: () => { ipcRenderer.send('get-blockers') },
+  clear: () => { ipcRenderer.invoke('clear-blockers') },
+  eventSystem: new EventSystem()
 }
 
 window.themeSys = {
-    eventSystem: new EventSystem()
+  eventSystem: new EventSystem()
 }
 
-/*---------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------- */
 /* Other functions */
 
 /**
@@ -161,36 +159,35 @@ window.getThemeName = () => { return ipcRenderer.sendSync('get-theme-name') }
 /**
  * A boolean that tells whether or not this app is running in a dev environment
  */
-window.isDev = ipcRenderer.sendSync('is-dev');
+window.isDev = ipcRenderer.sendSync('is-dev')
 
 /**
  * A string that indicates the current platform the app is running on
  */
-window.platform = ipcRenderer.sendSync('get-platform');
-
+window.platform = ipcRenderer.sendSync('get-platform')
 
 /* Listen for events from ipcRenderer and relay them accordingly */
 ipcRenderer.on('receive-timer-status', (event, timerStatus) => {
-    const fireCallbacks = (callback) => callback(event, timerStatus);
-    window.timer.eventSystem._events['update'].forEach(fireCallbacks);
+  const fireCallbacks = (callback) => callback(event, timerStatus)
+  window.timer.eventSystem._events.update.forEach(fireCallbacks)
 })
 
 ipcRenderer.on('receive-break-status', (event, breakStatus) => {
-    const fireCallbacks = (callback) => callback(event, breakStatus);
-    window.breakSys.eventSystem._events['update'].forEach(fireCallbacks);
+  const fireCallbacks = (callback) => callback(event, breakStatus)
+  window.breakSys.eventSystem._events.update.forEach(fireCallbacks)
 })
 
 ipcRenderer.on('store-changed', (event, category) => {
-    const fireCallbacks = (callback) => callback();
-    window.store[category].eventSystem._events['changed'].forEach(fireCallbacks);
+  const fireCallbacks = (callback) => callback()
+  window.store[category].eventSystem._events.changed.forEach(fireCallbacks)
 })
 
 ipcRenderer.on('receive-blockers', (event, blockers) => {
-    const fireCallbacks = (callback) => callback(event, blockers);
-    window.blockerSys.eventSystem._events['update'].forEach(fireCallbacks);
+  const fireCallbacks = (callback) => callback(event, blockers)
+  window.blockerSys.eventSystem._events.update.forEach(fireCallbacks)
 })
 
 ipcRenderer.on('theme-updated', (event, themeName) => {
-    const fireCallbacks = (callback) => callback(themeName);
-    window.themeSys.eventSystem._events['update'].forEach(fireCallbacks);
+  const fireCallbacks = (callback) => callback(themeName)
+  window.themeSys.eventSystem._events.update.forEach(fireCallbacks)
 })

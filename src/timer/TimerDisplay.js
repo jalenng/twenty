@@ -1,79 +1,78 @@
-import React from 'react';
+/* eslint-disable no-undef */
+
+import React from 'react'
 
 import {
-    Text,
-    DefaultButton,
-    TooltipHost,
-    Stack,
-    getTheme
-} from '@fluentui/react';
+  Text,
+  DefaultButton,
+  TooltipHost,
+  Stack,
+  getTheme
+} from '@fluentui/react'
 
-import Circle from 'react-circle';
+import Circle from 'react-circle'
 
-const chipStyle = { borderRadius: '20px', width: '40px', height: '28px' };
+const chipStyle = { borderRadius: '20px', width: '40px', height: '28px' }
 const circleProps = {
-    animate: true,
-    animationDuration: '1s',
-    size: 240,
-    lineWidth: 20,
-    roundedStroke: true,
-    showPercentage: false
+  animate: true,
+  animationDuration: '1s',
+  size: 240,
+  lineWidth: 20,
+  roundedStroke: true,
+  showPercentage: false
 }
 
-
 export default class extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {}
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
+  render () {
+    return (
 
-    render() {
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+      >
 
-        return (
+        {/* Circular progress bar */}
+        <Circle
+          {...circleProps}
+          progress={this.props.progressBarValue}
+          progressColor={getTheme().palette.themePrimary}
+          bgColor={getTheme().palette.neutralLighter}
+        />
 
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
+        {/* Timer information */}
+        <div className='time' style={{ position: 'absolute' }}>
+          <Stack vertical horizontalAlign='center'>
 
-                {/* Circular progress bar */}
-                <Circle
-                    {...circleProps}
-                    progress={this.props.progressBarValue}
-                    progressColor={getTheme().palette.themePrimary}
-                    bgColor={getTheme().palette.neutralLighter}
+            {/* Remaining time */}
+            <Text variant='xxLarge' style={{ fontSize: '3.5rem' }} block>
+              <div id='remainingTimeText'>
+                {this.props.text}
+              </div>
+            </Text>
+
+            {/* Chip */}
+            {this.props.showChip &&
+              <TooltipHost content={this.props.chipTooltip}>
+                <DefaultButton
+                  style={{ ...chipStyle }}
+                  iconProps={{ iconName: this.props.chipIconName }}
+                  text={this.props.chipText}
+                  disabled
                 />
+              </TooltipHost>}
 
-                {/* Timer information */}
-                <div className='time' style={{ position: 'absolute' }}>
-                    <Stack vertical horizontalAlign='center'>
+          </Stack>
+        </div>
 
-                        {/* Remaining time */}
-                        <Text variant={'xxLarge'} style={{ fontSize: '3.5rem' }} block>
-                            <div id='remainingTimeText'>
-                                {this.props.text}
-                            </div>
-                        </Text>
+      </div>
 
-                        {/* Chip */}
-                        {this.props.showChip &&
-                            <TooltipHost content={this.props.chipTooltip}>
-                                <DefaultButton
-                                    style={{ ...chipStyle }}
-                                    iconProps={{ iconName: this.props.chipIconName }}
-                                    text={this.props.chipText}
-                                    disabled
-                                />
-                            </TooltipHost>
-                        }
-
-                    </Stack>
-                </div>
-
-            </div>
-
-        );
-    }
+    )
+  }
 }

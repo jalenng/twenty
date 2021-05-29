@@ -1,128 +1,120 @@
+/* eslint-disable no-undef */
+
 /**
  * @file Provides a draggable title bar with a Close button and optional secondary button.
  * @author jalenng
  */
 
-import React from 'react';
+import React from 'react'
 
 import {
-    TooltipHost,
-    DefaultButton,
-    Stack,
-    IconButton,
-    getTheme
-} from '@fluentui/react';
+  TooltipHost,
+  DefaultButton,
+  Stack,
+  IconButton,
+  getTheme
+} from '@fluentui/react'
 
 const sharedStackProps = {
-    horizontal: true,
-    verticalAlign: 'center',
-    styles: { root: { height: '36px' } },
-    tokens: { childrenGap: '6px' }
+  horizontal: true,
+  verticalAlign: 'center',
+  styles: { root: { height: '36px' } },
+  tokens: { childrenGap: '6px' }
 }
 
 const topLeftStyle = {
-    position: 'absolute',
-    top: '6px',
-    left: '6px',
+  position: 'absolute',
+  top: '6px',
+  left: '6px'
 }
 
 const topCenterStyle = {
-    position: 'absolute',
-    top: '6px',
-    left: '50%',
-    transform: 'translate(-50%, 0%)'
+  position: 'absolute',
+  top: '6px',
+  left: '50%',
+  transform: 'translate(-50%, 0%)'
 }
 
 const topRightStyle = {
-    position: 'absolute',
-    top: '6px',
-    right: '6px',
+  position: 'absolute',
+  top: '6px',
+  right: '6px'
 }
 
 export default class extends React.Component {
+  render () {
+    const isMacOS = platform === 'darwin'
+    const secondaryButton = this.props.secondaryButton
 
-    static defaultProps = {
-        secondaryButton: null
-    };
+    const buttonIconColor = getTheme().palette.neutralPrimary
 
-    render() {
+    return (
 
-        const isMacOS = platform === 'darwin';
-        const secondaryButton = this.props.secondaryButton;
+      <div style={{ display: 'inline-block', height: '42px', WebkitAppRegion: 'drag' }}>
 
-        const buttonIconColor = getTheme().palette.neutralPrimary;
+        {/* Handle decor */}
+        <Stack {...sharedStackProps} style={topCenterStyle}>
+          <DefaultButton
+            style={{ borderRadius: '20px', width: '16px', height: '8px', margin: '0px 8px' }}
+            disabled
+          />
+        </Stack>
 
-        return (
+        {/* Top left */}
+        <Stack {...sharedStackProps} style={topLeftStyle}>
 
-            <div style={{ display: 'inline-block', height: '42px', WebkitAppRegion: 'drag'}}>
+          {/* macOS: Close button */}
+          {isMacOS && !this.props.hideClose &&
+            <TooltipHost content='Close'>
+              <IconButton
+                iconProps={{ iconName: 'CircleFill' }}
+                style={{ WebkitAppRegion: 'no-drag' }}
+                styles={{
+                  root: { color: '#ff6159' },
+                  rootHovered: { color: '#ff6159' },
+                  rootPressed: { color: '#bf4942' }
+                }}
+                onClick={() => window.close()}
+              />
+            </TooltipHost>}
 
-                {/* Handle decor */}
-                <Stack {...sharedStackProps} style={topCenterStyle}>
-                    <DefaultButton
-                        style={{ borderRadius: '20px', width: '16px', height: '8px', margin: '0px 8px' }}
-                        disabled
-                    />
-                </Stack>
+        </Stack>
 
-                {/* Top left */}
-                <Stack {...sharedStackProps} style={topLeftStyle}>
+        {/* Top right */}
+        <Stack {...sharedStackProps} style={topRightStyle}>
 
-                    {/* macOS: Close button */}
-                    {isMacOS && !this.props.hideClose &&
-                        <TooltipHost content="Close">
-                            <IconButton
-                                iconProps={{ iconName: 'CircleFill' }}
-                                style={{WebkitAppRegion: 'no-drag'}}
-                                styles={{ 
-                                    root: { color: '#ff6159' },
-                                    rootHovered: { color: '#ff6159' },
-                                    rootPressed: { color: '#bf4942' },
-                                }}
-                                onClick={() => window.close()}
-                            />
-                        </TooltipHost>
-                    }
+          {/* Secondary button */}
+          {secondaryButton &&
+            <TooltipHost content={secondaryButton.tooltip}>
+              <IconButton
+                iconProps={{ iconName: secondaryButton.iconName }}
+                style={{ WebkitAppRegion: 'no-drag' }}
+                styles={{ root: { color: buttonIconColor } }}
+                toggle
+                checked={secondaryButton.checked}
+                onClick={secondaryButton.onClick}
+              />
+            </TooltipHost>}
 
-                </Stack>
+          {/* non-macOS: Close button */}
+          {!isMacOS && !this.props.hideClose &&
+            <TooltipHost content='Close'>
+              <IconButton
+                iconProps={{ iconName: 'Cancel' }}
+                style={{ WebkitAppRegion: 'no-drag' }}
+                styles={{
+                  root: { color: buttonIconColor },
+                  rootHovered: { color: '#ffffff', background: '#E81123' },
+                  rootPressed: { color: '#ffffff', background: '#f1707a' }
+                }}
+                onClick={() => window.close()}
+              />
+            </TooltipHost>}
 
-                {/* Top right */}
-                <Stack {...sharedStackProps} style={topRightStyle}>
+        </Stack>
 
-                    {/* Secondary button */}
-                    {secondaryButton &&
-                        <TooltipHost content={secondaryButton.tooltip}>
-                            <IconButton
-                                iconProps={{ iconName: secondaryButton.iconName }}
-                                style={{WebkitAppRegion: 'no-drag'}}
-                                styles={{ root: { color: buttonIconColor } }}
-                                toggle={true}
-                                checked={secondaryButton.checked}
-                                onClick={secondaryButton.onClick}
-                            />
-                        </TooltipHost>
-                    }
+      </div>
 
-                    {/* non-macOS: Close button */}
-                    {!isMacOS && !this.props.hideClose &&
-                        <TooltipHost content="Close">
-                            <IconButton
-                                iconProps={{ iconName: 'Cancel' }}
-                                style={{WebkitAppRegion: 'no-drag'}}
-                                styles={{ 
-                                    root: { color: buttonIconColor},
-                                    rootHovered: { color: '#ffffff', background: '#E81123' },
-                                    rootPressed: { color: '#ffffff', background: '#f1707a' } 
-                                }}
-                                onClick={() => window.close()}
-                            />
-                        </TooltipHost>
-                    }
-
-                </Stack>
-
-            </div>
-
-        );
-    }
+    )
+  }
 }
-

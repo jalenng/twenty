@@ -3,75 +3,75 @@
  * @author jalenng
  */
 
-import React from 'react';
+/* eslint-disable no-undef */
 
-import { Stack, ScrollablePane } from '@fluentui/react';
+import React from 'react'
 
-import TitleBar from './window/TitleBar';
+import { Stack, ScrollablePane } from '@fluentui/react'
 
-import PrefsSidebar from './preferences/PrefsSidebar';
-import Notifications from './preferences/Notifications';
-import Blockers from './preferences/Blockers';
-import Startup from './preferences/Startup';
-import Appearance from './preferences/Appearance';
-import About from './preferences/About';
+import TitleBar from './window/TitleBar'
+
+import PrefsSidebar from './preferences/PrefsSidebar'
+import Notifications from './preferences/Notifications'
+import Blockers from './preferences/Blockers'
+import Startup from './preferences/Startup'
+import Appearance from './preferences/Appearance'
+import About from './preferences/About'
 
 const divStyle = {
-    paddingLeft: '30px',
-    display: 'grid'
-};
+  paddingLeft: '30px',
+  display: 'grid'
+}
 
 const preferencePages = {
-    notifications: <Notifications />,
-    blockers: <Blockers />,
-    startup: <Startup />,
-    appearance: <Appearance />,
-    about: <About />
+  notifications: <Notifications />,
+  blockers: <Blockers />,
+  startup: <Startup />,
+  appearance: <Appearance />,
+  about: <About />
 }
-    
 
 export default class extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { selectedKey: 'notifications' }
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = { selectedKey: 'notifications' };
-    }
+  render () {
+    const selectedKey = this.state.selectedKey
+    const preferencesPage = preferencePages[selectedKey]
 
-    render() {
-        const selectedKey = this.state.selectedKey;
-        let preferencesPage = preferencePages[selectedKey];
+    return (
 
-        return (
+      <Stack>
 
-            <Stack>
-                
-                <TitleBar/>
+        <TitleBar />
 
-                <div style={divStyle}>
+        <div style={divStyle}>
 
-                    <ScrollablePane style={{
-                        position: 'absolute',
-                        left: '260px',
-                        top: '48px',
-                        paddingRight: '40px'
-                    }}>
+          <ScrollablePane style={{
+            position: 'absolute',
+            left: '260px',
+            top: '48px',
+            paddingRight: '40px'
+          }}
+          >
 
-                        {preferencesPage}
+            {preferencesPage}
 
-                    </ScrollablePane>
+          </ScrollablePane>
 
-                    <PrefsSidebar
-                        selectedKey={selectedKey}
-                        onUpdateSelectedKey={(key) => {
-                            this.setState({ selectedKey: key });
-                        }}
-                    />
+          <PrefsSidebar
+            selectedKey={selectedKey}
+            onUpdateSelectedKey={(key) => {
+              this.setState({ selectedKey: key })
+            }}
+          />
 
-                </div>
+        </div>
 
-            </Stack>
+      </Stack>
 
-        );
-    }
+    )
+  }
 }
-

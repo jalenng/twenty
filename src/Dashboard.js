@@ -1,87 +1,85 @@
-import React from 'react';
+/* eslint-disable no-undef */
 
-import { 
-    Stack,
-    ActivityItem,
-    Icon,
-    Text
-} from '@fluentui/react';
+import React from 'react'
+
+import {
+  Stack,
+  ActivityItem,
+  Icon,
+  Text
+} from '@fluentui/react'
 
 const navStyles = {
-    root: {
-        width: '420px'
-    },
-};
+  root: {
+    width: '420px'
+  }
+}
 
 export default class extends React.Component {
-    _isMounted = false;
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            blockers: []
-        };
-        this.updateState = this.updateState.bind(this);
+  constructor (props) {
+    super(props)
+    this.state = {
+      blockers: []
     }
+    this.updateState = this.updateState.bind(this)
+    this._isMounted = false
+  }
 
-    componentDidMount() {
-        this._isMounted = true;
-        blockerSys.eventSystem.on('update', (event, blockers) => this.updateState(blockers));
+  componentDidMount () {
+    this._isMounted = true
+    blockerSys.eventSystem.on('update', (event, blockers) => this.updateState(blockers))
 
-        blockerSys.getBlockers();
-        setInterval(blockerSys.getBlockers, 100);
-    }
+    blockerSys.getBlockers()
+    setInterval(blockerSys.getBlockers, 100)
+  }
 
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
+  componentWillUnmount () {
+    this._isMounted = false
+  }
 
-    updateState(blockers) {
-        this.setState({
-            blockers: blockers
-        });
-    }
+  updateState (blockers) {
+    this.setState({
+      blockers: blockers
+    })
+  }
 
-    render() {
+  render () {
+    const hasBlockers = this.state.blockers.length !== 0
 
-        const hasBlockers = this.state.blockers.length !== 0;
+    if (hasBlockers) {
+      return (
 
-        if (hasBlockers)
-            return (
+        <Stack styles={navStyles} tokens={{ childrenGap: '16px' }}>
 
-                <Stack styles={navStyles} tokens={{ childrenGap: '16px' }}>
+          <Text variant='xLarge' block>
+            We've paused your timer for you.
+          </Text>
 
-                    <Text variant={'xLarge'} block>
-                        We've paused your timer for you.
-                    </Text>
+          <Stack tokens={{ childrenGap: '3px' }}>
 
-                    <Stack tokens={{ childrenGap: '3px' }}>
-                        
-                        { this.state.blockers.map( blocker => {
+            {this.state.blockers.map(blocker => {
+              const description = blocker.type === 'app'
+                ? `${blocker.message} is open`
+                : `${blocker.message}`
 
-                            const description = blocker.type === "app"
-                            ? `${blocker.message} is open`
-                            : `${blocker.message}`;
+              return (
+                <ActivityItem
+                  activityDescription={description}
+                  activityIcon={<Icon iconName='Blocked2' />}
+                  isCompact
+                />
+              )
+            })}
 
-                            return (
-                                <ActivityItem 
-                                    activityDescription={description} 
-                                    activityIcon={ <Icon iconName="Blocked2" /> }
-                                    isCompact={true}
-                                />
-                            )
+          </Stack>
 
-                        })}
+          <Text variant='medium' block>
+            Click the blue button to ignore these blockers for now.
+          </Text>
 
-                    </Stack>
+        </Stack>
 
-                    <Text variant={'medium'} block>
-                        Click the blue button to ignore these blockers for now.
-                    </Text>
-
-                </Stack>
-
-            )
-        else return <div></div>
-    }
+      )
+    } else return <div />
+  }
 }

@@ -1,11 +1,11 @@
 /**
- * @file Handles the timing and logic of the breaks. 
+ * @file Handles the timing and logic of the breaks.
  * @author jalenng
- * 
+ *
  * The states of the break system are as follows:
  *  - isOnBreak
  *      - true <---> false
- * 
+ *
  * The break system is also an event emitter that emits the following events:
  *  - break-start: when the break begins
  *  - break-times-set: when the break countdown resets (due to the user moving their mouse)
@@ -13,140 +13,123 @@
  *  - break-end: when the break countdown reaches to zero
  */
 
-require ('hazardous');
-const path = require('path'); 
+require('hazardous')
+const path = require('path')
 
-const { screen } = require('electron');
-const soundPlayer = require('sound-play');
+const { screen } = require('electron')
+const soundPlayer = require('sound-play')
 
-const EventEmitter = require('./EventEmitter');
+const EventEmitter = require('./EventEmitter')
 
-const BREAK_DURATION = 20000;
-const POPUP_NOTIF_DURATION = 5000;
+const BREAK_DURATION = 20000
+const POPUP_NOTIF_DURATION = 5000
 
 class BreakSystem extends EventEmitter {
+  constructor () {
+    super()
 
-    constructor() {
-        super();
-        
-        this.isOnBreak = false;
-        this.totalDuration = 0;
-        this.endTime = new Date();
+    this.isOnBreak = false
+    this.totalDuration = 0
+    this.endTime = new Date()
+  };
 
-        this.oldMousePos;
-        this.checkMousePositionInterval;
-        
-        this.mainTimeout;
-        this.intermediateTimeout;
-    };
+  /**
+   * Gets the status of the break system
+   * @returns an object
+   */
+  getStatus () {
+    const remainingTime = this.isOnBreak
+      ? this.endTime - new Date()
+      : this.totalDuration
 
-    /**
-     * Gets the status of the break system
-     * @returns an object
-     */
-    getStatus() {
-
-        let remainingTime = this.isOnBreak
-                ? this.endTime - new Date()
-                : this.totalDuration;
-
-        let breakStatus = {
-            isOnBreak: this.isOnBreak,
-            endTime: this.endTime,
-            duration: this.totalDuration,
-            remainingTime: remainingTime
-        }
-
-        return breakStatus;
-    };
-
-    /**
-     * Starts the break. Calls this.setupTimes in the process.
-     */
-    start() {
-
-        if (this.isOnBreak) return;
-
-        this.isOnBreak = true;
-
-        if (global.store.get('preferences.notifications.enableSound') === true) 
-            this.playSound();
-
-        this.setupTimes();
-                    
-        // Set interval to continuously check mouse position
-        this.oldMousePos = screen.getCursorScreenPoint();
-        this.checkMousePositionInterval = setInterval(() => {
-            var newMousePos = screen.getCursorScreenPoint();
-            var mouseMoved = newMousePos.x != this.oldMousePos.x || newMousePos.y != this.oldMousePos.y;
-
-            if (mouseMoved) {
-                this.setupTimes();
-                this.oldMousePos = newMousePos;
-            }
-
-        }, 100);            
-        
-        this.emit('break-start')
-
-    }
-    
-    /**
-     * Initializes the end time and timeout
-     */
-    setupTimes() {
-
-        this.emit('break-times-set')
-
-        this.endTime = new Date();
-        this.endTime.setMilliseconds(this.endTime.getMilliseconds() + BREAK_DURATION);
-        
-        this.totalDuration = BREAK_DURATION;
-        
-        clearTimeout(this.mainTimeout)
-        clearTimeout(this.intermediateTimeout)
-
-        this.mainTimeout = setTimeout(this.end.bind(this), BREAK_DURATION);
-        this.intermediateTimeout = setTimeout(() => {
-            // Call break-intermediate listeners after POPUP_NOTIF_DURATION
-            this.emit('break-intermediate')
-        }, POPUP_NOTIF_DURATION);
+    const breakStatus = {
+      isOnBreak: this.isOnBreak,
+      endTime: this.endTime,
+      duration: this.totalDuration,
+      remainingTime: remainingTime
     }
 
-    /**
-     * Ends the break and emits the 'break-end' event
-     */
-    end() {
-        if (this.isOnBreak) {
+    return breakStatus
+  };
 
-            if (global.store.get('preferences.notifications.enableSound') === true) 
-                this.playSound();
+  /**
+   * Starts the break. Calls this.setupTimes in the process.
+   */
+  start () {
+    if (this.isOnBreak) return
 
-            clearTimeout(this.mainTimeout)
-            clearTimeout(this.intermediateTimeout)
-            clearInterval(this.checkMousePositionInterval)
+    this.isOnBreak = true
 
-            this.emit('break-end')
+    if (global.store.get('preferences.notifications.enableSound') === true) { this.playSound() }
 
-            this.isOnBreak = false; 
-        }
+    this.setupTimes()
 
+    // Set interval to continuously check mouse position
+    this.oldMousePos = screen.getCursorScreenPoint()
+    this.checkMousePositionInterval = setInterval(() => {
+      const newMousePos = screen.getCursorScreenPoint()
+      const mouseMoved = newMousePos.x !== this.oldMousePos.x || newMousePos.y !== this.oldMousePos.y
+
+      if (mouseMoved) {
+        this.setupTimes()
+        this.oldMousePos = newMousePos
+      }
+    }, 100)
+
+    this.emit('break-start')
+  }
+
+  /**
+   * Initializes the end time and timeout
+   */
+  setupTimes () {
+    this.emit('break-times-set')
+
+    this.endTime = new Date()
+    this.endTime.setMilliseconds(this.endTime.getMilliseconds() + BREAK_DURATION)
+
+    this.totalDuration = BREAK_DURATION
+
+    clearTimeout(this.mainTimeout)
+    clearTimeout(this.intermediateTimeout)
+
+    this.mainTimeout = setTimeout(this.end.bind(this), BREAK_DURATION)
+    this.intermediateTimeout = setTimeout(() => {
+      // Call break-intermediate listeners after POPUP_NOTIF_DURATION
+      this.emit('break-intermediate')
+    }, POPUP_NOTIF_DURATION)
+  }
+
+  /**
+   * Ends the break and emits the 'break-end' event
+   */
+  end () {
+    if (this.isOnBreak) {
+      if (global.store.get('preferences.notifications.enableSound') === true) { this.playSound() }
+
+      clearTimeout(this.mainTimeout)
+      clearTimeout(this.intermediateTimeout)
+      clearInterval(this.checkMousePositionInterval)
+
+      this.emit('break-end')
+
+      this.isOnBreak = false
     }
+  }
 
-    /**
-     * Plays the sound stored in the store under preferences.notifications.sound
-     */
-    playSound() {
-        let soundKey = global.store.get('preferences.notifications.sound');
-        let volume = global.store.get('preferences.notifications.soundVolume') / 100;
+  /**
+   * Plays the sound stored in the store under preferences.notifications.sound
+   */
+  playSound () {
+    const soundKey = global.store.get('preferences.notifications.sound')
+    const volume = global.store.get('preferences.notifications.soundVolume') / 100
 
-        let fullFilepath = path.isAbsolute(soundKey)
-            ? soundKey
-            : path.join(__dirname, soundKey);
-        soundPlayer.play(fullFilepath, volume);
-    }
-
+    const fullFilepath = path.isAbsolute(soundKey)
+      ? soundKey
+      : path.join(__dirname, soundKey)
+    soundPlayer.play(fullFilepath, volume)
+  }
 }
 
 /** Exports */
-module.exports = BreakSystem;
+module.exports = BreakSystem

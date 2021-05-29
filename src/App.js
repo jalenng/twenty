@@ -1,51 +1,52 @@
-import React from 'react';
+/* eslint-disable no-undef */
 
-import { Stack } from '@fluentui/react';
+import React from 'react'
 
-import TitleBar from './window/TitleBar';
-import Timer from './timer/Timer';
+import { Stack } from '@fluentui/react'
+
+import TitleBar from './window/TitleBar'
+import Timer from './timer/Timer'
 
 export default class App extends React.Component {
-        
-    constructor(props) {
-        super(props);
-        this.state = {
-            alwaysOnTop: store.preferences.getAll().appearance.alwaysOnTop
-        };
+  constructor (props) {
+    super(props)
+    this.state = {
+      alwaysOnTop: store.preferences.getAll().appearance.alwaysOnTop
     }
+  }
 
-    componentDidMount() {
-        // Update this component's state when preferences are updated
-        store.preferences.eventSystem.on('changed', () => {
-            this.updateState();
-        })
-    }
+  componentDidMount () {
+    // Update this component's state when preferences are updated
+    store.preferences.eventSystem.on('changed', () => {
+      this.updateState()
+    })
+  }
 
-    updateState() {
-        this.setState({
-            alwaysOnTop: store.preferences.getAll().appearance.alwaysOnTop
-        });
-    }
+  updateState () {
+    this.setState({
+      alwaysOnTop: store.preferences.getAll().appearance.alwaysOnTop
+    })
+  }
 
-    render() {
+  render () {
+    return (
 
-        return (
+      <Stack>
 
-            <Stack>
+        <TitleBar secondaryButton={{
+          tooltip: 'Always show on top',
+          iconName: 'Pinned',
+          checked: this.state.alwaysOnTop,
+          onClick: () => {
+            store.preferences.set('appearance.alwaysOnTop', !this.state.alwaysOnTop)
+          }
+        }}
+        />
 
-                <TitleBar secondaryButton={{
-                    tooltip: 'Always show on top',
-                    iconName: 'Pinned',
-                    checked: this.state.alwaysOnTop,
-                    onClick: () => {
-                        store.preferences.set('appearance.alwaysOnTop', !this.state.alwaysOnTop)
-                    }
-                }}/>
+        <Timer />
 
-                <Timer />
+      </Stack>
 
-            </Stack>
-
-        );
-    }
+    )
+  }
 }

@@ -1,10 +1,10 @@
 /*
- * The timer system handles the timing and logic of the timer functionality. 
- * 
+ * The timer system handles the timing and logic of the timer functionality.
+ *
  * The states of the timers and its transitions are shown here:
- * 
+ *
  * 0 : false :: 1 : true
- * 
+ *
  *              +-----------------------+--------------+
  *              |               isStopped               |
  *              +-----------------------+--------------+
@@ -16,7 +16,7 @@
  * |           |   | |    0    |    1    | |              |  /\          |
  * |           | 0 | +-------------------+ |    Stopped    |  |           |
  * | isBlocked |   | | Running |  Idle   | |              |  |           |
- * |           |   | +-------------------+ |              |  |           | 
+ * |           |   | +-------------------+ |              |  |           |
  * |           |   |    <----Start-----    |              |  | Unblock   | Block
  * |           |   |    ------End----->    |              |  |           |
  * |           +---+-----------------------+--------------+  |           |
@@ -26,250 +26,233 @@
  * +-----------+---+-----------------------+--------------+
  *                             <-------Start--------
  *                             --------Pause------->
- * 
+ *
  *                             <-------Toggle------>
- * 
+ *
  * - Running:           the timer is counting down.
  * - Idle:              the timer has finished its countdown and is waiting to restart automatically.
  * - Blocked:           the timer is not counting down because of a blocker.
  * - Stopped:           the timer is not counting down because it was stopped manually.
  * - Blocked & stopped: the timer was blocked when it was stopped.
- * 
+ *
  * The timer system is also an event emitter that emits the following events:
  *     - timer-end: when the timer counts down to zero, or is manually ended.
- * 
+ *
  */
 
-const EventEmitter = require('./EventEmitter');
+const EventEmitter = require('./EventEmitter')
 
 const states = {
-    RUNNING: 'running',
-    IDLE: 'idle',
-    BLOCKED: 'blocked',
-    STOPPED: 'stopped',
-    BLOCKED_AND_STOPPED: 'blocked_and_stopped'
+  RUNNING: 'running',
+  IDLE: 'idle',
+  BLOCKED: 'blocked',
+  STOPPED: 'stopped',
+  BLOCKED_AND_STOPPED: 'blocked_and_stopped'
 }
 
-class TimerSystem extends EventEmitter{
+class TimerSystem extends EventEmitter {
+  constructor () {
+    super()
 
-    constructor() {
-        super();
+    this.timeout
 
-        this.timeout;
+    // Interval for sending updated timer info
+    this.sendingInterval
 
-        // Interval for sending updated timer info
-        this.sendingInterval; 
+    // Flags and variables to track timer status
+    this.isStopped = true
+    this.isBlocked = false
+    this.isIdle = false
 
-        // Flags and variables to track timer status
-        this.isStopped = true;
-        this.isBlocked = false;
-        this.isIdle = false;
+    // The Date Object indicating when the timer will end
+    this.endDate = new Date()
 
-        // The Date Object indicating when the timer will end
-        this.endDate = new Date();
+    // The total duration of the timer run in milliseconds
+    this.totalDuration = global.store.get('preferences.notifications.interval') * 60000
 
-        // The total duration of the timer run in milliseconds
-        this.totalDuration = global.store.get('preferences.notifications.interval') * 60000; 
+    // Stores the remaining time when the timer is stopped or blocked (TODO: Depreciate this)
+    this.savedTime = this.totalDuration
+  }
 
-        // Stores the remaining time when the timer is stopped or blocked (TODO: Depreciate this)
-        this.savedTime = this.totalDuration;    
+  /**
+   * Gets the state of the timer.
+   * @returns a string indicating the state.
+   */
+  getState () {
+    if (this.isStopped) {
+      if (this.isBlocked) { return states.BLOCKED_AND_STOPPED } else { return states.STOPPED }
+    } else {
+      if (this.isBlocked) { return states.BLOCKED } else if (this.isIdle) { return states.IDLE } else { return states.RUNNING }
     }
+  }
 
-    /**
-     * Gets the state of the timer.
-     * @returns a string indicating the state.
-     */
-    getState() {
-        if (this.isStopped) {
-            if (this.isBlocked)
-                return states.BLOCKED_AND_STOPPED;
-            else
-                return states.STOPPED;
-        }
-        else {
-            if (this.isBlocked)
-                return states.BLOCKED;
-            else if (this.isIdle)
-                return states.IDLE;
-            else
-                return states.RUNNING;
-        }
+  /**
+   * Gets the status of the timer system
+   * @returns an object
+   */
+  getStatus () {
+    return {
+      endDate: this.endDate,
+      totalDuration: this.totalDuration,
+      remainingTime: (() => {
+        if (this.savedTime != null) return this.savedTime // Use this only if the timer is stopped or blocked
+        else return this.endDate - new Date() // Otherwise, calculate it dynamically
+      })(),
+      isBlocked: this.isBlocked,
+      isStopped: this.isStopped,
+      isIdle: this.isIdle
     }
+  };
 
-    /**
-     * Gets the status of the timer system
-     * @returns an object
-     */
-    getStatus() {
-        return { 
-            endDate: this.endDate,
-            totalDuration: this.totalDuration,
-            remainingTime: (() => {
-                if (this.savedTime != null) return this.savedTime   // Use this only if the timer is stopped or blocked
-                else return this.endDate - new Date();      // Otherwise, calculate it dynamically
-                })(),
-            isBlocked: this.isBlocked,
-            isStopped: this.isStopped,
-            isIdle: this.isIdle
-        }
-    };
+  /**
+   * Updates the timer.
+   */
+  update () {
+    switch (this.getState()) {
+      case states.RUNNING:
+        if (this.savedTime === 0) this.reset()
+        else this.setup()
 
-    /**
-     * Updates the timer.
-     */
-    update() {
-        switch (this.getState()) {
-            case states.RUNNING:
-                if (this.savedTime === 0) this.reset();
-                else this.setup();
+        break
 
-                break;
+      // End timer and begin break
+      case states.IDLE:
 
-            // End timer and begin break
-            case states.IDLE:
-                
-                this.savedTime = 0;
-                clearTimeout(this.timeout);
-
-                this.emit('timer-end', callback => callback(this.totalDuration));
-
-                break;
-
-            // The timer should not be running here
-            case states.BLOCKED:
-            case states.BLOCKED_AND_STOPPED:
-            case states.STOPPED:
-
-                this.totalDuration = global.store.get('preferences.notifications.interval') * 60000;
-                this.savedTime = this.totalDuration;
-                clearTimeout(this.timeout);
-
-                break;
-        }
-
-        this.resetSendingInterval();
-    }
-
-    /**
-     * Sets up the timer
-     */
-    setup() {
-        
-        // Use JS timeouts to facilitate delay
+        this.savedTime = 0
         clearTimeout(this.timeout)
-        this.timeout = setTimeout(this.end.bind(this), this.savedTime);
 
-        // Calculate the end date
-        this.endDate = new Date();
-        let msLeft = this.endDate.getMilliseconds() + this.savedTime;
-        this.endDate.setMilliseconds(msLeft);
+        this.emit('timer-end', callback => callback(this.totalDuration))
 
-        this.savedTime = null;
-    }
+        break
 
-    /**
-     * Resets the interval for sending timer updates
-     */
-    resetSendingInterval() {
-        clearInterval(this.sendingInterval);
-        
-        if (global.mainWindow && !global.mainWindow.isDestroyed())
-            global.mainWindow.webContents.send('receive-timer-status', this.getStatus());
+      // The timer should not be running here
+      case states.BLOCKED:
+      case states.BLOCKED_AND_STOPPED:
+      case states.STOPPED:
 
-        this.sendingInterval = setInterval( () => {
-            if (global.mainWindow && !global.mainWindow.isDestroyed())
-                global.mainWindow.webContents.send('receive-timer-status', this.getStatus());
-        }, 1000);    
-    }
-
-    /**
-     * Resets the timer
-     */
-    reset() {
-        this.totalDuration = global.store.get('preferences.notifications.interval') * 60000;
+        this.totalDuration = global.store.get('preferences.notifications.interval') * 60000
         this.savedTime = this.totalDuration
+        clearTimeout(this.timeout)
 
-        if (this.getState() === states.RUNNING) this.setup();
+        break
     }
 
-    /**
-     * Starts the timer
-     */
-    start() {
-        if (this.isBlocked) return;
-        if (this.getState() === states.RUNNING) return;
+    this.resetSendingInterval()
+  }
 
-        // Set flags
-        this.isIdle = false;
-        this.isStopped = false;
+  /**
+   * Sets up the timer
+   */
+  setup () {
+    // Use JS timeouts to facilitate delay
+    clearTimeout(this.timeout)
+    this.timeout = setTimeout(this.end.bind(this), this.savedTime)
 
-        this.update();
-    };
+    // Calculate the end date
+    this.endDate = new Date()
+    const msLeft = this.endDate.getMilliseconds() + this.savedTime
+    this.endDate.setMilliseconds(msLeft)
 
-    /** 
-     * Ends the timer and starts the break
-     */
-    end() {
-        if (this.isBlocked) return;
-        if (this.isIdle) return;
+    this.savedTime = null
+  }
 
-        // Set flags
-        this.isIdle = true;
-        this.isStopped = false;
+  /**
+   * Resets the interval for sending timer updates
+   */
+  resetSendingInterval () {
+    clearInterval(this.sendingInterval)
 
-        this.update();
-    };
+    if (global.mainWindow && !global.mainWindow.isDestroyed()) { global.mainWindow.webContents.send('receive-timer-status', this.getStatus()) }
 
-    /**
-     * Pauses the timer
-     */
-    // Conditions to ignore
-    stop() {
-        if (this.isStopped) return;
+    this.sendingInterval = setInterval(() => {
+      if (global.mainWindow && !global.mainWindow.isDestroyed()) { global.mainWindow.webContents.send('receive-timer-status', this.getStatus()) }
+    }, 1000)
+  }
 
-        // Set flags
-        this.isIdle = false;
-        this.isStopped = true;
-        
-        this.update();
-    }
+  /**
+   * Resets the timer
+   */
+  reset () {
+    this.totalDuration = global.store.get('preferences.notifications.interval') * 60000
+    this.savedTime = this.totalDuration
 
-    /**
-     * Blocks the timer from running
-     */
-    block() {
-        if (this.isBlocked) return;
+    if (this.getState() === states.RUNNING) this.setup()
+  }
 
-        // Set flag
-        this.isBlocked = true;
+  /**
+   * Starts the timer
+   */
+  start () {
+    if (this.isBlocked) return
+    if (this.getState() === states.RUNNING) return
 
-        this.update();
-    }
+    // Set flags
+    this.isIdle = false
+    this.isStopped = false
 
-    /**
-     * Unblocks the timer from running
-     */
-    unblock() {
-        if (!this.isBlocked) return;
+    this.update()
+  };
 
-        // Set flag
-        this.isBlocked = false;
+  /**
+   * Ends the timer and starts the break
+   */
+  end () {
+    if (this.isBlocked) return
+    if (this.isIdle) return
 
-        this.update();
-    }
+    // Set flags
+    this.isIdle = true
+    this.isStopped = false
 
-    /**
-     * Pauses the timer if the timer is running,
-     * or starts the timer when it is stopped or blocked.
-     */
-    togglePause() {
-        if (this.isStopped)
-            this.start();
-        else
-            this.stop();
-    }
+    this.update()
+  };
 
+  /**
+   * Pauses the timer
+   */
+  // Conditions to ignore
+  stop () {
+    if (this.isStopped) return
+
+    // Set flags
+    this.isIdle = false
+    this.isStopped = true
+
+    this.update()
+  }
+
+  /**
+   * Blocks the timer from running
+   */
+  block () {
+    if (this.isBlocked) return
+
+    // Set flag
+    this.isBlocked = true
+
+    this.update()
+  }
+
+  /**
+   * Unblocks the timer from running
+   */
+  unblock () {
+    if (!this.isBlocked) return
+
+    // Set flag
+    this.isBlocked = false
+
+    this.update()
+  }
+
+  /**
+   * Pauses the timer if the timer is running,
+   * or starts the timer when it is stopped or blocked.
+   */
+  togglePause () {
+    if (this.isStopped) { this.start() } else { this.stop() }
+  }
 }
 
 /** Exports */
-module.exports = TimerSystem;
+module.exports = TimerSystem
