@@ -1,3 +1,8 @@
+/**
+ * @file Handles the creation of app windows.
+ * @author jalenng
+ */
+
 const { BrowserWindow, screen, app, Menu } = require('electron')
 const isDev = require('electron-is-dev')
 const path = require('path')

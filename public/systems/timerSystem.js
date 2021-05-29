@@ -1,5 +1,6 @@
-/*
- * The timer system handles the timing and logic of the timer functionality.
+/**
+ * @file Handles the timing and logic of the timer functionality.
+ * @author jalenng
  *
  * The states of the timers and its transitions are shown here:
  *

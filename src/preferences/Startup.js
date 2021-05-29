@@ -1,3 +1,8 @@
+/**
+ * @file The "Startup" tab in Preferences
+ * @author jalenng
+ */
+
 /* eslint-disable no-undef */
 
 import React from 'react'

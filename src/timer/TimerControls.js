@@ -1,3 +1,9 @@
+/**
+ * @file The controls portion of the Timer. Allows user to start, stop, and unblock the timer,
+ * as well as open the preferences window.
+ * @author jalenng
+ */
+
 /* eslint-disable no-undef */
 
 import React from 'react'

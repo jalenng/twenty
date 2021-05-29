@@ -1,3 +1,8 @@
+/**
+ * @file Catches exceptions and displays a user-friendly error screen.
+ * @author jalenng
+ */
+
 /* eslint-disable no-undef */
 
 import React from 'react'

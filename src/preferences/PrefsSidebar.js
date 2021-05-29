@@ -1,3 +1,8 @@
+/**
+ * @file The sidebar in Preferences. Used to switch between various preference pages.
+ * @author jalenng
+ */
+
 /* eslint-disable no-undef */
 
 import React from 'react'

@@ -1,3 +1,8 @@
+/**
+ * @file Provides an interface for the user to interact with the timer.
+ * @author jalenng
+ */
+
 /* eslint-disable no-undef */
 
 import React from 'react'

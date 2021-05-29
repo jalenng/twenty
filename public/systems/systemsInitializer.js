@@ -1,3 +1,9 @@
+/**
+ * @file Initializes the various systems that manage the app logic, as well as
+ * their interactions with each other.
+ * @author jalenng
+ */
+
 const { powerMonitor } = require('electron')
 
 const TimerSystem = require('./timerSystem')
@@ -6,7 +12,6 @@ const NotificationSystem = require('./notificationSystem')
 const AppSnapshotSystem = require('./appSnapshotSystem')
 const BlockerSystem = require('./blockerSystem')
 
-// Instantiate the systems
 global.timerSystem = new TimerSystem()
 global.breakSystem = new BreakSystem()
 global.notificationSystem = new NotificationSystem()

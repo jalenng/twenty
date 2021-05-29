@@ -1,3 +1,8 @@
+/**
+ * @file The display portion of the Timer. Sole purpose is to display timer status.
+ * @author jalenng
+ */
+
 /* eslint-disable no-undef */
 
 import React from 'react'
