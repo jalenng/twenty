@@ -55,7 +55,8 @@ ipcMain.on('get-about-info', (event) => {
       { name: 'hazardous', link: 'https://github.com/epsitec-sa/hazardous' },
       { name: 'react', link: 'https://github.com/facebook/react' },
       { name: 'react-circle', link: 'https://github.com/zzarcon/react-circle' },
-      { name: 'sound-play', link: 'https://github.com/ilehoang/sound-play' }
+      { name: 'sound-play', link: 'https://github.com/ilehoang/sound-play' },
+      { name: 'standard', link: 'https://github.com/standard/standard' }
     ],
     license: [
       {
