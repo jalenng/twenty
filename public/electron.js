@@ -8,6 +8,8 @@ const path = require('path')
 
 const isDev = require('electron-is-dev')
 
+const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer')
+
 const { createWindow } = require('./windowCreator')
 
 /* Initialize the stores and systems */
@@ -15,10 +17,6 @@ require('./store/storeInitializer')
 require('./systems/systemsInitializer')
 
 require('./ipcHandlers')
-
-/* References to windows */
-// global.mainWindow
-// global.prefsWindow
 
 /* ------------------------------------------------------------------------- */
 /* Mechanism to allow only one instance of the app at once */
@@ -48,6 +46,15 @@ app.setLoginItemSettings({
 let appTray = null
 
 app.whenReady().then(() => {
+
+  /* Load React Dev Tools if isDev */
+  if (isDev) {
+    installExtension(REACT_DEVELOPER_TOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err))
+  }
+
+  // Create main Window
   global.mainWindow = createWindow('main')
 
   // Pin main window if option is enabled

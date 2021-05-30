@@ -12,6 +12,7 @@ import {
   DefaultButton,
   Stack,
   IconButton,
+  DirectionalHint,
   getTheme
 } from '@fluentui/react'
 
@@ -74,7 +75,10 @@ export default class extends React.Component {
 
           {/* macOS: Close button */}
           {isMacOS && !this.props.hideClose &&
-            <TooltipHost content='Close'>
+            <TooltipHost
+              content='Close'
+              calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
+            >
               <IconButton
                 iconProps={{ iconName: 'CircleFill' }}
                 style={{ WebkitAppRegion: 'no-drag' }}
@@ -94,7 +98,10 @@ export default class extends React.Component {
 
           {/* Secondary button */}
           {secondaryButton &&
-            <TooltipHost content={secondaryButton.tooltip}>
+            <TooltipHost
+              content={secondaryButton.tooltip}
+              calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
+            >
               <IconButton
                 iconProps={{ iconName: secondaryButton.iconName }}
                 style={{ WebkitAppRegion: 'no-drag' }}
@@ -107,7 +114,10 @@ export default class extends React.Component {
 
           {/* non-macOS: Close button */}
           {!isMacOS && !this.props.hideClose &&
-            <TooltipHost content='Close'>
+            <TooltipHost
+              content='Close'
+              calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
+            >
               <IconButton
                 iconProps={{ iconName: 'Cancel' }}
                 style={{ WebkitAppRegion: 'no-drag' }}

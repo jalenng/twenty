@@ -12,6 +12,7 @@ import {
   DefaultButton,
   TooltipHost,
   Stack,
+  DirectionalHint,
   getTheme
 } from '@fluentui/react'
 
@@ -64,7 +65,10 @@ export default class extends React.Component {
 
             {/* Chip */}
             {this.props.showChip &&
-              <TooltipHost content={this.props.chipTooltip}>
+              <TooltipHost
+                content={this.props.chipTooltip}
+                calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
+              >
                 <DefaultButton
                   style={{ ...chipStyle }}
                   iconProps={{ iconName: this.props.chipIconName }}

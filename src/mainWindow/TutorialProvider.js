@@ -16,34 +16,34 @@ const tutorialStages = [
     headline: `Welcome to ${appName}.`,
     contents: 'For a quick overview, click ‘Next’.',
     target: '#container',
-    calloutProps: { directionalHint: DirectionalHint.bottomCenter }
+    direction: 'bottomCenter'
   },
 
   {
     headline: 'The 20-20-20 rule',
     contents: `Looking at computer screens for long periods of time strains our eyes. Every 20 minutes, ${appName} will remind you to look at something at least 20 feet away for 20 seconds, the duration it takes for your eyes to fully relax. `,
     target: '#timer',
-    calloutProps: { directionalHint: DirectionalHint.rightCenter }
+    direction: 'rightCenter'
   },
 
   {
     headline: 'Start/stop button',
     contents: 'Start or stop the timer here. When the timer is stopped, you will not receive notifications. ',
     target: '#toggleButton',
-    calloutProps: { directionalHint: DirectionalHint.bottomLeftEdge }
+    direction: 'bottomLeftEdge'
   },
 
   {
     headline: 'Preferences button',
     contents: 'Customize your notification intervals, sounds, blockers, and more here. ',
     target: '#prefsButton',
-    calloutProps: { directionalHint: DirectionalHint.bottomRightEdge }
+    calloutProps: 'bottomRightEdge'
   },
 
   {
     headline: 'You\'re all set!',
     target: '#container',
-    calloutProps: { directionalHint: DirectionalHint.topCenter }
+    calloutProps: 'topCenter'
   }
 ]
 
@@ -51,11 +51,32 @@ export default class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      stageNumber: 0
+      stageNumber: -1
     }
     this.handlePreviousStage = this.handlePreviousStage.bind(this)
     this.handleNextStage = this.handleNextStage.bind(this)
     this.handleClose = this.handleClose.bind(this)
+    this.handleOpen = this.handleOpen.bind(this)
+
+    this.savedWidth = 0
+    this.savedHeight = 0
+  }
+
+  componentDidMount () {
+    setTimeout(this.handleOpen, 3000)
+  }
+
+  handleOpen () {
+    this.savedWidth = window.innerWidth
+    this.savedHeight = window.innerHeight
+    window.resizeTo(1280, 960)
+
+    setTimeout(() => {
+      this.setState({
+        ...this.state,
+        stageNumber: 0
+      })
+    }, 10)
   }
 
   handlePreviousStage () {
@@ -77,6 +98,7 @@ export default class extends React.Component {
       ...this.state,
       stageNumber: -1
     })
+    window.resizeTo(this.savedWidth, this.savedHeight)
   }
 
   render () {
@@ -99,38 +121,65 @@ export default class extends React.Component {
       }
     }
 
-    const stageNumber = this.state.stageNumber
+    const tutorialPopups = tutorialStages.map((stageProps, index) => {
+      
+      const primaryButtonProps = index === tutorialStages.length - 1
+        ? buttonProps.finish
+        : buttonProps.next
 
-    const primaryButtonProps = stageNumber === tutorialStages.length - 1
-      ? buttonProps.finish
-      : buttonProps.next
+      const secondaryButtonProps = index === 0
+        ? buttonProps.skip
+        : buttonProps.previous
 
-    const secondaryButtonProps = stageNumber === 0
-      ? buttonProps.skip
-      : buttonProps.previous
-
-    if (stageNumber >= 0 && stageNumber < tutorialStages.length) {
       return (
 
-        <Overlay isDarkThemed={true}>
+        <TeachingBubble
+          key={index}
+          footerContent={`${index + 1}/${tutorialStages.length}`}
+          hasSmallHeadline
+          primaryButtonProps={primaryButtonProps}
+          secondaryButtonProps={secondaryButtonProps}
+          headline={stageProps.headline}
+          contents={stageProps.contents}
+          target={stageProps.target}
+          calloutProps={{
+            directionalHint: DirectionalHint[stageProps.direction],
+            hidden: this.state.stageNumber !== index
+          }}
+        >
+          {stageProps.contents}
+        </TeachingBubble>
 
-          <TeachingBubble
-            footerContent={`${stageNumber + 1}/${tutorialStages.length}`}
-            hasSmallHeadline
-            primaryButtonProps={primaryButtonProps}
-            secondaryButtonProps={secondaryButtonProps}
-            {...tutorialStages[stageNumber]}
+
+      )
+    })
+
+    if (this.props.stageNumber === -1) {
+      return (this.props.children)
+    } else {
+      return (
+
+        <Overlay isDarkThemed>
+
+          {tutorialPopups}
+
+          <div style={{
+            width: this.savedWidth,
+            height: this.savedHeight,
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            position: 'absolute'
+          }}
           >
-            {tutorialStages[stageNumber].contents}
-          </TeachingBubble>
 
-          {this.props.children}
+            {this.props.children}
+
+          </div>
 
         </Overlay>
 
       )
-    } else {
-      return (null)
     }
   }
 }

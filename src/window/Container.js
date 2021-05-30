@@ -13,6 +13,12 @@ import themes from './Themes'
 import ErrorBoundary from './ErrorBoundary'
 
 export default class extends React.Component {
+
+  static defaultProps = {
+    width: '100%',
+    height: '100%'
+  }
+
   constructor (props) {
     super(props)
     this.state = { currentThemeName: getThemeName() }
@@ -41,15 +47,17 @@ export default class extends React.Component {
 
       <ThemeProvider theme={theme}>
 
-        <div style={{
-          background: theme.background,
-          border: `1px solid ${theme.palette.neutralLight}`,
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-          borderRadius: '8px',
-          boxSizing: 'border-box'
-        }}
+        <div 
+          id='container'
+          style={{
+            background: theme.background,
+            border: `1px solid ${theme.palette.neutralLight}`,
+            width: this.props.width,
+            height: this.props.height,
+            borderRadius: '8px',
+            boxSizing: 'border-box',
+            position: 'absolute',
+          }}
         >
           <ErrorBoundary>
 

@@ -37,8 +37,6 @@ const TYPE_OPTIONS = {
   main: {
     width: 280,
     height: 360,
-    // width: 1280,
-    // height: 960,
     title: appName
   },
   preferences: {
