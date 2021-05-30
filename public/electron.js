@@ -73,7 +73,7 @@ app.whenReady().then(() => {
         ? 'white'
         : 'black'
 
-    const imagePath = (path.join(__dirname, `../tray_assets/${folder}/${percentageMultOfFive}.png`))
+    const imagePath = path.join(__dirname, `../tray_assets/${folder}/${percentageMultOfFive}.png`)
 
     return nativeImage.createFromPath(imagePath)
   }
