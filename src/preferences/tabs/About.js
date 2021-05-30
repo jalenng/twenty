@@ -14,7 +14,7 @@ import {
   Text
 } from '@fluentui/react'
 
-import logo from '../assets/icon.png'
+import logo from '../../assets/icon.png'
 import { level1Props, level2Props, level2HorizontalProps } from './PrefsStackProps'
 
 const versionComponents = [

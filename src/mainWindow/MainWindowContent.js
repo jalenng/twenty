@@ -4,9 +4,8 @@ import React from 'react'
 
 import { Stack } from '@fluentui/react'
 
-import TitleBar from './window/TitleBar'
+import TitleBar from '../window/TitleBar'
 import Timer from './timer/Timer'
-
 export default class App extends React.Component {
   constructor (props) {
     super(props)

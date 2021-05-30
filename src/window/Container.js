@@ -10,6 +10,7 @@ import React from 'react'
 import { ThemeProvider, createTheme, loadTheme } from '@fluentui/react'
 
 import themes from './Themes'
+import ErrorBoundary from './ErrorBoundary'
 
 export default class extends React.Component {
   constructor (props) {
@@ -39,6 +40,7 @@ export default class extends React.Component {
     return (
 
       <ThemeProvider theme={theme}>
+
         <div style={{
           background: theme.background,
           border: `1px solid ${theme.palette.neutralLight}`,
@@ -49,10 +51,14 @@ export default class extends React.Component {
           boxSizing: 'border-box'
         }}
         >
+          <ErrorBoundary>
 
-          {this.props.children}
+            {this.props.children}
+
+          </ErrorBoundary>
 
         </div>
+
       </ThemeProvider>
 
     )

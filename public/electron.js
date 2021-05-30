@@ -100,7 +100,7 @@ app.whenReady().then(() => {
 
 /* Handle closing all windows behavior for macOS */
 app.on('window-all-closed', function () {
-  if (process.platform === 'darwin') app.exit()
+  if (process.platform !== 'darwin') app.exit()
 })
 
 /* Prevent loading of new websites */

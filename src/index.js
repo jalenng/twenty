@@ -9,12 +9,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './css/index.css'
 
-import App from './App'
-import Preferences from './Preferences'
+import MainWindow from './MainWindow'
+import PreferencesWindow from './PreferencesWindow'
 import FullscreenNotification from './notifications/FullscreenNotification'
 import PopupNotification from './notifications/PopupNotification'
-import Container from './window/Container'
-import ErrorBoundary from './window/ErrorBoundary'
 
 import { HashRouter, Route, Switch } from 'react-router-dom'
 import { initializeIcons } from '@fluentui/react'
@@ -32,20 +30,16 @@ initializeIcons()
 ReactDOM.render(
   <div style={unselectableTextStyle}>
     <React.StrictMode>
-      <Container>
-        <ErrorBoundary>
-          <HashRouter>
-            <Switch>
-              <Route path='/' exact component={App} />
+      <HashRouter>
+        <Switch>
+          <Route path='/' exact component={MainWindow} />
 
-              <Route path='/fullscreenNotification' exact component={FullscreenNotification} />
-              <Route path='/popupNotification' exact component={PopupNotification} />
+          <Route path='/fullscreenNotification' exact component={FullscreenNotification} />
+          <Route path='/popupNotification' exact component={PopupNotification} />
 
-              <Route path='/preferences' exact component={Preferences} />
-            </Switch>
-          </HashRouter>
-        </ErrorBoundary>
-      </Container>
+          <Route path='/preferences' exact component={PreferencesWindow} />
+        </Switch>
+      </HashRouter>
     </React.StrictMode>
   </div>,
   document.getElementById('root')

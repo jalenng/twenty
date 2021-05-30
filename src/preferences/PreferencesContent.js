@@ -9,14 +9,14 @@ import React from 'react'
 
 import { Stack, ScrollablePane } from '@fluentui/react'
 
-import TitleBar from './window/TitleBar'
+import TitleBar from '../window/TitleBar'
 
-import PrefsSidebar from './preferences/PrefsSidebar'
-import Notifications from './preferences/Notifications'
-import Blockers from './preferences/Blockers'
-import Startup from './preferences/Startup'
-import Appearance from './preferences/Appearance'
-import About from './preferences/About'
+import PrefsSidebar from './tabs/PrefsSidebar'
+import Notifications from './tabs/Notifications'
+import Blockers from './tabs/Blockers'
+import Startup from './tabs/Startup'
+import Appearance from './tabs/Appearance'
+import About from './tabs/About'
 
 const divStyle = {
   paddingLeft: '30px',

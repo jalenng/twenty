@@ -93,7 +93,7 @@ export default class extends React.Component {
     }
 
     return (
-      <div>
+      <div id='timer'>
         <Stack vertical tokens={{ childrenGap: 8 }} horizontalAlign='center'>
 
           <TimerDisplay
