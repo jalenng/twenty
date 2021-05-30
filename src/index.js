@@ -9,10 +9,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './css/index.css'
 
+import Container from './window/Container'
+import TitleBar from './window/TitleBar'
+
+import TutorialProvider from './mainWindow/TutorialProvider'
+
 import FullscreenNotification from './notifications/FullscreenNotification'
 import PopupNotification from './notifications/PopupNotification'
-import TutorialProvider from './mainWindow/TutorialProvider'
-import Container from './window/Container'
 
 import MainWindowContent from './mainWindow/MainWindowContent'
 import PreferencesContent from './preferences/PreferencesContent'
@@ -36,6 +39,7 @@ function MainWindow (props) {
     <TutorialProvider>
 
       <Container>
+        <TitleBar />
         <MainWindowContent />
       </Container>
 
@@ -47,6 +51,7 @@ function MainWindow (props) {
 function PreferencesWindow (props) {
   return (
     <Container>
+      <TitleBar />
       <PreferencesContent />
     </Container>
   )
@@ -54,7 +59,7 @@ function PreferencesWindow (props) {
 
 function FullscreenNotificationWindow (props) {
   return (
-    <Container>
+    <Container noBorder>
       <FullscreenNotification />
     </Container>
   )

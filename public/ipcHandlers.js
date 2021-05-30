@@ -3,7 +3,7 @@
  * @author jalenng
  */
 
-const { ipcMain, app, nativeTheme, dialog } = require('electron')
+const { BrowserWindow, ipcMain, app, nativeTheme, dialog } = require('electron')
 const path = require('path')
 const isDev = require('electron-is-dev')
 
@@ -223,4 +223,12 @@ ipcMain.handle('reset-store', () => {
 // Update the local preferences
 ipcMain.handle('set-prefs', (event, key, value) => {
   global.store.set(`preferences.${key}`, value)
+})
+
+
+ipcMain.handle('toggle-pin-window', (event) => {
+  const senderWindow = BrowserWindow.fromWebContents(event.sender)
+  senderWindow.setAlwaysOnTop(!senderWindow.isAlwaysOnTop())
+  return (senderWindow.isAlwaysOnTop())
+  // global.store.set('appearance.alwaysOnTop', !this.state.alwaysOnTop)
 })

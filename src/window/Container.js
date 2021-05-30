@@ -7,7 +7,7 @@
 
 import React from 'react'
 
-import { ThemeProvider, createTheme, loadTheme } from '@fluentui/react'
+import { ThemeProvider, createTheme, loadTheme, Stack } from '@fluentui/react'
 
 import themes from './Themes'
 import ErrorBoundary from './ErrorBoundary'
@@ -16,7 +16,8 @@ export default class extends React.Component {
 
   static defaultProps = {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    noBorder: false
   }
 
   constructor (props) {
@@ -51,17 +52,19 @@ export default class extends React.Component {
           id='container'
           style={{
             background: theme.background,
-            border: `1px solid ${theme.palette.neutralLight}`,
             width: this.props.width,
             height: this.props.height,
-            borderRadius: '8px',
+            border: this.props.noBorder ? '0px' : `1px solid ${theme.palette.neutralLight}`,
+            borderRadius: this.props.noBorder ? '0px' : '8px',
             boxSizing: 'border-box',
             position: 'absolute',
           }}
         >
           <ErrorBoundary>
 
-            {this.props.children}
+            <Stack>
+              {this.props.children}
+            </Stack>
 
           </ErrorBoundary>
 

@@ -151,6 +151,11 @@ window.openExternalLink = link => { shell.openExternal(link) }
 window.getThemeName = () => { return ipcRenderer.sendSync('get-theme-name') }
 
 /**
+ * Toggles the pin status of the window
+ */
+window.togglePin = () => { return ipcRenderer.invoke('toggle-pin-window') }
+
+/**
  * Information about the app
  */
 window.aboutAppInfo = ipcRenderer.sendSync('get-about-info')

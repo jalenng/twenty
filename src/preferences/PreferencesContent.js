@@ -7,11 +7,9 @@
 
 import React from 'react'
 
-import { Stack, ScrollablePane } from '@fluentui/react'
+import { ScrollablePane } from '@fluentui/react'
 
-import TitleBar from '../window/TitleBar'
-
-import PrefsSidebar from './tabs/PrefsSidebar'
+import PrefsSidebar from './PrefsSidebar'
 import Notifications from './tabs/Notifications'
 import Blockers from './tabs/Blockers'
 import Startup from './tabs/Startup'
@@ -43,34 +41,28 @@ export default class extends React.Component {
 
     return (
 
-      <Stack>
+      <div style={divStyle}>
 
-        <TitleBar />
+        <ScrollablePane style={{
+          position: 'absolute',
+          left: '260px',
+          top: '48px',
+          paddingRight: '40px'
+        }}
+        >
 
-        <div style={divStyle}>
+          {preferencesPage}
 
-          <ScrollablePane style={{
-            position: 'absolute',
-            left: '260px',
-            top: '48px',
-            paddingRight: '40px'
+        </ScrollablePane>
+
+        <PrefsSidebar
+          selectedKey={selectedKey}
+          onUpdateSelectedKey={(key) => {
+            this.setState({ selectedKey: key })
           }}
-          >
+        />
 
-            {preferencesPage}
-
-          </ScrollablePane>
-
-          <PrefsSidebar
-            selectedKey={selectedKey}
-            onUpdateSelectedKey={(key) => {
-              this.setState({ selectedKey: key })
-            }}
-          />
-
-        </div>
-
-      </Stack>
+      </div>
 
     )
   }

@@ -11,39 +11,51 @@ import { TeachingBubble, Overlay, DirectionalHint } from '@fluentui/react'
 
 const appName = aboutAppInfo.appInfo.name
 
+const tutorialModeSize = {
+  width: 1280,
+  height: 720
+}
+
 const tutorialStages = [
   {
     headline: `Welcome to ${appName}.`,
     contents: 'For a quick overview, click ‘Next’.',
     target: '#container',
-    direction: 'bottomCenter'
+    direction: 'topCenter'
   },
 
   {
     headline: 'The 20-20-20 rule',
-    contents: `Looking at computer screens for long periods of time strains our eyes. Every 20 minutes, ${appName} will remind you to look at something at least 20 feet away for 20 seconds, the duration it takes for your eyes to fully relax. `,
+    contents: 'Looking at screens for long periods of time strains our eyes. The 20-20-20 rule suggests that for every 20 minutes, look at something at least 20 feet away for 20 seconds. ',
+    target: '#container',
+    direction: 'leftCenter'
+  },
+
+  {
+    headline: 'Timer',
+    contents: 'This timer keeps track of the 20-minute intervals for you. When the timer ends, you will be reminded and the timer will be restarted automatically. ',
     target: '#timer',
-    direction: 'rightCenter'
+    direction: 'leftCenter'
   },
 
   {
     headline: 'Start/stop button',
-    contents: 'Start or stop the timer here. When the timer is stopped, you will not receive notifications. ',
+    contents: 'Start and stop the timer here. When the timer is stopped, you will not receive notifications. ',
     target: '#toggleButton',
-    direction: 'bottomLeftEdge'
+    direction: 'bottomRightEdge'
   },
 
   {
     headline: 'Preferences button',
-    contents: 'Customize your notification intervals, sounds, blockers, and more here. ',
+    contents: 'Customize your notifications, blockers, and more here. ',
     target: '#prefsButton',
-    calloutProps: 'bottomRightEdge'
+    direction: 'bottomLeftEdge'
   },
 
   {
     headline: 'You\'re all set!',
     target: '#container',
-    calloutProps: 'topCenter'
+    direction: 'rightCenter'
   }
 ]
 
@@ -69,7 +81,7 @@ export default class extends React.Component {
   handleOpen () {
     this.savedWidth = window.innerWidth
     this.savedHeight = window.innerHeight
-    window.resizeTo(1280, 960)
+    window.resizeTo(tutorialModeSize.width, tutorialModeSize.height)
 
     setTimeout(() => {
       this.setState({
@@ -112,7 +124,7 @@ export default class extends React.Component {
         onClick: this.handleNextStage
       },
       finish: {
-        text: 'Finish!',
+        text: 'Let\'s start!',
         onClick: this.handleClose
       },
       skip: {
@@ -121,8 +133,8 @@ export default class extends React.Component {
       }
     }
 
+    // Create the TeachingBubbles
     const tutorialPopups = tutorialStages.map((stageProps, index) => {
-      
       const primaryButtonProps = index === tutorialStages.length - 1
         ? buttonProps.finish
         : buttonProps.next
@@ -150,11 +162,10 @@ export default class extends React.Component {
           {stageProps.contents}
         </TeachingBubble>
 
-
       )
     })
 
-    if (this.props.stageNumber === -1) {
+    if (this.state.stageNumber === -1) {
       return (this.props.children)
     } else {
       return (

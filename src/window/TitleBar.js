@@ -45,16 +45,30 @@ const topRightStyle = {
 export default class extends React.Component {
   constructor (props) {
     super(props)
-    this.handleSecondaryButton = this.handleSecondaryButton.bind(this)
+    this.state = {
+      isPinned: false
+    }
+    this.handlePin = this.handlePin.bind(this)
+    this.updatePinnedState = this.updatePinnedState.bind(this)
   }
 
-  handleSecondaryButton () {
-    this.props.secondaryButton.onClick()
+  handleClose () {
+    window.close()
+  }
+
+  updatePinnedState (isPinned) {
+    this.setState({
+      ...this.state,
+      isPinned: isPinned
+    })
+  }
+
+  handlePin () {
+    togglePin().then(isPinned => { this.updatePinnedState(isPinned) })
   }
 
   render () {
     const isMacOS = platform === 'darwin'
-    const secondaryButton = this.props.secondaryButton
 
     const buttonIconColor = getTheme().palette.neutralPrimary
 
@@ -87,7 +101,7 @@ export default class extends React.Component {
                   rootHovered: { color: '#ff6159' },
                   rootPressed: { color: '#bf4942' }
                 }}
-                onClick={() => window.close()}
+                onClick={this.handleClose}
               />
             </TooltipHost>}
 
@@ -97,20 +111,19 @@ export default class extends React.Component {
         <Stack {...sharedStackProps} style={topRightStyle}>
 
           {/* Secondary button */}
-          {secondaryButton &&
-            <TooltipHost
-              content={secondaryButton.tooltip}
-              calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
-            >
-              <IconButton
-                iconProps={{ iconName: secondaryButton.iconName }}
-                style={{ WebkitAppRegion: 'no-drag' }}
-                styles={{ root: { color: buttonIconColor } }}
-                toggle
-                checked={secondaryButton.checked}
-                onClick={this.handleSecondaryButton}
-              />
-            </TooltipHost>}
+          <TooltipHost
+            content='Always show on top'
+            calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
+          >
+            <IconButton
+              iconProps={{ iconName: 'Pinned' }}
+              style={{ WebkitAppRegion: 'no-drag' }}
+              styles={{ root: { color: buttonIconColor } }}
+              toggle
+              checked={this.state.isPinned}
+              onClick={this.handlePin}
+            />
+          </TooltipHost>
 
           {/* non-macOS: Close button */}
           {!isMacOS && !this.props.hideClose &&
@@ -126,7 +139,7 @@ export default class extends React.Component {
                   rootHovered: { color: '#ffffff', background: '#E81123' },
                   rootPressed: { color: '#ffffff', background: '#f1707a' }
                 }}
-                onClick={() => window.close()}
+                onClick={this.handleClose}
               />
             </TooltipHost>}
 
