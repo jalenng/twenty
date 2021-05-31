@@ -8,10 +8,6 @@ const path = require('path')
 
 const isDev = require('electron-is-dev')
 
-const { default: installExtension, REACT_DEVELOPER_TOOLS } = isDev
-  ? require('electron-devtools-installer')
-  : null
-
 const { createWindow } = require('./windowCreator')
 
 /* Initialize the stores and systems */
@@ -48,12 +44,6 @@ app.setLoginItemSettings({
 let appTray = null
 
 app.whenReady().then(() => {
-  /* Load React Dev Tools if isDev */
-  if (isDev) {
-    installExtension(REACT_DEVELOPER_TOOLS)
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err))
-  }
 
   /* Create main window */
   global.mainWindow = createWindow('main')
