@@ -150,7 +150,6 @@ export default class extends React.Component {
         <TeachingBubble
           key={index}
           footerContent={`${index + 1}/${tutorialStages.length}`}
-          hasSmallHeadline
           primaryButtonProps={primaryButtonProps}
           secondaryButtonProps={secondaryButtonProps}
           headline={stageProps.headline}

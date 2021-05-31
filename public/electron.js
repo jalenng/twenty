@@ -8,7 +8,9 @@ const path = require('path')
 
 const isDev = require('electron-is-dev')
 
-const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer')
+const { default: installExtension, REACT_DEVELOPER_TOOLS } = isDev
+  ? require('electron-devtools-installer')
+  : null
 
 const { createWindow } = require('./windowCreator')
 
@@ -46,7 +48,6 @@ app.setLoginItemSettings({
 let appTray = null
 
 app.whenReady().then(() => {
-
   /* Load React Dev Tools if isDev */
   if (isDev) {
     installExtension(REACT_DEVELOPER_TOOLS)
