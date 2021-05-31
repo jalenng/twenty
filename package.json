@@ -11,7 +11,7 @@
   },
   "private": true,
   "build": {
-    "appId": "jalennggjt.twenty",
+    "appId": "jalenng.twenty",
     "publish": {
       "provider": "github"
     },
