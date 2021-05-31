@@ -220,15 +220,13 @@ ipcMain.handle('reset-store', () => {
     })
 })
 
-// Update the local preferences
-ipcMain.handle('set-prefs', (event, key, value) => {
-  global.store.set(`preferences.${key}`, value)
+// Update a value in the store
+ipcMain.handle('set-store', (event, key, value) => {
+  global.store.set(key, value)
 })
-
 
 ipcMain.handle('toggle-pin-window', (event) => {
   const senderWindow = BrowserWindow.fromWebContents(event.sender)
   senderWindow.setAlwaysOnTop(!senderWindow.isAlwaysOnTop())
   return (senderWindow.isAlwaysOnTop())
-  // global.store.set('appearance.alwaysOnTop', !this.state.alwaysOnTop)
 })

@@ -47,17 +47,7 @@ window.store = {
      * @param {String} key The key of the preference. e.g. 'notifications.sound'
      * @param {String} value The new value
      */
-    set: (key, value) => { ipcRenderer.invoke('set-prefs', key, value) },
-
-    /**
-     * Fetch user preferences from the backend
-     */
-    fetch: () => { return ipcRenderer.invoke('fetch-prefs') },
-
-    /**
-     * Update user preferences on the backend
-     */
-    push: () => { return ipcRenderer.invoke('push-prefs') },
+    set: (key, value) => { ipcRenderer.invoke('set-store', `preferences.${key}`, value) },
 
     /* Event system */
     eventSystem: new EventSystem()
@@ -84,7 +74,23 @@ window.store = {
      */
     getAll: () => { return ipcRenderer.sendSync('get-store', 'appNames') }
   },
-  reset: () => { return ipcRenderer.invoke('reset-store') }
+  tutorialFlag: {
+    /**
+     * Retrieve the tutorial flag
+     * @returns {boolean} true if the tutorial has been completed; false otherwise
+     */
+    get: () => { return ipcRenderer.sendSync('get-store', 'tutorialFlag') },
+
+    /**
+     * Sets the tutorial flag
+     * @returns {boolean} true if the tutorial has been completed; false otherwise
+     */
+    set: (value) => { ipcRenderer.invoke('set-store', 'tutorialFlag', value) }
+  },
+  /**
+   * Requests a store reset
+   */
+  reset: () => { ipcRenderer.invoke('reset-store') }
 }
 
 /* ------------------------------------------------------------------------- */

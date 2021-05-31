@@ -54,11 +54,8 @@ app.whenReady().then(() => {
       .catch((err) => console.log('An error occurred: ', err))
   }
 
-  // Create main Window
+  /* Create main window */
   global.mainWindow = createWindow('main')
-
-  // Pin main window if option is enabled
-  global.mainWindow.setAlwaysOnTop(global.store.get('preferences.appearance.alwaysOnTop'))
 
   /* When app is activated and no windows are open, create a window */
   app.on('activate', function () {

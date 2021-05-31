@@ -94,8 +94,16 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
       mainWindowState = windowStateKeeper({})
 
       // Update and remember the position of the main window
-      // window.setPosition(mainWindowState.x, mainWindowState.y)
+      window.setPosition(mainWindowState.x, mainWindowState.y)
       mainWindowState.manage(window)
+
+      // Make the main window always on top if its corresponding preference is enabled
+      window.setAlwaysOnTop(global.store.get('preferences.appearance.alwaysOnTop'))
+
+      // Update the alwaysOnTop preference when the main window's alwaysOnTop property changes
+      window.on('always-on-top-changed', (event, isAlwaysOnTop) => {
+        global.store.set('preferences.appearance.alwaysOnTop', isAlwaysOnTop)
+      })
 
       // Handle the close button action
       window.on('close', (e) => {

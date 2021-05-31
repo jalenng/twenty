@@ -194,10 +194,19 @@ const resetFlagSchema = {
   default: false
 }
 
+/*
+Tutorial flag (boolean)
+*/
+const tutorialFlagSchema = {
+  type: 'boolean',
+  default: false
+}
+
 /* Exports */
 module.exports = {
   preferences: preferencesSchema,
   sounds: soundsSchema,
   appNames: appNamesSchema,
-  resetFlag: resetFlagSchema
+  resetFlag: resetFlagSchema,
+  tutorialFlag: tutorialFlagSchema
 }

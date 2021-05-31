@@ -75,7 +75,8 @@ export default class extends React.Component {
   }
 
   componentDidMount () {
-    setTimeout(this.handleOpen, 3000)
+    // Open tutorial if the tutorial has not been completed or skipped yet
+    if (!store.tutorialFlag.get()) this.handleOpen()
   }
 
   handleOpen () {
@@ -110,6 +111,7 @@ export default class extends React.Component {
       ...this.state,
       stageNumber: -1
     })
+    store.tutorialFlag.set(true)
     window.resizeTo(this.savedWidth, this.savedHeight)
   }
 
@@ -165,6 +167,7 @@ export default class extends React.Component {
       )
     })
 
+    // Render the UI
     if (this.state.stageNumber === -1) {
       return (this.props.children)
     } else {
