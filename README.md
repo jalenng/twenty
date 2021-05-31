@@ -4,7 +4,7 @@
   
   <h1> Twenty </h1>
 
-  A customizable timer that reminds you to take breaks in preventing eye strain
+  A customizable timer that reminds you to take breaks to prevent eye strain
   
   <br>
   
