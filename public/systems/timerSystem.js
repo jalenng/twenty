@@ -76,9 +76,19 @@ class TimerSystem extends EventEmitter {
    */
   getState () {
     if (this.isStopped) {
-      if (this.isBlocked) { return states.BLOCKED_AND_STOPPED } else { return states.STOPPED }
+      if (this.isBlocked) {
+        return states.BLOCKED_AND_STOPPED
+      } else {
+        return states.STOPPED
+      }
     } else {
-      if (this.isBlocked) { return states.BLOCKED } else if (this.isIdle) { return states.IDLE } else { return states.RUNNING }
+      if (this.isBlocked) {
+        return states.BLOCKED
+      } else if (this.isIdle) {
+        return states.IDLE
+      } else {
+        return states.RUNNING
+      }
     }
   }
 

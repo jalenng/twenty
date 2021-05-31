@@ -19,13 +19,6 @@ global.appSnapshotSystem = new AppSnapshotSystem()
 global.blockerSystem = new BlockerSystem()
 
 /* ------------------------------------------------------------------------- */
-/* Start timer automatically based on user preferences */
-
-if (global.store.get('preferences.startup.startTimerOnAppStartup')) { global.timerSystem.start() }
-
-global.appSnapshotSystem.updateState()
-
-/* ------------------------------------------------------------------------- */
 /* If timer has stopped and the notification interval updates, update the timer with the new value. */
 
 global.store.onDidChange('preferences.notifications.interval', () => {
@@ -94,3 +87,12 @@ powerMonitor.on('on-ac', () => {
     global.blockerSystem.remove('other', 'batteryPower')
   }
 })
+
+/* ------------------------------------------------------------------------- */
+/* Start timer automatically based on user preferences */
+
+if (global.store.get('preferences.startup.startTimerOnAppStartup')) {
+  global.timerSystem.start()
+}
+
+global.appSnapshotSystem.updateState()

@@ -44,7 +44,6 @@ app.setLoginItemSettings({
 let appTray = null
 
 app.whenReady().then(() => {
-
   /* Create main window */
   global.mainWindow = createWindow('main')
 

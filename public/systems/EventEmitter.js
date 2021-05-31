@@ -22,7 +22,10 @@ class EventEmitter {
    * @param {(callback) => any} fireCallbacks
    */
   emit (eventName, fireCallbacks = callback => callback()) {
-    this._events[eventName].forEach(fireCallbacks)
+    const callbacks = this._events[eventName]
+    if (callbacks) {
+      callbacks.forEach(fireCallbacks)
+    }
   }
 }
 

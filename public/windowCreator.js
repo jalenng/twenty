@@ -94,7 +94,9 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
       mainWindowState = windowStateKeeper({})
 
       // Update and remember the position of the main window
-      window.setPosition(mainWindowState.x, mainWindowState.y)
+      if (mainWindowState.x && mainWindowState.y) {
+        window.setPosition(mainWindowState.x, mainWindowState.y)
+      }
       mainWindowState.manage(window)
 
       // Make the main window always on top if its corresponding preference is enabled
