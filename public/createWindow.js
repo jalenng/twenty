@@ -127,7 +127,7 @@ module.exports = function createWindow (type, destination = '', display = null, 
 
       // If notification is a popup window, show when ready and set always-on-top level
       if (isPopup) {
-        window.setAlwaysOnTop(true, 'pop-up-menu')
+        window.setAlwaysOnTop(true, 'screen-saver')
         window.on('ready-to-show', () => window.show())
       }
 
