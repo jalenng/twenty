@@ -2,6 +2,8 @@ const path = require('path')
 
 const { app, nativeTheme, nativeImage, Menu, Tray } = require('electron')
 
+const { isMacOS } = require('./constants')
+
 let appTray = null
 
 // Function to get path of icon file
@@ -11,15 +13,19 @@ const getTrayImage = function () {
   const percentage = timerStatus.remainingTime / timerStatus.totalDuration * 100
   const percentageMultOfFive = Math.round(percentage / 5) * 5
 
-  const folder = process.platform === 'darwin'
+  const folder = isMacOS
     ? 'template'
     : nativeTheme.shouldUseDarkColors
       ? 'white'
       : 'black'
 
-  const imagePath = path.join(__dirname, `../tray_assets/${folder}/${percentageMultOfFive}.png`)
+  const filename = isMacOS
+    ? `${percentageMultOfFive}Template.png`
+    : `${percentageMultOfFive}.png`
+  const imagePath = path.join(__dirname, '..', 'tray_assets', folder, filename)
+  const image = nativeImage.createFromPath(imagePath)
 
-  return nativeImage.createFromPath(imagePath)
+  return image
 }
 
 const contextMenu = Menu.buildFromTemplate([
