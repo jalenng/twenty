@@ -1,24 +1,22 @@
-<div align="center">
 <img src="icon.png" width="128" height="128">
   
-# Twenty [![Build](https://github.com/jalenng/twenty/actions/workflows/build.yml/badge.svg)](https://github.com/jalenng/twenty/actions/workflows/build.yml)
-
+# Twenty
 **Customizable timer that reminds you to take eye breaks**
-  
-</div>
+
+[![Build status](https://img.shields.io/github/workflow/status/jalenng/twenty/Build/main?style=for-the-badge)](https://github.com/jalenng/twenty/actions/workflows/build.yml)
+![Repo size](https://img.shields.io/github/repo-size/jalenng/twenty?style=for-the-badge)
+![Lines of code](https://img.shields.io/tokei/lines/github/jalenng/twenty?style=for-the-badge)
+![Release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/jalenng/twenty?include_prereleases&style=for-the-badge)
+[![License](https://img.shields.io/github/license/jalenng/twenty?style=for-the-badge)](https://github.com/jalenng/twenty/blob/readme/LICENS)
 
 <br/>
 
 ---
 # Overview
 
-<div align="center"> 
+Twenty helps you prevent eye strain by reminding you to practice the 20-20-20 rule:
 
-  Twenty helps you prevent eye strain by reminding you to practice the 20-20-20 rule:
-
-  <h3> <b> Every 20 minutes, look at something at least 20 feet away for 20 seconds </b> </h3>
-
-</div>
+### **Every 20 minutes, look at something at least 20 feet away for 20 seconds.**
 
 <br/>
 
