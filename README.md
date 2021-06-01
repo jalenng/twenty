@@ -7,7 +7,7 @@
 ![Repo size](https://img.shields.io/github/repo-size/jalenng/twenty?style=for-the-badge)
 ![Lines of code](https://img.shields.io/tokei/lines/github/jalenng/twenty?style=for-the-badge)
 ![Release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/jalenng/twenty?include_prereleases&style=for-the-badge)
-[![License](https://img.shields.io/github/license/jalenng/twenty?style=for-the-badge)](https://github.com/jalenng/twenty/blob/readme/LICENS)
+[![License](https://img.shields.io/github/license/jalenng/twenty?style=for-the-badge)](https://github.com/jalenng/twenty/blob/readme/LICENSE)
 
 <br/>
 
@@ -27,13 +27,13 @@ Twenty helps you prevent eye strain by reminding you to practice the 20-20-20 ru
 Specify conditions for when you want to maintain focus
 
 ### ⏲ **Interval customization**
-Find your balance between preventing eye strain and maintaining focus
+Find your balance between preventing eye strain and maintaining your focus
 
 ### 🔊 **Sound customization**
 Personalize your experience with custom notification sounds 
 
 ### 😊 **Ease of use**
-Runs on startup, minimizes to system tray--just set and forget 
+Runs on startup and minimizes to system tray--just set and forget 
 
 ### 🖱 **Simple user interface**
 Elegant, streamlined, and easy to use
@@ -41,9 +41,9 @@ Elegant, streamlined, and easy to use
 <br/>
 
 ---
-# 📷 Screenshots
+# 📷 Screenshot
 
-<!-- TODO -->
+![twenty-collage](https://user-images.githubusercontent.com/42555186/120399720-6f96e900-c2f1-11eb-95d9-7fd936958045.png)
 
 <br/>
 
@@ -51,6 +51,8 @@ Elegant, streamlined, and easy to use
 # 💻 Download
 
 Get the latest releases for Windows and macOS [**here**]( https://github.com/jalenng/twenty/releases).
+
+Note: Twenty has not been code-signed or notarized. That means your operating system may try to warn you that the app is unsafe, depending on your security settings.
 
 <br/>
 
