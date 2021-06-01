@@ -115,6 +115,25 @@ ipcMain.on('get-theme-name', (event) => {
   event.returnValue = nativeTheme.shouldUseDarkColors ? 'dark' : 'light'
 })
 
+// Toggle the pin status of a window
+ipcMain.handle('toggle-pin-window', (event) => {
+  const senderWindow = BrowserWindow.fromWebContents(event.sender)
+  senderWindow.setAlwaysOnTop(!senderWindow.isAlwaysOnTop())
+  return (senderWindow.isAlwaysOnTop())
+})
+
+// Toggle the pin status of a window
+ipcMain.handle('set-fullscreen', (event, status) => {
+  const senderWindow = BrowserWindow.fromWebContents(event.sender)
+  senderWindow.setFullScreen(status)
+})
+
+// Toggle the movable status of a window
+ipcMain.handle('set-movable', (event, status) => {
+  const senderWindow = BrowserWindow.fromWebContents(event.sender)
+  senderWindow.setMovable(status)
+})
+
 /* ------------------------------------------------------------------------- */
 /* System-related */
 
@@ -228,10 +247,4 @@ ipcMain.handle('reset-store', () => {
 // Update a value in the store
 ipcMain.handle('set-store', (event, key, value) => {
   global.store.set(key, value)
-})
-
-ipcMain.handle('toggle-pin-window', (event) => {
-  const senderWindow = BrowserWindow.fromWebContents(event.sender)
-  senderWindow.setAlwaysOnTop(!senderWindow.isAlwaysOnTop())
-  return (senderWindow.isAlwaysOnTop())
 })

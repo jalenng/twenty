@@ -69,9 +69,6 @@ export default class extends React.Component {
     this.handleNextStage = this.handleNextStage.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
-
-    this.savedWidth = 0
-    this.savedHeight = 0
   }
 
   componentDidMount () {
@@ -82,7 +79,8 @@ export default class extends React.Component {
   handleOpen () {
     this.savedWidth = window.innerWidth
     this.savedHeight = window.innerHeight
-    window.resizeTo(tutorialModeSize.width, tutorialModeSize.height)
+    setMovable(false)
+    setFullscreen(true)
 
     setTimeout(() => {
       this.setState({
@@ -112,7 +110,8 @@ export default class extends React.Component {
       stageNumber: -1
     })
     store.tutorialFlag.set(true)
-    window.resizeTo(this.savedWidth, this.savedHeight)
+    setMovable(true)
+    setFullscreen(false)
   }
 
   render () {

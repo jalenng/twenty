@@ -162,6 +162,16 @@ window.getThemeName = () => { return ipcRenderer.sendSync('get-theme-name') }
 window.togglePin = () => { return ipcRenderer.invoke('toggle-pin-window') }
 
 /**
+ * Toggles the pin status of the window
+ */
+window.setFullscreen = (status) => { ipcRenderer.invoke('set-fullscreen', status) }
+
+/**
+ * Toggles the movable status of the window
+ */
+window.setMovable = (status) => { ipcRenderer.invoke('set-movable', status) }
+
+/**
  * Information about the app
  */
 window.aboutAppInfo = ipcRenderer.sendSync('get-about-info')
