@@ -9,12 +9,6 @@ import {
   Text
 } from '@fluentui/react'
 
-const navStyles = {
-  root: {
-    width: '420px'
-  }
-}
-
 export default class extends React.Component {
   constructor (props) {
     super(props)
@@ -49,11 +43,7 @@ export default class extends React.Component {
     if (hasBlockers) {
       return (
 
-        <Stack styles={navStyles} tokens={{ childrenGap: '16px' }}>
-
-          <Text variant='xLarge' block>
-            We've paused your timer for you.
-          </Text>
+        <Stack tokens={{ childrenGap: '16px' }}>
 
           <Stack tokens={{ childrenGap: '3px' }}>
 

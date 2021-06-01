@@ -11,6 +11,7 @@ import { Stack } from '@fluentui/react'
 
 import TimerDisplay from './timer/TimerDisplay'
 import TimerControls from './timer/TimerControls'
+import Dashboard from './timer/Dashboard'
 
 export default class extends React.Component {
   constructor (props) {
@@ -84,6 +85,7 @@ export default class extends React.Component {
     } else if (this.state.isBlocked) { // Chip shows blocked indicator
       timerDisplayChipProps = {
         showChip: true,
+        chipTooltip: (() => { return <Dashboard /> })(),
         chipIconName: 'Blocked2'
       }
     } else {

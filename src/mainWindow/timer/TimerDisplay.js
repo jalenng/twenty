@@ -70,6 +70,7 @@ export default class extends React.Component {
                 calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
               >
                 <DefaultButton
+                  id='timerChip'
                   style={{ ...chipStyle }}
                   iconProps={{ iconName: this.props.chipIconName }}
                   text={this.props.chipText}

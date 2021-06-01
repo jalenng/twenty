@@ -43,7 +43,7 @@ module.exports = {
       themeDark: '#00539b',
       themeDarker: '#003d72',
       neutralLighterAlt: '#f8f8f8',
-      neutralLighter: '#f4f4f4',
+      neutralLighter: '#f2f2f2',
       neutralLight: '#eaeaea',
       neutralQuaternaryAlt: '#dadada',
       neutralQuaternary: '#d0d0d0',
