@@ -41,9 +41,9 @@ Elegant, streamlined, and easy to use
 <br/>
 
 ---
-# 📷 Screenshots
+# 📷 Screenshot
 
-<!-- TODO -->
+![twenty-collage](https://user-images.githubusercontent.com/42555186/120399720-6f96e900-c2f1-11eb-95d9-7fd936958045.png)
 
 <br/>
 
