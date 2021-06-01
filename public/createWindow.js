@@ -125,8 +125,11 @@ module.exports = function createWindow (type, destination = '', display = null, 
       // Prevent closing
       window.on('close', (e) => e.preventDefault())
 
-      // If notification is a popup window, show when ready
-      if (isPopup) { window.on('ready-to-show', () => window.show()) }
+      // If notification is a popup window, show when ready and set always-on-top level
+      if (isPopup) {
+        window.setAlwaysOnTop(true, 'pop-up-menu')
+        window.on('ready-to-show', () => window.show())
+      }
 
       break
 
@@ -139,39 +142,33 @@ module.exports = function createWindow (type, destination = '', display = null, 
 
   // If displays are provided for setting bounds
   if (display) {
-    let windowBounds
+    // Decide which bounds to use. Work area excludes the dock/taskbar, while bounds is the entire display.
+    const bounds = isPopup ? display.workArea : display.bounds
 
-    if (!isPopup) { // If fullscreen intended
-      windowBounds = display.bounds
-    } else { // Else, popup intended
-      const bounds = display.workArea
-
-      const popupSize = POPUP_OPTIONS.size
-      const popupGapFromEdge = POPUP_OPTIONS.gapFromEdge
-
-      if (isWindows) {
-        // Perform additional processing on Windows due to DPI differences
-        const screenRect = isWindows ? screen.dipToScreenRect(null, bounds) : bounds
-        const trueScaling = display.scaleFactor / screen.getPrimaryDisplay().scaleFactor
-
-        windowBounds = {
-          x: screenRect.x + ((bounds.width - popupSize.width - popupGapFromEdge) * trueScaling),
-          y: screenRect.y + ((bounds.height - popupSize.height - popupGapFromEdge) * trueScaling),
-          width: popupSize.width,
-          height: popupSize.height
+    // Calculate the top-left position based on type of notification
+    let position = isPopup
+      ? {
+          x: bounds.x + bounds.width - POPUP_OPTIONS.size.width - POPUP_OPTIONS.gapFromEdge,
+          y: bounds.y + bounds.height - POPUP_OPTIONS.size.height - POPUP_OPTIONS.gapFromEdge
         }
-      } else {
-        windowBounds = {
-          x: bounds.x + bounds.width - popupSize.width,
-          y: bounds.y + bounds.height - popupSize.height,
-          width: popupSize.width,
-          height: popupSize.height
-        }
-      }
-    }
+      : { x: bounds.x, y: bounds.y }
 
-    // Set bounds
-    window.setBounds(windowBounds)
+    // Windows: Account for DPI differences and convert position
+    if (isWindows) { position = screen.dipToScreenPoint(position) }
+
+    // Decide window size to use
+    const size = isPopup
+      ? {
+          width: POPUP_OPTIONS.size.width,
+          height: POPUP_OPTIONS.size.height
+        }
+      : {
+          width: bounds.width,
+          height: bounds.height
+        }
+
+    // Set bounds of window
+    window.setBounds({ ...position, ...size })
   }
 
   window.on('system-context-menu', (event, point) => {
