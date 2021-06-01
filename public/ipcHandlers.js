@@ -47,6 +47,10 @@ ipcMain.on('get-about-info', (event) => {
       version: app.getVersion()
     },
     versions: process.versions,
+    links: [
+      { name: 'GitHub', link: 'https://github.com/jalenng/twenty', iconName: 'GitGraph' },
+      { name: 'Website', link: 'https://jalenng.github.io/twenty', iconName: 'Globe' }
+    ],
     openSourceLibraries: [
       { name: '@fluentui/react', link: 'https://github.com/microsoft/fluentui' },
       { name: 'electron', link: 'https://github.com/electron/electron' },

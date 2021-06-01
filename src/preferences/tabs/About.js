@@ -47,6 +47,7 @@ export default class extends React.Component {
   render () {
     const appInfo = aboutAppInfo.appInfo
     const versions = aboutAppInfo.versions
+    const links = aboutAppInfo.links
     const openSourceLibraries = aboutAppInfo.openSourceLibraries
     const licenseParagraphs = this.state.licenseExpanded
       ? aboutAppInfo.license
@@ -97,6 +98,27 @@ export default class extends React.Component {
 
           </Stack>
 
+        </Stack>
+
+        {/* Links */}
+        <Stack {...level2Props}>
+          <Text variant='xLarge' block> Links </Text>
+
+          <div style={{ display: 'inline' }}>
+
+            {links.map(linkElem => {
+              return (
+                <DefaultButton
+                  iconProps={{ iconName: linkElem.iconName }}
+                  key={linkElem.name}
+                  style={{ borderRadius: '8px', marginRight: '8px', marginBottom: '8px' }}
+                  text={linkElem.name}
+                  onClick={() => openExternalLink(linkElem.link)}
+                />
+              )
+            })}
+
+          </div>
         </Stack>
 
         {/* Attributions to open-source libraries */}
