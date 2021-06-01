@@ -43,6 +43,7 @@
 
 const EventEmitter = require('./EventEmitter')
 
+/** Timer states */
 const states = {
   RUNNING: 'running',
   IDLE: 'idle',
@@ -51,7 +52,11 @@ const states = {
   BLOCKED_AND_STOPPED: 'blocked_and_stopped'
 }
 
-class TimerSystem extends EventEmitter {
+/**
+ * Initializes a TimerSystem.
+ * @class
+ */
+module.exports = class TimerSystem extends EventEmitter {
   constructor () {
     super()
 
@@ -68,6 +73,11 @@ class TimerSystem extends EventEmitter {
 
     // Stores the remaining time when the timer is stopped or blocked (TODO: Depreciate this)
     this.savedTime = this.totalDuration
+
+    // Start timer on app startup if enabled in preferences
+    if (global.store.get('preferences.startup.startTimerOnAppStartup')) {
+      this.start()
+    }
   }
 
   /**
@@ -259,6 +269,3 @@ class TimerSystem extends EventEmitter {
     if (this.isStopped) { this.start() } else { this.stop() }
   }
 }
-
-/** Exports */
-module.exports = TimerSystem

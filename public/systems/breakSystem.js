@@ -13,7 +13,8 @@
  *  - break-end: when the break countdown reaches to zero
  */
 
-require('hazardous')
+require('hazardous') // Needs to be imported before importing 'path'
+
 const path = require('path')
 
 const { screen } = require('electron')
@@ -24,7 +25,11 @@ const EventEmitter = require('./EventEmitter')
 const BREAK_DURATION = 20000
 const POPUP_NOTIF_DURATION = 5000
 
-class BreakSystem extends EventEmitter {
+/**
+ * Initializes a BreakSystem.
+ * @class
+ */
+module.exports = class BreakSystem extends EventEmitter {
   constructor () {
     super()
 
@@ -130,6 +135,3 @@ class BreakSystem extends EventEmitter {
     soundPlayer.play(fullFilepath, volume)
   }
 }
-
-/** Exports */
-module.exports = BreakSystem

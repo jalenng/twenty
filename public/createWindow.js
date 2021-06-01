@@ -7,8 +7,7 @@ const { BrowserWindow, screen, app, Menu } = require('electron')
 const isDev = require('electron-is-dev')
 const path = require('path')
 
-const appName = app.getName()
-const isWindows = process.platform === 'win32'
+const { isWindows, appName } = require('./constants')
 
 const windowStateKeeper = require('electron-window-state')
 
@@ -72,7 +71,7 @@ const POPUP_OPTIONS = {
  *                      Effective only if display is provided. Optional.
  * @returns a BrowserWindow object of the newly created window
  */
-function createWindow (type, destination = '', display = null, isPopup = false) {
+module.exports = function createWindow (type, destination = '', display = null, isPopup = false) {
   // Initialize window
   const window = new BrowserWindow({
     ...SHARED_OPTIONS,
@@ -189,8 +188,4 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
   window.webContents.setWindowOpenHandler('new-window', () => { return ({ action: 'deny' }) })
 
   return window
-}
-
-module.exports = {
-  createWindow: createWindow
 }

@@ -6,11 +6,11 @@
 
 const { powerMonitor } = require('electron')
 
-const TimerSystem = require('./timerSystem')
+const TimerSystem = require('./TimerSystem')
 const BreakSystem = require('./breakSystem')
 const NotificationSystem = require('./notificationSystem')
-const AppSnapshotSystem = require('./appSnapshotSystem')
-const BlockerSystem = require('./blockerSystem')
+const AppSnapshotSystem = require('./AppSnapshotSystem')
+const BlockerSystem = require('./BlockerSystem')
 
 global.timerSystem = new TimerSystem()
 global.breakSystem = new BreakSystem()
@@ -87,12 +87,3 @@ powerMonitor.on('on-ac', () => {
     global.blockerSystem.remove('other', 'batteryPower')
   }
 })
-
-/* ------------------------------------------------------------------------- */
-/* Start timer automatically based on user preferences */
-
-if (global.store.get('preferences.startup.startTimerOnAppStartup')) {
-  global.timerSystem.start()
-}
-
-global.appSnapshotSystem.updateState()

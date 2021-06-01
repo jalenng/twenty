@@ -4,8 +4,13 @@
  */
 
 const { screen } = require('electron')
-const { createWindow } = require('../windowCreator')
 
+const createWindow = require('../createWindow')
+
+/**
+ * Initializes a NotificationSystem.
+ * @class
+ */
 class NotificationSystem {
   constructor () {
     this.fullscreenWindows = []

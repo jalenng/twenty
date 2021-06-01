@@ -12,17 +12,22 @@
 const PowerShell = require('node-powershell')
 const EventEmitter = require('./EventEmitter')
 
-const isWindows = process.platform === 'win32'
+const { isWindows, appFilePath } = require('../constants.js')
 
 const APP_SNAPSHOT_INTERVAL = 5000
 const POWERSHELL_GET_PROCESS_COMMAND =
   'Get-Process | Where-Object {$_.mainWindowTitle} | Select-Object Name, mainWindowtitle, Description, Path | ConvertTo-Json | % {$_ -replace("\\u200B")} | % {$_ -replace("\\u200E")}'
 
-class AppSnapshotSystem extends EventEmitter {
+/**
+ * Initializes an AppSnapshotSystem.
+ * @class
+ */
+module.exports = class AppSnapshotSystem extends EventEmitter {
   constructor () {
     super()
     this.isRunning = false
     this.lastSnapshot = []
+    this.startSystem()
   }
 
   /**
@@ -55,6 +60,9 @@ class AppSnapshotSystem extends EventEmitter {
           const winDesc = process.Description
           const winPath = process.Path
 
+          // Exclude self
+          if (winPath === appFilePath) return
+
           // Push process to list of open windows
           result.push({
             path: winPath,
@@ -62,7 +70,11 @@ class AppSnapshotSystem extends EventEmitter {
           })
 
           // Perform processing to get the ideal name
-          if (winTitle.indexOf(winDesc) === -1 || winDesc === '') { newAppNames[winPath] = winTitle } else { newAppNames[winPath] = winDesc }
+          if (winTitle.indexOf(winDesc) === -1 || winDesc === '') {
+            newAppNames[winPath] = winTitle
+          } else {
+            newAppNames[winPath] = winDesc
+          }
         })
 
         // Update the app names dictionary
@@ -112,13 +124,4 @@ class AppSnapshotSystem extends EventEmitter {
   getLastSnapshot () {
     return this.lastSnapshot
   }
-
-  /**
-   * Starts or stops the app snapshot system depending on user preferences
-   */
-  updateState () {
-    this.startSystem()
-  }
 }
-
-module.exports = AppSnapshotSystem

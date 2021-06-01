@@ -19,6 +19,8 @@ global.store = new Store({
 // Reset entire store if the reset flag is enabled
 if (global.store.get('resetFlag')) global.store.clear()
 
+// global.store.set('preferences.notifications.interval', 0.1)
+
 /* ------------------------------------------------------------------------- */
 /** Handler for store change events */
 

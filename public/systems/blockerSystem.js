@@ -9,7 +9,11 @@
 
 const EventEmitter = require('./EventEmitter')
 
-class BlockerSystem extends EventEmitter {
+/**
+ * Initializes a BlockerSystem.
+ * @class
+ */
+module.exports = class BlockerSystem extends EventEmitter {
   constructor () {
     super()
     this.dismissedBlockers = []
@@ -131,6 +135,3 @@ class BlockerSystem extends EventEmitter {
    */
   notifyBlockerDetected () { this.emit('blocker-detected') };
 }
-
-/** Exports */
-module.exports = BlockerSystem

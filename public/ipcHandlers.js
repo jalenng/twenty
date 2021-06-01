@@ -3,11 +3,12 @@
  * @author jalenng
  */
 
-const { BrowserWindow, ipcMain, app, nativeTheme, dialog } = require('electron')
 const path = require('path')
-const isDev = require('electron-is-dev')
 
-const { createWindow } = require('./windowCreator')
+const { BrowserWindow, ipcMain, app, nativeTheme, dialog } = require('electron')
+
+const { isDev } = require('./constants')
+const createWindow = require('./createWindow')
 
 /* ------------------------------------------------------------------------- */
 /* Main */

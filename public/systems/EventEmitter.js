@@ -3,7 +3,11 @@
  * @author jalenng
  */
 
-class EventEmitter {
+/**
+ * Initializes an EventEmitter.
+ * @class
+ */
+module.exports = class EventEmitter {
   constructor () {
     this._events = {}
   }
@@ -28,6 +32,3 @@ class EventEmitter {
     }
   }
 }
-
-/** Exports */
-module.exports = EventEmitter
