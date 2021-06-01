@@ -1,55 +1,78 @@
 <div align="center">
+<img src="icon.png" width="128" height="128">
   
-  <img src="icon.png" width="256" height="256">
-  
-  <h1> Twenty </h1>
+# Twenty [![Build](https://github.com/jalenng/twenty/actions/workflows/build.yml/badge.svg)](https://github.com/jalenng/twenty/actions/workflows/build.yml)
 
-  A customizable timer that reminds you to take breaks to prevent eye strain
-  
-  <br>
-  
-  [![Build](https://github.com/jalenng/twenty/actions/workflows/build.yml/badge.svg)](https://github.com/jalenng/twenty/actions/workflows/build.yml)
+**Customizable timer that reminds you to take eye breaks**
   
 </div>
 
----
-
 <br/>
 
+---
 # Overview
 
 <div align="center"> 
-  <b> Every 20 minutes, look at something at least 20 feet away for 20 seconds </b>
+
+  Twenty helps you prevent eye strain by reminding you to practice the 20-20-20 rule:
+
+  <h3> <b> Every 20 minutes, look at something at least 20 feet away for 20 seconds </b> </h3>
+
 </div>
 
-
-## 🌟 Features
-* Blocker apps - 
-* Interval customization - Find the best balance between preventing eye strain and maintaining focus.
-* Sound customization - Customize your notification sounds
-
-## 📷Screenshots
-
-<!-- TODO: implement -->
 <br/>
 
+---
+# 🌟 Features
 
+### ⛔ **Blockers**
+Specify conditions for when you want to maintain focus
+
+### ⏲ **Interval customization**
+Find your balance between preventing eye strain and maintaining focus
+
+### 🔊 **Sound customization**
+Personalize your experience with custom notification sounds 
+
+### 😊 **Ease of use**
+Runs on startup, minimizes to system tray--just set and forget 
+
+### 🖱 **Simple user interface**
+Elegant, streamlined, and easy to use
+
+<br/>
+
+---
+# 📷 Screenshots
+
+<!-- TODO -->
+
+<br/>
+
+---
 # 💻 Download
 
-https://github.com/jalenng/twenty/releases
+Get the latest releases for Windows and macOS [**here**]( https://github.com/jalenng/twenty/releases).
 
 <br/>
 
-# ➕ Contribution
+---
+# ➕ Contributing
 
-* 🐞 Found a bug or issue? Report it [here](https://github.com/jalenng/twenty/issues/new).
-* ➕ Found a bug or issue? Report it [here](https://github.com/jalenng/twenty/issues/new).
+### **Issues**
+Found a **bug🐞** or got a **suggestion💡**? Report them [**here**](https://github.com/jalenng/twenty/issues/new).
+
+### **Pull requests**
+Pull requests are welcome--please don't hesitate to open one!
 
 <br/>
 
+---
 # 👨‍💻 Development
 
-Twenty is built with Node.js, Electron, and React.
+Twenty is built with Node.js, Electron, React, and ❤.
+
+Make sure you have `Node.js` and `npm` installed on your computer. 
 
 ### `npm i`
 Installs the required dependencies.
@@ -62,6 +85,7 @@ Packages Twenty for production
 
 <br/>
 
+---
 # 📃 License
 
 MIT © [Jalen Ng](https://jalenng.github.io)
