@@ -14,24 +14,54 @@
 
 ---
 
+<br/>
+
 # Overview
 
-## Features
+<div align="center"> 
+  <b> Every 20 minutes, look at something at least 20 feet away for 20 seconds </b>
+</div>
+
+
+## 🌟 Features
+* Blocker apps - 
+* Interval customization - Find the best balance between preventing eye strain and maintaining focus.
+* Sound customization - Customize your notification sounds
+
+## 📷Screenshots
 
 <!-- TODO: implement -->
+<br/>
 
-## Screenshots
 
-<!-- TODO: implement -->
+# 💻 Download
 
-# Download
+https://github.com/jalenng/twenty/releases
 
-<!-- TODO: implement -->
+<br/>
 
-# Development
+# ➕ Contribution
 
-<!-- TODO: implement -->
+* 🐞 Found a bug or issue? Report it [here](https://github.com/jalenng/twenty/issues/new).
+* ➕ Found a bug or issue? Report it [here](https://github.com/jalenng/twenty/issues/new).
 
-# License
+<br/>
+
+# 👨‍💻 Development
+
+Twenty is built with Node.js, Electron, and React.
+
+### `npm i`
+Installs the required dependencies.
+
+### `npm run dev`
+Starts the React development environment and Electron process.
+
+### `npm run build`
+Packages Twenty for production
+
+<br/>
+
+# 📃 License
 
 MIT © [Jalen Ng](https://jalenng.github.io)
