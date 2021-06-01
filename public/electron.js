@@ -7,8 +7,8 @@ const { BrowserWindow, nativeTheme, app } = require('electron')
 
 const createWindow = require('./createWindow')
 
-/* Initialize the stores and systems */
-require('./store/storeInitializer')
+// Initialize the stores and systems
+require('./store/initializeStore')
 require('./systems/initializeSystems')
 
 require('./ipcHandlers')

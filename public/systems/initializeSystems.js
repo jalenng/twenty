@@ -7,53 +7,55 @@
 const { powerMonitor } = require('electron')
 
 const TimerSystem = require('./TimerSystem')
-const BreakSystem = require('./breakSystem')
-const NotificationSystem = require('./notificationSystem')
+const BreakSystem = require('./BreakSystem')
+const NotificationSystem = require('./NotificationSystem')
 const AppSnapshotSystem = require('./AppSnapshotSystem')
 const BlockerSystem = require('./BlockerSystem')
 
-global.timerSystem = new TimerSystem()
-global.breakSystem = new BreakSystem()
-global.notificationSystem = new NotificationSystem()
-global.appSnapshotSystem = new AppSnapshotSystem()
-global.blockerSystem = new BlockerSystem()
+global.systems = {
+  timer: new TimerSystem(),
+  break: new BreakSystem(),
+  notification: new NotificationSystem(),
+  appSnapshot: new AppSnapshotSystem(),
+  blocker: new BlockerSystem()
+}
 
 /* ------------------------------------------------------------------------- */
 /* If timer has stopped and the notification interval updates, update the timer with the new value. */
 
 global.store.onDidChange('preferences.notifications.interval', () => {
-  if (global.timerSystem.isStopped) global.timerSystem.update()
+  if (global.systems.timer.isStopped) global.systems.timer.update()
 })
 
 /* ------------------------------------------------------------------------- */
 /* Configure event listeners and connect the various systems */
 
 // Start break when timer ends
-global.timerSystem.on('timer-end', () => global.breakSystem.start())
+global.systems.timer.on('timer-end', () => global.systems.break.start())
 
 // Create notification windows when break starts
-global.breakSystem.on('break-start', () => global.notificationSystem.createWindows())
+global.systems.break.on('break-start', () => global.systems.notification.createWindows())
 
 // Minimize notification when the break time is set/reset
-global.breakSystem.on('break-times-set', () => global.notificationSystem.minimize())
+global.systems.break.on('break-times-set', () => global.systems.notification.minimize())
 
 // Expand notification when the break time is past the intermediate point
-global.breakSystem.on('break-intermediate', () => global.notificationSystem.maximize())
+global.systems.break.on('break-intermediate', () => global.systems.notification.maximize())
 
 // Close notification windows when break ends
-global.breakSystem.on('break-end', () => global.notificationSystem.closeWindows())
+global.systems.break.on('break-end', () => global.systems.notification.closeWindows())
 
 // Start timer when break ends
-global.breakSystem.on('break-end', () => global.timerSystem.start())
+global.systems.break.on('break-end', () => global.systems.timer.start())
 
 // Process the list of open apps through the blocker system when a snapshot is taken
-global.appSnapshotSystem.on('app-snapshot-taken', (snapshot) => global.blockerSystem.processAppSnapshot(snapshot))
+global.systems.appSnapshot.on('app-snapshot-taken', (snapshot) => global.systems.blocker.processAppSnapshot(snapshot))
 
 // Block the timer when a blocker is detected
-global.blockerSystem.on('blocker-detected', () => global.timerSystem.block())
+global.systems.blocker.on('blocker-detected', () => global.systems.timer.block())
 
 // Unblock the timer when all blockers are cleared
-global.blockerSystem.on('blockers-cleared', () => global.timerSystem.unblock())
+global.systems.blocker.on('blockers-cleared', () => global.systems.timer.unblock())
 
 /* ------------------------------------------------------------------------- */
 /* Update blockers when the power state updates */
@@ -62,7 +64,7 @@ global.blockerSystem.on('blockers-cleared', () => global.timerSystem.unblock())
 
 if (powerMonitor.isOnBatteryPower()) {
   if (global.store.get('preferences.blockers.blockOnBattery')) {
-    global.blockerSystem.add({
+    global.systems.blocker.add({
       type: 'other',
       key: 'batteryPower',
       message: 'Your computer is running on battery power.'
@@ -73,7 +75,7 @@ if (powerMonitor.isOnBatteryPower()) {
 // Add a blocker if switched to battery power
 powerMonitor.on('on-battery', () => {
   if (global.store.get('preferences.blockers.blockOnBattery')) {
-    global.blockerSystem.add({
+    global.systems.blocker.add({
       type: 'other',
       key: 'batteryPower',
       message: 'Your computer is running on battery power.'
@@ -84,6 +86,6 @@ powerMonitor.on('on-battery', () => {
 // Remove the blocker if switched to AC power
 powerMonitor.on('on-ac', () => {
   if (global.store.get('preferences.blockers.blockOnBattery')) {
-    global.blockerSystem.remove('other', 'batteryPower')
+    global.systems.blocker.remove('other', 'batteryPower')
   }
 })

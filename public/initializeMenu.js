@@ -44,7 +44,7 @@ const menu = Menu.buildFromTemplate([
       {
         label: 'Start/Stop',
         accelerator: 'CmdOrCtrl+s',
-        click: () => { global.timerSystem.togglePause() }
+        click: () => { global.systems.timer.togglePause() }
       }
     ]
   },
@@ -59,7 +59,7 @@ const menu = Menu.buildFromTemplate([
           {
             label: 'Test break',
             accelerator: 'CmdOrCtrl+e',
-            click: () => { global.timerSystem.end() }
+            click: () => { global.systems.timer.end() }
           }
         ]
       }]

@@ -7,7 +7,7 @@ let appTray = null
 // Function to get path of icon file
 const getTrayImage = function () {
   // Calculate percentage
-  const timerStatus = global.timerSystem.getStatus()
+  const timerStatus = global.systems.timer.getStatus()
   const percentage = timerStatus.remainingTime / timerStatus.totalDuration * 100
   const percentageMultOfFive = Math.round(percentage / 5) * 5
 
