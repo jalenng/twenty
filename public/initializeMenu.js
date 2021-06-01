@@ -16,7 +16,7 @@
 
 const { Menu } = require('electron')
 
-const { createWindow } = require('./createWindow')
+const createWindow = require('./createWindow')
 
 const { isDev } = require('./constants')
 
@@ -28,7 +28,9 @@ const menu = Menu.buildFromTemplate([
         label: 'Preferences',
         accelerator: 'CmdOrCtrl+,',
         click: () => {
-          if (!global.prefsWindow || global.prefsWindow.isDestroyed()) { global.prefsWindow = createWindow('preferences', 'prefs') } else {
+          if (!global.prefsWindow || global.prefsWindow.isDestroyed()) {
+            global.prefsWindow = createWindow('preferences', 'preferences')
+          } else {
             global.prefsWindow.restore()
             global.prefsWindow.focus()
           }

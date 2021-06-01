@@ -16,7 +16,7 @@ const SHARED_OPTIONS = {
   resizable: false,
   minimizable: false,
   maximizable: false,
-  useContentSize: true,
+  useContentSize: false,
   show: false,
   frame: false,
   transparent: true,
