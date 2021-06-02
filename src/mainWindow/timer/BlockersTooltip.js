@@ -6,8 +6,12 @@ import {
   Stack,
   ActivityItem,
   Icon,
-  Text
+  Text,
+  DefaultButton
 } from '@fluentui/react'
+
+import { UnselectableTextStyle } from '../../SharedStyles'
+import { StackProps } from '../../SharedProps'
 
 export default class extends React.Component {
   constructor (props) {
@@ -37,15 +41,20 @@ export default class extends React.Component {
     })
   }
 
+  handleClearBtn () {
+    blockerSys.clear()
+  }
+
   render () {
-    const hasBlockers = this.state.blockers.length !== 0
+    return (
 
-    if (hasBlockers) {
-      return (
+      <div style={{ ...UnselectableTextStyle, minWidth: '240px' }}>
 
-        <Stack tokens={{ childrenGap: '16px' }}>
+        <Stack {...StackProps.level1}>
 
-          <Stack tokens={{ childrenGap: '3px' }}>
+          <Text>The timer is blocked. </Text>
+
+          <Stack {...StackProps.level2}>
 
             {this.state.blockers.map(blocker => {
               const description = blocker.type === 'app'
@@ -64,13 +73,18 @@ export default class extends React.Component {
 
           </Stack>
 
-          <Text variant='medium' block>
-            Click the blue button to ignore these blockers for now.
-          </Text>
+          <Stack {...StackProps.level2Horizontal}>
+            <DefaultButton
+              text='Ignore'
+              iconProps={{ iconName: 'Clear' }}
+              onClick={this.handleClearBtn}
+            />
+          </Stack>
 
         </Stack>
 
-      )
-    } else return <div />
+      </div>
+
+    )
   }
 }

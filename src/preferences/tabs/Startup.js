@@ -13,7 +13,7 @@ import {
   Toggle
 } from '@fluentui/react'
 
-import { level1Props, level2Props } from './PrefsStackProps'
+import { StackProps } from '../../SharedProps'
 
 export default class extends React.Component {
   constructor (props) {
@@ -36,9 +36,9 @@ export default class extends React.Component {
     const appName = aboutAppInfo.appInfo.name
 
     return (
-      <Stack id='startup' {...level1Props}>
+      <Stack id='startup' {...StackProps.level1}>
 
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
           <Text variant='xLarge' block> Startup </Text>
 
           <Toggle

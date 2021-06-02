@@ -9,10 +9,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './css/index.css'
 
+import { UnselectableTextStyle } from './SharedStyles'
+
 import Container from './window/Container'
 import TitleBar from './window/TitleBar'
 
-import TutorialProvider from './mainWindow/TutorialProvider'
+import TutorialProvider from './mainWindow/tutorial/TutorialProvider'
 
 import FullscreenNotification from './notifications/FullscreenNotification'
 import PopupNotification from './notifications/PopupNotification'
@@ -24,13 +26,6 @@ import { HashRouter, Route, Switch } from 'react-router-dom'
 import { initializeIcons } from '@fluentui/react'
 
 initializeIcons()
-
-/* Styling for components to make sure text is unselectable */
-const unselectableTextStyle = {
-  MozUserSelect: 'none',
-  WebkitUserSelect: 'none',
-  msUserSelect: 'none'
-}
 
 /* Function components for the windows */
 function MainWindow (props) {
@@ -75,7 +70,7 @@ function PopupNotificationWindow (props) {
 
 /* Render the application */
 ReactDOM.render(
-  <div style={{ ...unselectableTextStyle, width: '100%', height: '100%' }}>
+  <div style={{ ...UnselectableTextStyle, width: '100%', height: '100%' }}>
     <React.StrictMode>
       <HashRouter>
         <Switch>

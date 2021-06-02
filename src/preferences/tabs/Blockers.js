@@ -18,7 +18,7 @@ import {
   Selection
 } from '@fluentui/react'
 
-import { level1Props, level2Props, level2HorizontalProps } from './PrefsStackProps'
+import { StackProps } from '../../SharedProps'
 
 export default class extends React.Component {
   constructor (props) {
@@ -113,11 +113,11 @@ export default class extends React.Component {
 
     return (
 
-      <Stack id='blockers' {...level1Props}>
+      <Stack id='blockers' {...StackProps.level1}>
 
         {/* Blocker app settings - only show if not macOS */}
         {!isMacOS &&
-          <Stack {...level2Props}>
+          <Stack {...StackProps.level2}>
 
             <Text variant='xLarge' block> App blockers </Text>
 
@@ -126,7 +126,7 @@ export default class extends React.Component {
             </Text>
 
             {/* Add app blockers */}
-            <Stack {...level2HorizontalProps} verticalAlign='end'>
+            <Stack {...StackProps.level2Horizontal} verticalAlign='end'>
 
               <Dropdown
                 label='Add an app'
@@ -164,7 +164,7 @@ export default class extends React.Component {
           </Stack>}
 
         {/* Other blocker settings */}
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
 
           <Text variant='xLarge' block> Other blockers </Text>
 

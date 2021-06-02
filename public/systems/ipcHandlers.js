@@ -47,4 +47,3 @@ ipcMain.on('get-blockers', (event) => {
 ipcMain.handle('clear-blockers', () => {
   global.systems.blocker.clear()
 })
-

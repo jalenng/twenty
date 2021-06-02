@@ -14,7 +14,7 @@ import {
   ChoiceGroup
 } from '@fluentui/react'
 
-import { level1Props, level2Props } from './PrefsStackProps'
+import { StackProps } from '../../SharedProps'
 
 export default class extends React.Component {
   constructor (props) {
@@ -53,9 +53,9 @@ export default class extends React.Component {
     ]
 
     return (
-      <Stack id='appearance' {...level1Props}>
+      <Stack id='appearance' {...StackProps.level1}>
 
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
           <Text variant='xLarge' block> Appearance </Text>
 
           <ChoiceGroup

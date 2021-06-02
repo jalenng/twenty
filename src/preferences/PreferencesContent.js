@@ -51,7 +51,12 @@ export default class extends React.Component {
         }}
         >
 
-          {preferencesPage}
+          <div style={{
+            paddingBottom: '20px'
+          }}
+          >
+            {preferencesPage}
+          </div>
 
         </ScrollablePane>
 

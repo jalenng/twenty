@@ -1,3 +1,8 @@
+/**
+ * @file Shared constants
+ * @author jalenng
+ */
+
 const { app } = require('electron')
 
 module.exports = {

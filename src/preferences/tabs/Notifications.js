@@ -17,7 +17,7 @@ import {
   TooltipHost
 } from '@fluentui/react'
 
-import { level1Props, level2Props, level2HorizontalProps } from './PrefsStackProps'
+import { StackProps } from '../../SharedProps'
 
 export default class extends React.Component {
   constructor (props) {
@@ -80,9 +80,9 @@ export default class extends React.Component {
 
     return (
 
-      <Stack id='notifications' {...level1Props}>
+      <Stack id='notifications' {...StackProps.level1}>
 
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
           <Text variant='xLarge' block> Timing </Text>
 
           <Slider
@@ -97,7 +97,7 @@ export default class extends React.Component {
           />
         </Stack>
 
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
           <Text variant='xLarge' block> Sound </Text>
 
           <Toggle
@@ -108,7 +108,7 @@ export default class extends React.Component {
             onChange={(event, checked) => store.preferences.set('notifications.enableSound', checked)}
           />
 
-          <Stack {...level2HorizontalProps} verticalAlign='end'>
+          <Stack {...StackProps.level2Horizontal} verticalAlign='end'>
 
             <Dropdown
               label='Sound selection'

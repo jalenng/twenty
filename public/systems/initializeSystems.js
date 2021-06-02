@@ -51,7 +51,9 @@ global.systems.break.on('break-end', () => global.systems.notification.closeWind
 global.systems.break.on('break-end', () => global.systems.timer.start())
 
 // Process the list of open apps through the blocker system when a snapshot is taken
-global.systems.appSnapshot.on('app-snapshot-taken', (snapshot) => global.systems.blocker.processAppSnapshot(snapshot))
+global.systems.appSnapshot.on('app-snapshot-taken', (snapshot) => {
+  global.systems.blocker.processAppSnapshot(snapshot)
+})
 
 // Block the timer when a blocker is detected
 global.systems.blocker.on('blocker-detected', () => global.systems.timer.block())

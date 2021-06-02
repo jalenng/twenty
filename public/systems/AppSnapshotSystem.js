@@ -1,9 +1,6 @@
 /**
  * @file Handles capturing the list of open windows on the user's computer.
  * @author jalenng
- * The states of the app snapshot usage system are as follows:
- *  - isRunning
- *  - true <---> false
  *
  * The app snapshot system is also an event emitter that emits the following events:
  *  - app-snapshot-taken: emitted whenever a snapshot has been taken (usually on an interval)
@@ -25,9 +22,11 @@ const POWERSHELL_GET_PROCESS_COMMAND =
 module.exports = class AppSnapshotSystem extends EventEmitter {
   constructor () {
     super()
-    this.isRunning = false
     this.lastSnapshot = []
-    this.startSystem()
+    this.interval = setInterval(this.takeAppSnapshot.bind(this), APP_SNAPSHOT_INTERVAL)
+
+    // Take first snapshot
+    this.takeAppSnapshot()
   }
 
   /**
@@ -90,31 +89,6 @@ module.exports = class AppSnapshotSystem extends EventEmitter {
     this.lastSnapshot = result
 
     return result
-  }
-
-  /**
-   * Starts the app snapshot system.
-   */
-  startSystem () {
-    if (!this.isRunning) {
-      // Set interval to take snapshots of open processes
-      this.interval = setInterval(this.takeAppSnapshot.bind(this), APP_SNAPSHOT_INTERVAL)
-
-      this.isRunning = true
-
-      // Take first snapshot
-      this.takeAppSnapshot()
-    }
-  }
-
-  /**
-   * Stops the app snapshot system.
-   */
-  stopSystem () {
-    if (this.isRunning) {
-      clearInterval(this.interval)
-      this.isRunning = false
-    }
   }
 
   /**

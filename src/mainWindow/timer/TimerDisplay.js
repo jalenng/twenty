@@ -9,16 +9,13 @@ import React from 'react'
 
 import {
   Text,
-  DefaultButton,
-  TooltipHost,
   Stack,
-  DirectionalHint,
   getTheme
 } from '@fluentui/react'
-
 import Circle from 'react-circle'
 
-const chipStyle = { borderRadius: '20px', width: '40px', height: '28px' }
+import Chip from './Chip'
+
 const circleProps = {
   animate: true,
   animationDuration: '1s',
@@ -35,6 +32,18 @@ export default class extends React.Component {
   }
 
   render () {
+    const remainingTime = this.props.remainingTime
+    const totalDuration = this.props.totalDuration
+
+    // Get remaining percentage for progress bar
+    const percentage = remainingTime / totalDuration * 100
+
+    // Convert remaining time to M:SS format
+    const minutes = Math.floor(remainingTime / 60000).toString()
+    let seconds = Math.floor((remainingTime % 60000) / 1000)
+    seconds = ('00' + seconds).substr(-2, 2)
+    const timerString = `${minutes}:${seconds}`
+
     return (
 
       <div style={{
@@ -47,7 +56,7 @@ export default class extends React.Component {
         {/* Circular progress bar */}
         <Circle
           {...circleProps}
-          progress={this.props.progressBarValue}
+          progress={percentage}
           progressColor={getTheme().palette.themePrimary}
           bgColor={getTheme().palette.neutralLighter}
         />
@@ -59,24 +68,12 @@ export default class extends React.Component {
             {/* Remaining time */}
             <Text variant='xxLarge' style={{ fontSize: '3.5rem' }} block>
               <div id='remainingTimeText'>
-                {this.props.text}
+                {timerString}
               </div>
             </Text>
 
             {/* Chip */}
-            {this.props.showChip &&
-              <TooltipHost
-                content={this.props.chipTooltip}
-                calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
-              >
-                <DefaultButton
-                  id='timerChip'
-                  style={{ ...chipStyle }}
-                  iconProps={{ iconName: this.props.chipIconName }}
-                  text={this.props.chipText}
-                  disabled
-                />
-              </TooltipHost>}
+            <Chip {...this.props.chipProps} />
 
           </Stack>
         </div>

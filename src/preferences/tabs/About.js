@@ -15,7 +15,7 @@ import {
 } from '@fluentui/react'
 
 import logo from '../../assets/icon.png'
-import { level1Props, level2Props, level2HorizontalProps } from './PrefsStackProps'
+import { StackProps } from '../../SharedProps'
 
 const versionComponents = [
   { key: 'electron', text: 'Electron' },
@@ -54,13 +54,13 @@ export default class extends React.Component {
       : aboutAppInfo.license.slice(0, 2)
 
     return (
-      <Stack {...level1Props} id='about'>
+      <Stack {...StackProps.level1} id='about'>
 
         {/* Version info */}
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
 
           {/* App banner */}
-          <Stack {...level2HorizontalProps}>
+          <Stack {...StackProps.level2Horizontal}>
 
             <Image
               imageFit={ImageFit.centerContain}
@@ -76,7 +76,7 @@ export default class extends React.Component {
           </Stack>
 
           {/* Chips for Electron, Chrome, Node, and v8 engine */}
-          <Stack {...level2HorizontalProps}>
+          <Stack {...StackProps.level2Horizontal}>
 
             {versionComponents.map((component) => {
               return (
@@ -101,7 +101,7 @@ export default class extends React.Component {
         </Stack>
 
         {/* Links */}
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
           <Text variant='xLarge' block> Links </Text>
 
           <div style={{ display: 'inline' }}>
@@ -122,7 +122,7 @@ export default class extends React.Component {
         </Stack>
 
         {/* Attributions to open-source libraries */}
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
           <Text variant='xLarge' block> Open source libraries </Text>
 
           <div style={{ display: 'inline' }}>
@@ -142,7 +142,7 @@ export default class extends React.Component {
         </Stack>
 
         {/* License */}
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
           <Text variant='xLarge' block> License </Text>
 
           {licenseParagraphs.map(paragraph => {
@@ -172,11 +172,11 @@ export default class extends React.Component {
         </Stack>
 
         {/* Options to reset the app */}
-        <Stack {...level2Props}>
+        <Stack {...StackProps.level2}>
 
           <Text variant='xLarge' block> Reset app </Text>
 
-          <Stack {...level2HorizontalProps}>
+          <Stack {...StackProps.level2Horizontal}>
             <DefaultButton
               text={`Reset ${appInfo.name}`}
               iconProps={{ iconName: 'Refresh' }}

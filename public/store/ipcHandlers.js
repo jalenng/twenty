@@ -68,4 +68,3 @@ ipcMain.handle('reset-store', () => {
 ipcMain.handle('set-store', (event, key, value) => {
   global.store.set(key, value)
 })
-

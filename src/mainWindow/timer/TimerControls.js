@@ -25,42 +25,27 @@ export default class extends React.Component {
     this.state = {}
   }
 
+  handleToggleBtn () {
+    timer.toggle()
+  }
+
   render () {
-    let mainButtonTooltip
-    let mainButtonIconName
-    let mainButtonOnClick
-
-    if (this.props.isBlocked) {
-      // Main button is a button to clear all blockers
-      mainButtonTooltip = 'Clear blockers'
-      mainButtonIconName = 'Clear'
-      mainButtonOnClick = blockerSys.clear
-    } else { // Main button is a button to toggle the timer
-      mainButtonOnClick = timer.toggle
-      if (this.props.isStopped) {
-        mainButtonTooltip = 'Start'
-        mainButtonIconName = 'Play'
-      } else {
-        mainButtonTooltip = 'Stop'
-        mainButtonIconName = 'Pause'
-      }
-    }
-
-    const mainButtonDisabled = this.props.isIdle
+    const primaryButtonIconName = this.props.isStopped ? 'Play' : 'Stop'
+    const primaryButtonTooltip = this.props.isStopped ? 'Start' : 'Stop'
 
     return (
 
       <Stack horizontal tokens={{ childrenGap: 20 }}>
 
         {/* Main button */}
-        <TooltipHost content={mainButtonTooltip}>
+        <TooltipHost content={primaryButtonTooltip}>
           <PrimaryButton
             id='toggleButton'
-            disabled={mainButtonDisabled}
-            onClick={mainButtonOnClick}
+            disabled={this.props.disabled}
+            onClick={this.handleToggleBtn}
             style={buttonStyle}
             onRenderText={() => {
-              return <FontIcon iconName={mainButtonIconName} className={buttonIconClass} />
+              return <FontIcon iconName={primaryButtonIconName} className={buttonIconClass} />
             }}
           />
         </TooltipHost>
