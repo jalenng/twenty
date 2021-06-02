@@ -18,7 +18,7 @@ const { Menu } = require('electron')
 
 const createWindow = require('./createWindow')
 
-const { isDev } = require('./constants')
+const { isDev } = require('../constants')
 
 const menu = Menu.buildFromTemplate([
   {

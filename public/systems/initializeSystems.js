@@ -12,6 +12,8 @@ const NotificationSystem = require('./NotificationSystem')
 const AppSnapshotSystem = require('./AppSnapshotSystem')
 const BlockerSystem = require('./BlockerSystem')
 
+require('./ipcHandlers')
+
 global.systems = {
   timer: new TimerSystem(),
   break: new BreakSystem(),

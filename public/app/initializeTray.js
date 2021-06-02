@@ -2,7 +2,7 @@ const path = require('path')
 
 const { app, nativeTheme, nativeImage, Menu, Tray } = require('electron')
 
-const { isMacOS } = require('./constants')
+const { isMacOS } = require('../constants')
 
 let appTray = null
 
@@ -22,7 +22,7 @@ const getTrayImage = function () {
   const filename = isMacOS
     ? `${percentageMultOfFive}Template.png`
     : `${percentageMultOfFive}.png`
-  const imagePath = path.join(__dirname, '..', 'tray_assets', folder, filename)
+  const imagePath = path.join(__dirname, '..', '..', 'tray_assets', folder, filename)
   const image = nativeImage.createFromPath(imagePath)
 
   return image

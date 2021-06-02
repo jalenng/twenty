@@ -3,11 +3,10 @@
  * @author jalenng
  */
 
-const { BrowserWindow, screen, app, Menu } = require('electron')
-const isDev = require('electron-is-dev')
+const { BrowserWindow, screen, app, Menu, Notification } = require('electron')
 const path = require('path')
 
-const { isWindows, appName } = require('./constants')
+const { isDev, isWindows, appName } = require('../constants')
 
 const windowStateKeeper = require('electron-window-state')
 
@@ -113,6 +112,11 @@ module.exports = function createWindow (type, destination = '', display = null, 
         } else {
           e.preventDefault() // Otherwise, just hide to tray
           global.mainWindow.hide()
+          new Notification({
+            title: `${appName} is still running`,
+            body: 'To repoen the timer, click the icon in the tray',
+            silent: true
+          }).show()
         }
       })
 

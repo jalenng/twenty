@@ -5,15 +5,16 @@
 
 const { BrowserWindow, nativeTheme, app } = require('electron')
 
-const createWindow = require('./createWindow')
+const createWindow = require('./app/createWindow')
 
 // Initialize the stores and systems
 require('./store/initializeStore')
 require('./systems/initializeSystems')
 
-require('./ipcHandlers')
+require('./app/ipcHandlers')
 
-require('./InstanceEnforcer')
+const InstanceEnforcer = require('./app/InstanceEnforcer')
+InstanceEnforcer.getLock()
 
 const { appPath, isMacOS } = require('./constants')
 
@@ -38,10 +39,10 @@ app.whenReady().then(() => {
   })
 
   // Create tray button
-  require('./initializeTray')
+  require('./app/initializeTray')
 
   // Create menu
-  require('./initializeMenu')
+  require('./app/initializeMenu')
 })
 
 // Exit the app if all windows are closed if not on macOS

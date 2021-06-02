@@ -8,6 +8,8 @@ const Store = require('electron-store')
 
 const storeSchema = require('./storeSchema')
 
+require('./ipcHandlers')
+
 /* ------------------------------------------------------------------------- */
 /* Store initialization */
 

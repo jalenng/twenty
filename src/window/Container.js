@@ -10,7 +10,6 @@ import React from 'react'
 import { ThemeProvider, createTheme, loadTheme, Stack } from '@fluentui/react'
 
 import themes from './Themes'
-import ErrorBoundary from './ErrorBoundary'
 
 export default class extends React.Component {
 
@@ -60,13 +59,10 @@ export default class extends React.Component {
             position: 'absolute',
           }}
         >
-          <ErrorBoundary>
-
-            <Stack>
-              {this.props.children}
-            </Stack>
-
-          </ErrorBoundary>
+        
+          <Stack>
+            {this.props.children}
+          </Stack>
 
         </div>
 
