@@ -81,7 +81,7 @@ module.exports = function createWindow (type, destination = '', display = null, 
   window.loadURL(
     isDev
       ? `http://localhost:3000#/${destination}`
-      : `file://${path.join(__dirname, `../build/index.html#${destination}`)}`
+      : `file://${path.join(__dirname, `../../build/index.html#${destination}`)}`
   )
 
   let mainWindowState
