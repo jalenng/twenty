@@ -17,6 +17,8 @@ if (!isDev) {
 
 /** Application event handlers */
 app.whenReady().then(() => {
+  app.setAppUserModelId(process.execPath)
+
   // Create main window
   global.mainWindow = createWindow('main')
 
