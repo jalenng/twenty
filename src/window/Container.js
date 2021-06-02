@@ -9,6 +9,7 @@ import React from 'react'
 
 import { ThemeProvider, createTheme, loadTheme, Stack } from '@fluentui/react'
 
+import TitleBar from './TitleBar'
 import themes from './Themes'
 
 export default class extends React.Component {
@@ -42,6 +43,7 @@ export default class extends React.Component {
 
   render () {
     const theme = themes[this.state.currentThemeName]
+    const showTitleBar = !this.props.noTitleBar
 
     return (
 
@@ -61,7 +63,11 @@ export default class extends React.Component {
         >
         
           <Stack>
+
+            {showTitleBar && <TitleBar {...this.props.titleBarProps}/>}
+            
             {this.props.children}
+          
           </Stack>
 
         </div>

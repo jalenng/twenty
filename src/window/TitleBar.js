@@ -88,7 +88,7 @@ export default class extends React.Component {
         <Stack {...sharedStackProps} style={topLeftStyle}>
 
           {/* macOS: Close button */}
-          {isMacOS && !this.props.hideClose &&
+          {isMacOS && !this.props.noClose &&
             <TooltipHost
               content='Close'
               calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
@@ -111,22 +111,23 @@ export default class extends React.Component {
         <Stack {...sharedStackProps} style={topRightStyle}>
 
           {/* Secondary button */}
-          <TooltipHost
-            content='Always show on top'
-            calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
-          >
-            <IconButton
-              iconProps={{ iconName: 'Pinned' }}
-              style={{ WebkitAppRegion: 'no-drag' }}
-              styles={{ root: { color: buttonIconColor } }}
-              toggle
-              checked={this.state.isPinned}
-              onClick={this.handlePin}
-            />
-          </TooltipHost>
+          {!this.props.noPin &&
+            <TooltipHost
+              content='Always show on top'
+              calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
+            >
+              <IconButton
+                iconProps={{ iconName: 'Pinned' }}
+                style={{ WebkitAppRegion: 'no-drag' }}
+                styles={{ root: { color: buttonIconColor } }}
+                toggle
+                checked={this.state.isPinned}
+                onClick={this.handlePin}
+              />
+            </TooltipHost>}
 
           {/* non-macOS: Close button */}
-          {!isMacOS && !this.props.hideClose &&
+          {!isMacOS && !this.props.noClose &&
             <TooltipHost
               content='Close'
               calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}

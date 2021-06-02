@@ -16,6 +16,24 @@ import {
 
 import { StackProps } from '../../SharedProps'
 
+const themeOptions = [
+  {
+    key: 'system',
+    text: 'System default ',
+    iconProps: { iconName: 'Personalize' }
+  },
+  {
+    key: 'light',
+    text: 'Light',
+    iconProps: { iconName: 'Sunny' }
+  },
+  {
+    key: 'dark',
+    text: 'Dark',
+    iconProps: { iconName: 'ClearNight' }
+  }
+]
+
 export default class extends React.Component {
   constructor (props) {
     super(props)
@@ -34,24 +52,6 @@ export default class extends React.Component {
   }
 
   render () {
-    const themeOptions = [
-      {
-        key: 'system',
-        text: 'System default ',
-        iconProps: { iconName: 'Personalize' }
-      },
-      {
-        key: 'light',
-        text: 'Light',
-        iconProps: { iconName: 'Sunny' }
-      },
-      {
-        key: 'dark',
-        text: 'Dark',
-        iconProps: { iconName: 'ClearNight' }
-      }
-    ]
-
     return (
       <Stack id='appearance' {...StackProps.level1}>
 

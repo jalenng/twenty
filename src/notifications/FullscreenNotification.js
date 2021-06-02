@@ -8,19 +8,19 @@
 import React from 'react'
 
 import {
-  mergeStyles,
   FontIcon,
   Stack,
-  Text
+  Text,
+  getTheme
 } from '@fluentui/react'
 
-const iconClass = mergeStyles({
+const baseIconStyle = {
   fontSize: 128,
   height: 128,
   width: 128,
   margin: '0 25px',
   color: 'deepskyblue'
-})
+}
 
 export default class extends React.Component {
   constructor (props) {
@@ -47,6 +47,8 @@ export default class extends React.Component {
   }
 
   render () {
+    const iconStyle = { ...baseIconStyle, color: getTheme().palette.themePrimary }
+
     return (
       <div>
 
@@ -62,9 +64,9 @@ export default class extends React.Component {
           <Stack tokens={{ childrenGap: 16 }}>
             <Stack.Item align='center'>
               <Stack horizontal verticalAlign='center'>
-                <FontIcon iconName='RedEye' className={iconClass} />
-                <FontIcon iconName='Remove' className={iconClass} />
-                <FontIcon iconName='Street' className={iconClass} />
+                <FontIcon iconName='RedEye' style={iconStyle} />
+                <FontIcon iconName='Remove' style={iconStyle} />
+                <FontIcon iconName='Street' style={iconStyle} />
               </Stack>
 
             </Stack.Item>

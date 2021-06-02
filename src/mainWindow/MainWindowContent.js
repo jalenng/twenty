@@ -64,6 +64,7 @@ export default class extends React.Component {
     })
   }
 
+  // Render the timer display and controls
   render () {
     return (
       <div id='timer'>

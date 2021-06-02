@@ -34,7 +34,6 @@ function MainWindow (props) {
     <TutorialProvider>
 
       <Container>
-        <TitleBar />
         <MainWindowContent />
       </Container>
 
@@ -45,8 +44,7 @@ function MainWindow (props) {
 
 function PreferencesWindow (props) {
   return (
-    <Container>
-      <TitleBar />
+    <Container titleBarProps={{ noPin: true }}>
       <PreferencesContent />
     </Container>
   )
@@ -54,7 +52,7 @@ function PreferencesWindow (props) {
 
 function FullscreenNotificationWindow (props) {
   return (
-    <Container noBorder>
+    <Container noBorder noTitleBar>
       <FullscreenNotification />
     </Container>
   )
@@ -62,7 +60,7 @@ function FullscreenNotificationWindow (props) {
 
 function PopupNotificationWindow (props) {
   return (
-    <Container>
+    <Container noTitleBar>
       <PopupNotification />
     </Container>
   )
