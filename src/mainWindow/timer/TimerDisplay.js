@@ -35,14 +35,23 @@ export default class extends React.Component {
     const remainingTime = this.props.remainingTime
     const totalDuration = this.props.totalDuration
 
-    // Get remaining percentage for progress bar
-    const percentage = remainingTime / totalDuration * 100
+    let percentage
+    let timerString
 
-    // Convert remaining time to M:SS format
-    const minutes = Math.floor(remainingTime / 60000).toString()
-    let seconds = Math.floor((remainingTime % 60000) / 1000)
-    seconds = ('00' + seconds).substr(-2, 2)
-    const timerString = `${minutes}:${seconds}`
+    if (remainingTime === undefined || totalDuration === undefined) {
+      percentage = 0
+      timerString = '--:--'
+    } else {
+      // Get remaining percentage for progress bar
+      percentage = remainingTime / totalDuration * 100
+
+      // Convert remaining time to M:SS format
+      const minutes = Math.floor(remainingTime / 60000).toString()
+      let seconds = Math.floor((remainingTime % 60000) / 1000)
+      seconds = ('00' + seconds).substr(-2, 2)
+
+      timerString = `${minutes}:${seconds}`
+    }
 
     return (
 

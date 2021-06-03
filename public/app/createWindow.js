@@ -112,11 +112,6 @@ module.exports = function createWindow (type, destination = '', display = null, 
         } else {
           e.preventDefault() // Otherwise, just hide to tray
           global.mainWindow.hide()
-          new Notification({
-            title: `${appName} is still running`,
-            body: 'To repoen the timer, click the icon in the tray',
-            silent: true
-          }).show()
         }
       })
 

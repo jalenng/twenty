@@ -87,13 +87,14 @@ export default class extends React.Component {
         {/* Top left */}
         <Stack {...sharedStackProps} style={topLeftStyle}>
 
-          {/* macOS: Close button */}
+          {/* macOS: 'Red traffic light' close button on top left */}
           {isMacOS && !this.props.noClose &&
             <TooltipHost
               content='Close'
               calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
             >
               <IconButton
+                id='closeBtn'
                 iconProps={{ iconName: 'CircleFill' }}
                 style={{ WebkitAppRegion: 'no-drag' }}
                 styles={{
@@ -126,13 +127,14 @@ export default class extends React.Component {
               />
             </TooltipHost>}
 
-          {/* non-macOS: Close button */}
+          {/* non-macOS: 'X' close button on top right */}
           {!isMacOS && !this.props.noClose &&
             <TooltipHost
               content='Close'
               calloutProps={{ directionalHint: DirectionalHint.bottomCenter }}
             >
               <IconButton
+                id='closeBtn'
                 iconProps={{ iconName: 'Cancel' }}
                 style={{ WebkitAppRegion: 'no-drag' }}
                 styles={{

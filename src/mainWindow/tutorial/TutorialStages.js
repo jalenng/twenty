@@ -36,7 +36,7 @@ module.exports = [
     direction: 'bottomRightEdge',
     props: {
       headline: 'Start/stop button',
-      target: '#toggleButton'
+      target: '#toggleBtn'
     },
     contents: 'Start and stop the timer here. When the timer is stopped, you will not receive notifications. '
   },
@@ -45,9 +45,18 @@ module.exports = [
     direction: 'bottomLeftEdge',
     props: {
       headline: 'Preferences button',
-      target: '#prefsButton'
+      target: '#prefsBtn'
     },
     contents: 'Customize your notifications, blockers, and more here. '
+  },
+
+  {
+    direction: 'rightCenter',
+    props: {
+      headline: 'Close button',
+      target: '#closeBtn'
+    },
+    contents: `Hides the timer window to the tray. ${appName} will run in the background. You can quit ${appName} from the system tray.`
   },
 
   {
