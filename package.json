@@ -29,7 +29,13 @@
       "trayAssets/**/*"
     ],
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "certificateFile": "private/jalenng.pfx",
+      "certificatePassword": "",
+      "publisherName": "jalenng"
+    },
+    "mac": {
+      "category": "public.app-category.healthcare-fitness"
     },
     "linux": {
       "target": "deb"
@@ -77,7 +83,8 @@
     "build": "npm run react-build && npm run electron-build",
     "dev": "concurrently \"npm:react-start\" \"npm:electron-watch\"",
     "test": "concurrently -s first -k \"npm:react-start\" \"npm:electron-test\"",
-    "lint": "standard --fix"
+    "lint": "standard --fix",
+    "win-cert": "electron-builder create-self-signed-cert -p jalenng"
   },
   "browserslist": {
     "production": [
