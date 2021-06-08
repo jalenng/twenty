@@ -11,7 +11,8 @@ import {
   DefaultButton, ActionButton,
   Image, ImageFit,
   Stack,
-  Text
+  Text,
+  PrimaryButton
 } from '@fluentui/react'
 
 import logo from '../../assets/icon.png'
@@ -28,19 +29,58 @@ export default class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      testText: '',
+      isCheckingUpdates: false,
       licenseExpanded: false
     }
-    this.handleToggleLicenseExpand = this.handleToggleLicenseExpand.bind(this)
+    this.handleUpdatesBtn = this.handleUpdatesBtn.bind(this)
+    this.handleToggleLicenseExpandBtn = this.handleToggleLicenseExpandBtn.bind(this)
   }
 
-  handleToggleLicenseExpand () {
+  handleUpdatesBtn () {
+    this.setState({
+      ...this.state,
+      isCheckingUpdates: true
+    })
+    checkUpdate()
+      .then((result) => {
+        if (result) {
+          this.setState({
+            ...this.state,
+            testText: `Downloading version ${result.version}...`
+          })
+          downloadUpdate().then(() => {
+            this.setState({
+              ...this.state,
+              testText: 'Download complete. Update will install upon app restart.',
+              isCheckingUpdates: true
+            })
+          })
+        } else {
+          this.setState({
+            ...this.state,
+            testText: 'No new versions found.',
+            isCheckingUpdates: false
+          })
+        }
+      })
+      .catch(() => {
+        this.setState({
+          ...this.state,
+          testText: 'There was an error. Please try again later.',
+          isCheckingUpdates: false
+        })
+      })
+  }
+
+  handleToggleLicenseExpandBtn () {
     this.setState({
       ...this.state,
       licenseExpanded: !this.state.licenseExpanded
     })
   }
 
-  handleReset () {
+  handleResetBtn () {
     store.reset()
   }
 
@@ -82,7 +122,7 @@ export default class extends React.Component {
               return (
                 <DefaultButton
                   key={component.key}
-                  style={{ height: '52px', borderRadius: '8px' }}
+                  style={{ height: '52px' }}
                   disabled
                   onRenderText={() => {
                     return (
@@ -100,6 +140,22 @@ export default class extends React.Component {
 
         </Stack>
 
+        {/* Check for updates */}
+        <Stack {...StackProps.level2}>
+
+          <Stack {...StackProps.level2Horizontal}>
+            <PrimaryButton
+              text='Check for updates'
+              iconProps={{ iconName: 'Sync' }}
+              onClick={this.handleUpdatesBtn}
+              disabled={this.state.isCheckingUpdates}
+            />
+          </Stack>
+
+          <Text>{this.state.testText}</Text>
+
+        </Stack>
+
         {/* Links */}
         <Stack {...StackProps.level2}>
           <Text variant='xLarge' block> Links </Text>
@@ -111,7 +167,7 @@ export default class extends React.Component {
                 <DefaultButton
                   iconProps={{ iconName: linkElem.iconName }}
                   key={linkElem.name}
-                  style={{ borderRadius: '8px', marginRight: '8px', marginBottom: '8px' }}
+                  style={{ marginRight: '8px', marginBottom: '8px' }}
                   text={linkElem.name}
                   onClick={() => openExternalLink(linkElem.link)}
                 />
@@ -131,7 +187,7 @@ export default class extends React.Component {
               return (
                 <DefaultButton
                   key={library.name}
-                  style={{ borderRadius: '8px', marginRight: '8px', marginBottom: '8px' }}
+                  style={{ marginRight: '8px', marginBottom: '8px' }}
                   text={library.name}
                   onClick={() => openExternalLink(library.link)}
                 />
@@ -166,7 +222,7 @@ export default class extends React.Component {
                 : { iconName: 'Sell' }
             }
             text={this.state.licenseExpanded ? 'Show less' : 'Show more'}
-            onClick={this.handleToggleLicenseExpand}
+            onClick={this.handleToggleLicenseExpandBtn}
           />
 
         </Stack>

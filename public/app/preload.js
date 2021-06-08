@@ -172,6 +172,16 @@ window.setFullscreen = (status) => { ipcRenderer.invoke('set-fullscreen', status
 window.setMovable = (status) => { ipcRenderer.invoke('set-movable', status) }
 
 /**
+ * Checks for updates
+ */
+window.checkUpdate = () => { return ipcRenderer.invoke('check-update') }
+
+/**
+ * Downloads update
+ */
+window.downloadUpdate = () => { return ipcRenderer.invoke('download-update') }
+
+/**
  * Information about the app
  */
 window.aboutAppInfo = ipcRenderer.sendSync('get-about-info')

@@ -3,7 +3,7 @@
  * @author jalenng
  */
 
-const { BrowserWindow, screen, app, Menu, Notification } = require('electron')
+const { BrowserWindow, screen, app, Menu } = require('electron')
 const path = require('path')
 
 const { isDev, isWindows, appName } = require('../constants')
