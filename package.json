@@ -31,8 +31,6 @@
     ],
     "win": {
       "target": "nsis",
-      "certificateFile": "private/jalenng.pfx",
-      "certificatePassword": "",
       "publisherName": "jalenng"
     },
     "mac": {
