@@ -7,9 +7,20 @@ const { BrowserWindow, ipcMain, app, nativeTheme } = require('electron')
 
 const { isDev } = require('../constants')
 const createWindow = require('./createWindow')
+const updater = require('./updater')
 
 /* ------------------------------------------------------------------------- */
 /* Main */
+
+// Check for app update
+ipcMain.handle('check-update', () => {
+  return updater.check()
+})
+
+// Download app update
+ipcMain.handle('download-update', () => {
+  return updater.download()
+})
 
 // Find out whether or not the app is running in a dev environment
 ipcMain.on('is-dev', (event) => {

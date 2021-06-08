@@ -12,6 +12,9 @@
 /build
 /dist
 
+# private
+/private
+
 # misc
 .DS_Store
 .env.local

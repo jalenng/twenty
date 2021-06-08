@@ -32,7 +32,7 @@ const preferencesSchema = {
     },
     blockers: {
       apps: [],
-      blockOnBattery: true
+      blockOnBattery: false
     },
     startup: {
       startAppOnLogin: true,

@@ -1,20 +1,24 @@
 const { BrowserWindow, nativeTheme, app } = require('electron')
 
-const { appPath, isMacOS } = require('../constants')
+const { appPath, isMacOS, isDev } = require('../constants')
 const createWindow = require('./createWindow')
 
 require('./ipcHandlers')
 
 /** Configure login item settings */
-const startAppOnLogin = global.store.get('preferences.startup.startAppOnLogin')
-app.setLoginItemSettings({
-  openAtLogin: startAppOnLogin,
-  enabled: startAppOnLogin,
-  path: appPath
-})
+if (!isDev) {
+  const startAppOnLogin = global.store.get('preferences.startup.startAppOnLogin')
+  app.setLoginItemSettings({
+    openAtLogin: startAppOnLogin,
+    enabled: startAppOnLogin,
+    path: appPath
+  })
+}
 
 /** Application event handlers */
 app.whenReady().then(() => {
+  app.setAppUserModelId(process.execPath)
+
   // Create main window
   global.mainWindow = createWindow('main')
 

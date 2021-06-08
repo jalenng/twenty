@@ -3,7 +3,7 @@
  * @author jalenng
  */
 
-const { BrowserWindow, screen, app, Menu, Notification } = require('electron')
+const { BrowserWindow, screen, app, Menu } = require('electron')
 const path = require('path')
 
 const { isDev, isWindows, appName } = require('../constants')
@@ -112,11 +112,6 @@ module.exports = function createWindow (type, destination = '', display = null, 
         } else {
           e.preventDefault() // Otherwise, just hide to tray
           global.mainWindow.hide()
-          new Notification({
-            title: `${appName} is still running`,
-            body: 'To repoen the timer, click the icon in the tray',
-            silent: true
-          }).show()
         }
       })
 

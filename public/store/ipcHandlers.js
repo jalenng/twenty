@@ -48,7 +48,7 @@ ipcMain.on('get-store', (event, key) => { event.returnValue = global.store.get(k
 // Show a dialog to confirm resetting the app
 ipcMain.handle('reset-store', () => {
   const appName = app.getName()
-  dialog.showMessageBox(global.mainWindow, {
+  dialog.showMessageBox(null, {
     title: `Reset ${appName}`,
     type: 'question',
     message: `Reset ${appName}?`,

@@ -40,7 +40,7 @@ export default class extends React.Component {
         {/* Main button */}
         <TooltipHost content={primaryButtonTooltip}>
           <PrimaryButton
-            id='toggleButton'
+            id='toggleBtn'
             disabled={this.props.disabled}
             onClick={this.handleToggleBtn}
             style={buttonStyle}
@@ -53,7 +53,7 @@ export default class extends React.Component {
         {/* Preferences */}
         <TooltipHost content='Preferences'>
           <DefaultButton
-            id='prefsButton'
+            id='prefsBtn'
             disabled={false}
             style={buttonStyle}
             onClick={openPrefs}
