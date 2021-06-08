@@ -42,6 +42,7 @@
  */
 
 const EventEmitter = require('./EventEmitter')
+const store = require('../../store/store')
 
 /** Timer states */
 const states = {
@@ -69,13 +70,13 @@ module.exports = class TimerSystem extends EventEmitter {
     this.endDate = new Date()
 
     // The total duration of the timer run in milliseconds
-    this.totalDuration = global.store.get('preferences.notifications.interval') * 60000
+    this.totalDuration = store.get('preferences.notifications.interval') * 60000
 
     // Stores the remaining time when the timer is stopped or blocked (TODO: Depreciate this)
     this.savedTime = this.totalDuration
 
     // Start timer on app startup if enabled in preferences
-    if (global.store.get('preferences.startup.startTimerOnAppStartup')) {
+    if (store.get('preferences.startup.startTimerOnAppStartup')) {
       this.start()
     }
   }
@@ -146,7 +147,7 @@ module.exports = class TimerSystem extends EventEmitter {
       case states.BLOCKED_AND_STOPPED:
       case states.STOPPED:
 
-        this.totalDuration = global.store.get('preferences.notifications.interval') * 60000
+        this.totalDuration = store.get('preferences.notifications.interval') * 60000
         this.savedTime = this.totalDuration
         clearTimeout(this.timeout)
 
@@ -189,7 +190,7 @@ module.exports = class TimerSystem extends EventEmitter {
    * Resets the timer
    */
   reset () {
-    this.totalDuration = global.store.get('preferences.notifications.interval') * 60000
+    this.totalDuration = store.get('preferences.notifications.interval') * 60000
     this.savedTime = this.totalDuration
 
     if (this.getState() === states.RUNNING) this.setup()

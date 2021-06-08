@@ -21,6 +21,7 @@ const { screen } = require('electron')
 const soundPlayer = require('sound-play')
 
 const EventEmitter = require('./EventEmitter')
+const store = require('../../store/store')
 
 const BREAK_DURATION = 20000
 const POPUP_NOTIF_DURATION = 5000
@@ -65,7 +66,7 @@ module.exports = class BreakSystem extends EventEmitter {
 
     this.isOnBreak = true
 
-    if (global.store.get('preferences.notifications.enableSound') === true) { this.playSound() }
+    if (store.get('preferences.notifications.enableSound') === true) { this.playSound() }
 
     this.setupTimes()
 
@@ -110,7 +111,7 @@ module.exports = class BreakSystem extends EventEmitter {
    */
   end () {
     if (this.isOnBreak) {
-      if (global.store.get('preferences.notifications.enableSound') === true) { this.playSound() }
+      if (store.get('preferences.notifications.enableSound') === true) { this.playSound() }
 
       clearTimeout(this.mainTimeout)
       clearTimeout(this.intermediateTimeout)
@@ -126,8 +127,8 @@ module.exports = class BreakSystem extends EventEmitter {
    * Plays the sound stored in the store under preferences.notifications.sound
    */
   playSound () {
-    const soundKey = global.store.get('preferences.notifications.sound')
-    const volume = global.store.get('preferences.notifications.soundVolume') / 100
+    const soundKey = store.get('preferences.notifications.sound')
+    const volume = store.get('preferences.notifications.soundVolume') / 100
 
     const fullFilepath = path.isAbsolute(soundKey)
       ? soundKey

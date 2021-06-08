@@ -16,6 +16,7 @@
 
 const { Menu } = require('electron')
 
+const { timerSystem } = require('../systems/systems')
 const createWindow = require('./createWindow')
 
 const { isDev } = require('../constants')
@@ -46,7 +47,7 @@ const menu = Menu.buildFromTemplate([
       {
         label: 'Start/Stop',
         accelerator: 'CmdOrCtrl+s',
-        click: () => { global.systems.timer.togglePause() }
+        click: () => { timerSystem.togglePause() }
       }
     ]
   },
@@ -61,7 +62,7 @@ const menu = Menu.buildFromTemplate([
           {
             label: 'Test break',
             accelerator: 'CmdOrCtrl+e',
-            click: () => { global.systems.timer.end() }
+            click: () => { timerSystem.end() }
           }
         ]
       }]

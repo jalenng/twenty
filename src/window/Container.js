@@ -13,13 +13,6 @@ import TitleBar from './TitleBar'
 import themes from './Themes'
 
 export default class extends React.Component {
-
-  static defaultProps = {
-    width: '100%',
-    height: '100%',
-    noBorder: false
-  }
-
   constructor (props) {
     super(props)
     this.state = { currentThemeName: getThemeName() }
@@ -45,29 +38,33 @@ export default class extends React.Component {
     const theme = themes[this.state.currentThemeName]
     const showTitleBar = !this.props.noTitleBar
 
+    const width = this.props.width || '100%'
+    const height = this.props.height || '100%'
+    const noBorder = this.props.noBorder
+
     return (
 
       <ThemeProvider theme={theme}>
 
-        <div 
+        <div
           id='container'
           style={{
             background: theme.background,
-            width: this.props.width,
-            height: this.props.height,
-            border: this.props.noBorder ? '0px' : `1px solid ${theme.palette.neutralLight}`,
-            borderRadius: this.props.noBorder ? '0px' : '8px',
+            width: width,
+            height: height,
+            border: noBorder ? '0px' : `1px solid ${theme.palette.neutralLight}`,
+            borderRadius: noBorder ? '0px' : '8px',
             boxSizing: 'border-box',
-            position: 'absolute',
+            position: 'absolute'
           }}
         >
-        
+
           <Stack>
 
-            {showTitleBar && <TitleBar {...this.props.titleBarProps}/>}
-            
+            {showTitleBar && <TitleBar {...this.props.titleBarProps} />}
+
             {this.props.children}
-          
+
           </Stack>
 
         </div>

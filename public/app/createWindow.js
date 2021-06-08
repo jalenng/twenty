@@ -7,6 +7,7 @@ const { BrowserWindow, screen } = require('electron')
 const path = require('path')
 
 const { isDev, isWindows, appName } = require('../constants')
+const store = require('../store/store')
 
 const windowStateKeeper = require('electron-window-state')
 
@@ -98,11 +99,11 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
       mainWindowState.manage(window)
 
       // Make the main window always on top if its corresponding preference is enabled
-      window.setAlwaysOnTop(global.store.get('preferences.appearance.alwaysOnTop'))
+      window.setAlwaysOnTop(store.get('preferences.appearance.alwaysOnTop'))
 
       // Update the alwaysOnTop preference when the main window's alwaysOnTop property changes
       window.on('always-on-top-changed', (event, isAlwaysOnTop) => {
-        global.store.set('preferences.appearance.alwaysOnTop', isAlwaysOnTop)
+        store.set('preferences.appearance.alwaysOnTop', isAlwaysOnTop)
       })
 
       // Handle the close button action by having window hide
@@ -112,7 +113,7 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
       })
 
       // If not configured to hide the app on app startup, show window when ready
-      if (!global.store.get('preferences.startup.hideOnAppStartup')) {
+      if (!store.get('preferences.startup.hideOnAppStartup')) {
         window.on('ready-to-show', () => window.show())
       }
 

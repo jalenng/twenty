@@ -1,14 +1,15 @@
 
 const { powerMonitor } = require('electron')
 
-/* ------------------------------------------------------------------------- */
+const store = require('../../store/store')
+const { blockerSystem } = require('../systems')
+
 /* Update blockers when the power state updates */
 
 // If on battery when the app is open, add a blocker
-
 if (powerMonitor.isOnBatteryPower()) {
-  if (global.store.get('preferences.blockers.blockOnBattery')) {
-    global.systems.blocker.add({
+  if (store.get('preferences.blockers.blockOnBattery')) {
+    blockerSystem.add({
       type: 'other',
       key: 'batteryPower',
       message: 'Your computer is running on battery power.'
@@ -18,8 +19,8 @@ if (powerMonitor.isOnBatteryPower()) {
 
 // Add a blocker if switched to battery power
 powerMonitor.on('on-battery', () => {
-  if (global.store.get('preferences.blockers.blockOnBattery')) {
-    global.systems.blocker.add({
+  if (store.get('preferences.blockers.blockOnBattery')) {
+    blockerSystem.add({
       type: 'other',
       key: 'batteryPower',
       message: 'Your computer is running on battery power.'
@@ -29,7 +30,7 @@ powerMonitor.on('on-battery', () => {
 
 // Remove the blocker if switched to AC power
 powerMonitor.on('on-ac', () => {
-  if (global.store.get('preferences.blockers.blockOnBattery')) {
-    global.systems.blocker.remove('other', 'batteryPower')
+  if (store.get('preferences.blockers.blockOnBattery')) {
+    blockerSystem.remove('other', 'batteryPower')
   }
 })

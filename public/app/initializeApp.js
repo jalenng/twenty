@@ -2,13 +2,14 @@ const { BrowserWindow, app } = require('electron')
 
 const { appPath, isMacOS, isDev } = require('../constants')
 const createWindow = require('./createWindow')
+const store = require('../store/store')
 
 require('./ipcHandlers')
 require('./theming')
 
 /** Configure login item settings */
 if (!isDev) {
-  const startAppOnLogin = global.store.get('preferences.startup.startAppOnLogin')
+  const startAppOnLogin = store.get('preferences.startup.startAppOnLogin')
   app.setLoginItemSettings({
     openAtLogin: startAppOnLogin,
     enabled: startAppOnLogin,

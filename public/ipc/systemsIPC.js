@@ -1,36 +1,38 @@
 const { ipcMain } = require('electron')
 
+const { timerSystem, breakSystem, blockerSystem } = require('../systems/systems')
+
 /* ------------------------------------------------------------------------- */
 /* System-related */
 
 // Reset the timer
 ipcMain.handle('timer-reset', () => {
-  global.systems.timer.reset()
+  timerSystem.reset()
 })
 
 // End the timer (and start the break)
 ipcMain.handle('timer-end', () => {
-  global.systems.timer.end()
+  timerSystem.end()
 })
 
 // Toggle pause/play
 ipcMain.handle('timer-toggle', () => {
-  global.systems.timer.togglePause()
+  timerSystem.togglePause()
 })
 
 // Block the timer from running
 ipcMain.handle('timer-block', () => {
-  global.systems.timer.block()
+  timerSystem.block()
 })
 
 // Get break status
 ipcMain.on('get-break-status', (event) => {
-  event.reply('receive-break-status', global.systems.break.getStatus())
+  event.reply('receive-break-status', breakSystem.getStatus())
 })
 
 // Play sound file
 ipcMain.handle('play-sound', () => {
-  global.systems.break.playSound()
+  breakSystem.playSound()
 })
 
 // Get list of open windows
@@ -40,10 +42,10 @@ ipcMain.on('get-open-windows', async (event) => {
 
 // Get timer status
 ipcMain.on('get-blockers', (event) => {
-  event.reply('receive-blockers', global.systems.blocker.getBlockers())
+  event.reply('receive-blockers', blockerSystem.getBlockers())
 })
 
 // Clear blockers
 ipcMain.handle('clear-blockers', () => {
-  global.systems.blocker.clear()
+  blockerSystem.clear()
 })

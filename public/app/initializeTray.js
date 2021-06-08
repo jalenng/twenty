@@ -3,13 +3,14 @@ const path = require('path')
 const { app, nativeTheme, nativeImage, Menu, Tray } = require('electron')
 
 const { isMacOS } = require('../constants')
+const { timerSystem } = require('../systems/systems')
 
 let appTray = null
 
 // Function to get path of icon file
 const getTrayImage = function () {
   // Calculate percentage
-  const timerStatus = global.systems.timer.getStatus()
+  const timerStatus = timerSystem.getStatus()
   const percentage = timerStatus.remainingTime / timerStatus.totalDuration * 100
   const percentageMultOfFive = Math.round(percentage / 5) * 5
 

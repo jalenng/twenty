@@ -3,22 +3,21 @@
  * @author jalenng
  */
 
-/*
-Preferences
-  - notifications
-    * enableSound (boolean)
-    * interval (number)
-    * sound (string)
-  - blockers
-    * apps (array of strings)
-    * blockOnBattery (boolean)
-  - startup
-    * startAppOnLogin (boolean)
-    * startTimerOnAppStartup (boolean)
-    * hideOnAppStartup (boolean)
-  - appearance
-    * theme (string)
-    * alwaysOnTop (boolean)
+/* Preferences
+    - notifications
+      * enableSound (boolean)
+      * interval (number)
+      * sound (string)
+    - blockers
+      * apps (array of strings)
+      * blockOnBattery (boolean)
+    - startup
+      * startAppOnLogin (boolean)
+      * startTimerOnAppStartup (boolean)
+      * hideOnAppStartup (boolean)
+    - appearance
+      * theme (string)
+      * alwaysOnTop (boolean)
 */
 const preferencesSchema = {
   type: 'object',
@@ -104,8 +103,7 @@ const preferencesSchema = {
   additionalProperties: false
 }
 
-/*
-Sounds
+/* Sounds
     - defaultSounds (array of objects, each with properties 'key' and 'text')
     - customSounds (array of objects, each with properties 'key' and 'text')
 */
@@ -177,8 +175,8 @@ const soundsSchema = {
   additionalProperties: false
 }
 
-/*
-App names (key-value set where the keys are paths to executables and the values are the friendly names)
+/* App names
+   (Key-value set where the keys are paths to executables and the values are the friendly names)
 */
 const appNamesSchema = {
   type: 'object',
@@ -186,23 +184,19 @@ const appNamesSchema = {
   additionalProperties: { type: 'string' }
 }
 
-/*
-Reset flag (boolean)
-*/
+/* Reset flag (boolean) */
 const resetFlagSchema = {
   type: 'boolean',
   default: false
 }
 
-/*
-Tutorial flag (boolean)
-*/
+/* Tutorial flag (boolean) */
 const tutorialFlagSchema = {
   type: 'boolean',
   default: false
 }
 
-/* Exports */
+/* Export the schema */
 module.exports = {
   preferences: preferencesSchema,
   sounds: soundsSchema,
