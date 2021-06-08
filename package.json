@@ -83,8 +83,7 @@
     "build": "npm run react-build && npm run electron-build",
     "dev": "concurrently \"npm:react-start\" \"npm:electron-watch\"",
     "test": "concurrently -s first -k \"npm:react-start\" \"npm:electron-test\"",
-    "lint": "standard --fix",
-    "win-cert": "electron-builder create-self-signed-cert -p jalenng"
+    "lint": "standard --fix"
   },
   "browserslist": {
     "production": [
