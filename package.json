@@ -30,8 +30,7 @@
       "trayAssets/**/*"
     ],
     "win": {
-      "target": "nsis",
-      "publisherName": "jalenng"
+      "target": "nsis"
     },
     "mac": {
       "category": "public.app-category.healthcare-fitness"
