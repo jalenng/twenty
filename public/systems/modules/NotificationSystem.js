@@ -5,7 +5,7 @@
 
 const { screen } = require('electron')
 
-const createWindow = require('../app/createWindow')
+const createWindow = require('../../app/createWindow')
 
 /**
  * Initializes a NotificationSystem.

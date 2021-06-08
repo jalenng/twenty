@@ -4,11 +4,11 @@
  */
 
 // First, ensure single instance.
-require('./enforceInstance') // App quits if it failed to get the lock
+require('./enforceInstance') // App may quit here if it fails to acquire the lock
 
-// Initialize the stores and systems
+// Next, set up the underlying logic by initializing the stores and systems
 require('./store/initializeStore')
-require('./systems/initializeSystems')
+require('./systems/setupSystems')
 
-// Initialize the app and its windows
+// Finally, initialize the Electron app and its windows
 require('./app/initializeApp')

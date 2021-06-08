@@ -180,7 +180,7 @@ export default class extends React.Component {
             <DefaultButton
               text={`Reset ${appInfo.name}`}
               iconProps={{ iconName: 'Refresh' }}
-              onClick={this.handleReset}
+              onClick={this.handleResetBtn}
             />
           </Stack>
 

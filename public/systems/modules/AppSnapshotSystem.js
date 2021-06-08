@@ -9,7 +9,7 @@
 const PowerShell = require('node-powershell')
 const EventEmitter = require('./EventEmitter')
 
-const { isWindows, appFilePath } = require('../constants.js')
+const { isWindows, appFilePath } = require('../../constants.js')
 
 const APP_SNAPSHOT_INTERVAL = 5000
 const POWERSHELL_GET_PROCESS_COMMAND =
