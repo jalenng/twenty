@@ -10,6 +10,7 @@ const NotificationSystem = require('./modules/NotificationSystem')
 const AppSnapshotSystem = require('./modules/AppSnapshotSystem')
 const BlockerSystem = require('./modules/BlockerSystem')
 
+const { sendToAllWindows } = require('../app/windowManager')
 const store = require('../store/store')
 
 const timerSystem = new TimerSystem()
@@ -48,6 +49,11 @@ blockerSystem.on('blocker-detected', () => timerSystem.block())
 
 // Unblock the timer when all blockers are cleared
 blockerSystem.on('blockers-cleared', () => timerSystem.unblock())
+
+//
+timerSystem.on('timer-update', (timerStatus) => { sendToAllWindows('receive-timer-status', timerStatus) })
+
+breakSystem.on('break-update', (breakStatus) => { sendToAllWindows('receive-break-status', breakStatus) })
 
 /** If timer has stopped and the notification interval updates, update the timer with the new value. */
 store.onDidChange('preferences.notifications.interval', () => {

@@ -105,6 +105,8 @@ module.exports = class BreakSystem extends EventEmitter {
       // Call break-intermediate listeners after POPUP_NOTIF_DURATION
       this.emit('break-intermediate')
     }, POPUP_NOTIF_DURATION)
+
+    this.resetSendingInterval()
   }
 
   /**
@@ -135,5 +137,18 @@ module.exports = class BreakSystem extends EventEmitter {
       ? soundKey
       : path.join(defaultSoundsPath, soundKey)
     soundPlayer.play(fullFilepath, volume)
+  }
+
+  /**
+   * Resets the interval for sending break countdown updates
+   */
+  resetSendingInterval () {
+    this.emit('break-update', callback => callback(this.getStatus()))
+
+    clearInterval(this.sendingInterval)
+
+    this.sendingInterval = setInterval(() => {
+      this.emit('break-update', callback => callback(this.getStatus()))
+    }, 1000)
   }
 }
