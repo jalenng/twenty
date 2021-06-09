@@ -82,4 +82,4 @@ const menu = Menu.buildFromTemplate([
   }
 ])
 
-Menu.setApplicationMenu(menu)
+module.exports = { menu }

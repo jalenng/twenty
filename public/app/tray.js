@@ -2,14 +2,21 @@ const path = require('path')
 
 const { app, nativeTheme, nativeImage, Menu, Tray } = require('electron')
 
-const { isMacOS } = require('../constants')
+const { appName, isMacOS } = require('../constants')
 const { timerSystem } = require('../systems/systems')
 const { getMainWindow } = require('./windowManager')
 
-let appTray = null
+const contextMenu = Menu.buildFromTemplate([
+  { label: appName, enabled: false },
+  { type: 'separator' },
+  { label: 'Quit', click: app.exit }
+])
 
-// Function to get path of icon file
-const getTrayImage = function () {
+/**
+ * Determines the path of the tray icon image based on the OS and timer status.
+ * @returns {String} the path of the image file to use
+ */
+function getTrayImage () {
   // Calculate percentage
   const timerStatus = timerSystem.getStatus()
   const percentage = timerStatus.remainingTime / timerStatus.totalDuration * 100
@@ -30,21 +37,22 @@ const getTrayImage = function () {
   return image
 }
 
-const contextMenu = Menu.buildFromTemplate([
-  { label: app.getName(), enabled: false },
-  { type: 'separator' },
-  { label: 'Quit', click: app.exit }
-])
+function createTray () {
+  const tray = new Tray(getTrayImage())
+  tray.setToolTip(appName)
+  tray.setContextMenu(contextMenu)
+  tray.on('click', () => {
+    getMainWindow().show()
+    getMainWindow().focus()
+  })
 
-appTray = new Tray(getTrayImage())
-appTray.setToolTip(app.getName())
-appTray.setContextMenu(contextMenu)
-appTray.on('click', () => {
-  getMainWindow().show()
-  getMainWindow().focus()
-})
+  // Update system tray icon on an interval
+  setInterval(() => {
+    tray.setImage(getTrayImage())
+  }, 5000)
+}
 
-// Update system tray icon on an interval
-setInterval(() => {
-  appTray.setImage(getTrayImage())
-}, 5000)
+/** Export tray reference and function to create tray */
+module.exports = {
+  createTray: createTray
+}

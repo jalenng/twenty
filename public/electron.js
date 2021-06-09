@@ -11,6 +11,7 @@ require('./store/store')
 require('./systems/systems')
 
 // Then, set up the IPC functions to allow the main process to communicate with the renderer window
+require('./ipc/appIPC')
 require('./ipc/storeIPC')
 require('./ipc/systemsIPC')
 
