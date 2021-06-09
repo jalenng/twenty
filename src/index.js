@@ -51,7 +51,7 @@ function PreferencesWindow (props) {
 
 function FullscreenNotificationWindow (props) {
   return (
-    <Container noBorder noTitleBar>
+    <Container noBorder noTitleBar useSecondaryBackgroundColor>
       <FullscreenNotification />
     </Container>
   )

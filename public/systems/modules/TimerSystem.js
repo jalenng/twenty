@@ -193,8 +193,7 @@ module.exports = class TimerSystem extends EventEmitter {
    */
   reset () {
     this.totalDuration = store.get('preferences.notifications.interval') * 60000
-
-    if (this.getState() === states.RUNNING) this.setup()
+    this.setup()
   }
 
   /**

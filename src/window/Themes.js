@@ -29,7 +29,8 @@ module.exports = {
       black: '#f8f8f8',
       white: '#1b1a19'
     },
-    background: '#222222'
+    background: '#222222',
+    secondaryBackground: '#000000'
   },
   light: {
     palette: {
@@ -56,6 +57,7 @@ module.exports = {
       black: '#000000',
       white: '#ffffff'
     },
-    background: '#ffffff'
+    background: '#ffffff',
+    secondaryBackground: '#ffffff'
   }
 }

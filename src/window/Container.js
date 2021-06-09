@@ -49,7 +49,7 @@ export default class extends React.Component {
         <div
           id='container'
           style={{
-            background: theme.background,
+            background: this.props.useSecondaryBackgroundColor ? theme.secondaryBackground : theme.background,
             width: width,
             height: height,
             border: noBorder ? '0px' : `1px solid ${theme.palette.neutralLight}`,
