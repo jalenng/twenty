@@ -1,6 +1,7 @@
 const { nativeTheme } = require('electron')
 
 const store = require('../store/store')
+const { getMainWindow, getPrefsWindow } = require('./windowManager')
 
 /** Theming */
 
@@ -11,11 +12,11 @@ nativeTheme.themeSource = store.get('preferences.appearance.theme')
 nativeTheme.on('updated', () => {
   const themeName = nativeTheme.shouldUseDarkColors ? 'dark' : 'light'
 
-  if (global.mainWindow && !global.mainWindow.isDestroyed()) {
-    global.mainWindow.webContents.send('theme-updated', themeName)
+  if (getMainWindow() && !getMainWindow().isDestroyed()) {
+    getMainWindow().webContents.send('theme-updated', themeName)
   }
 
-  if (global.prefsWindow && !global.prefsWindow.isDestroyed()) {
-    global.prefsWindow.webContents.send('theme-updated', themeName)
+  if (getPrefsWindow() && !getPrefsWindow().isDestroyed()) {
+    getPrefsWindow().webContents.send('theme-updated', themeName)
   }
 })

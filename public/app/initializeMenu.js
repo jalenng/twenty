@@ -18,6 +18,7 @@ const { Menu } = require('electron')
 
 const { timerSystem } = require('../systems/systems')
 const createWindow = require('./createWindow')
+const { setPrefsWindow, getPrefsWindow } = require('./windowManager')
 
 const { isDev } = require('../constants')
 
@@ -29,11 +30,11 @@ const menu = Menu.buildFromTemplate([
         label: 'Preferences',
         accelerator: 'CmdOrCtrl+,',
         click: () => {
-          if (!global.prefsWindow || global.prefsWindow.isDestroyed()) {
-            global.prefsWindow = createWindow('preferences', 'preferences')
+          if (!getPrefsWindow() || getPrefsWindow().isDestroyed()) {
+            setPrefsWindow(createWindow('preferences', 'preferences'))
           } else {
-            global.prefsWindow.restore()
-            global.prefsWindow.focus()
+            getPrefsWindow().restore()
+            getPrefsWindow().focus()
           }
         }
       },

@@ -1,6 +1,7 @@
 const { BrowserWindow, app } = require('electron')
 
 const { appPath, isMacOS, isDev } = require('../constants')
+const { setMainWindow } = require('./windowManager')
 const createWindow = require('./createWindow')
 const store = require('../store/store')
 
@@ -22,12 +23,12 @@ app.whenReady().then(() => {
   app.setAppUserModelId(process.execPath)
 
   // Create main window
-  global.mainWindow = createWindow('main')
+  setMainWindow(createWindow('main'))
 
   // macOS: Recreate a window if none are open but the dock icon is activated
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {
-      global.mainWindow = createWindow('main')
+      setMainWindow(createWindow('main'))
     }
   })
 

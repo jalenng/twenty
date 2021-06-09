@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron')
 
-const { timerSystem, breakSystem, blockerSystem } = require('../systems/systems')
+const { timerSystem, breakSystem, blockerSystem, appSnapshotSystem } = require('../systems/systems')
 
 /* ------------------------------------------------------------------------- */
 /* System-related */
@@ -37,7 +37,7 @@ ipcMain.handle('play-sound', () => {
 
 // Get list of open windows
 ipcMain.on('get-open-windows', async (event) => {
-  event.returnValue = global.systems.appSnapshot.getLastSnapshot()
+  event.returnValue = appSnapshotSystem.getLastSnapshot()
 })
 
 // Get timer status

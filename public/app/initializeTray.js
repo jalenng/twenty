@@ -4,6 +4,7 @@ const { app, nativeTheme, nativeImage, Menu, Tray } = require('electron')
 
 const { isMacOS } = require('../constants')
 const { timerSystem } = require('../systems/systems')
+const { getMainWindow } = require('./windowManager')
 
 let appTray = null
 
@@ -39,8 +40,8 @@ appTray = new Tray(getTrayImage())
 appTray.setToolTip(app.getName())
 appTray.setContextMenu(contextMenu)
 appTray.on('click', () => {
-  global.mainWindow.show()
-  global.mainWindow.focus()
+  getMainWindow().show()
+  getMainWindow().focus()
 })
 
 // Update system tray icon on an interval

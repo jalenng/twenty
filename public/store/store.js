@@ -7,6 +7,7 @@ const { nativeTheme, app } = require('electron')
 const Store = require('electron-store')
 
 const storeSchema = require('./storeSchema')
+const { getMainWindow, sendToAllWindows } = require('../app/windowManager')
 
 /** Initialize the store and reset if necessary */
 
@@ -30,29 +31,18 @@ store.onDidChange('preferences.startup.startAppOnLogin', (newVal, oldVal) => {
 
 // Configure the main BrowserWindow's alwaysOnTop property when its corresponding preference option changes
 store.onDidChange('preferences.appearance.alwaysOnTop', (newVal, oldVal) => {
-  global.mainWindow.setAlwaysOnTop(newVal)
+  getMainWindow().setAlwaysOnTop(newVal)
 })
 
 // Notify the preferences window and main window when any preference changes
 store.onDidChange('preferences', () => {
-  if (global.mainWindow && !global.mainWindow.isDestroyed()) {
-    global.mainWindow.webContents.send('store-changed', 'preferences')
-  }
+  sendToAllWindows('store-changed', 'preferences')
 
-  if (global.prefsWindow && !global.prefsWindow.isDestroyed()) {
-    global.prefsWindow.webContents.send('store-changed', 'preferences')
-  }
 })
 
 // Notify the preferences and main window when there is an update to the list of sounds
 store.onDidChange('sounds', () => {
-  if (global.mainWindow && !global.mainWindow.isDestroyed()) {
-    global.mainWindow.webContents.send('store-changed', 'sounds')
-  }
-
-  if (global.prefsWindow && !global.prefsWindow.isDestroyed()) {
-    global.prefsWindow.webContents.send('store-changed', 'sounds')
-  }
+  sendToAllWindows('store-changed', 'sounds')
 })
 
 // Update the Electron nativeTheme's themeSource property when its corresponding preference changes

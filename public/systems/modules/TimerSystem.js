@@ -43,6 +43,7 @@
 
 const EventEmitter = require('./EventEmitter')
 const store = require('../../store/store')
+const { sendToAllWindows } = require('../../app/windowManager')
 
 /** Timer states */
 const states = {
@@ -179,10 +180,10 @@ module.exports = class TimerSystem extends EventEmitter {
   resetSendingInterval () {
     clearInterval(this.sendingInterval)
 
-    if (global.mainWindow && !global.mainWindow.isDestroyed()) { global.mainWindow.webContents.send('receive-timer-status', this.getStatus()) }
+    sendToAllWindows('receive-timer-status', this.getStatus())
 
     this.sendingInterval = setInterval(() => {
-      if (global.mainWindow && !global.mainWindow.isDestroyed()) { global.mainWindow.webContents.send('receive-timer-status', this.getStatus()) }
+      sendToAllWindows('receive-timer-status', this.getStatus())
     }, 1000)
   }
 
