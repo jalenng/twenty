@@ -19,6 +19,21 @@ import {
 
 import { StackProps } from '../../SharedProps'
 
+const sliderSubtextOptions = {
+  5: '👁️ Taking your eye-care game to a whole new level, hun?',
+  10: '👁️ Taking your eye-care game to a whole new level, hun?',
+  15: '😊 Close adherence to the 20-20-20 rule.',
+  20: '😊 Perfect adherence to the 20-20-20 rule.',
+  25: '😊 When 20 minutes is slightly too short.',
+  30: '😊 Two breaks an hour—nice.',
+  35: '⚖️ A good balance between preventing eye strain and maintaining focus.',
+  40: '⚖️ A good balance between preventing eye strain and maintaining focus.',
+  45: '⚖️ A good balance between preventing eye strain and maintaining focus.',
+  50: '🧠 Provides adequate time for staying in the zone with less-frequent reminders.',
+  55: '🧠 Provides adequate time for staying in the zone with less-frequent reminders.',
+  60: '🧠 Provides adequate time for staying in the zone with less-frequent reminders.'
+}
+
 export default class extends React.Component {
   constructor (props) {
     super(props)
@@ -78,6 +93,8 @@ export default class extends React.Component {
         .concat(customSoundsHeader)
         .concat(customSounds)
 
+    const sliderSubtext = sliderSubtextOptions[this.state.notifications.interval]
+
     return (
 
       <Stack id='notifications' {...StackProps.level1}>
@@ -95,6 +112,8 @@ export default class extends React.Component {
             value={this.state.notifications.interval}
             onChange={number => store.preferences.set('notifications.interval', number)}
           />
+
+          <Text variant='medium' block>{sliderSubtext}</Text>
         </Stack>
 
         <Stack {...StackProps.level2}>

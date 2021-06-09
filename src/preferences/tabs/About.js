@@ -8,9 +8,10 @@
 import React from 'react'
 
 import {
-  DefaultButton, ActionButton,
+  DefaultButton, PrimaryButton, ActionButton,
   Image, ImageFit,
   Stack,
+  Dialog, DialogFooter, DialogType,
   Text
 } from '@fluentui/react'
 
@@ -28,15 +29,24 @@ export default class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      licenseExpanded: false
+      licenseExpanded: false,
+      resetDialogVisible: false
     }
     this.handleToggleLicenseExpandBtn = this.handleToggleLicenseExpandBtn.bind(this)
+    this.handleToggleResetDialogBtn = this.handleToggleResetDialogBtn.bind(this)
   }
 
   handleToggleLicenseExpandBtn () {
     this.setState({
       ...this.state,
       licenseExpanded: !this.state.licenseExpanded
+    })
+  }
+
+  handleToggleResetDialogBtn () {
+    this.setState({
+      ...this.state,
+      resetDialogVisible: !this.state.resetDialogVisible
     })
   }
 
@@ -166,7 +176,7 @@ export default class extends React.Component {
                 : { iconName: 'Sell' }
             }
             text={this.state.licenseExpanded ? 'Show less' : 'Show more'}
-            onClick={this.handleToggleLicenseExpandBtn}
+            onClick={this.handleToggleResetDialogBtn}
           />
 
         </Stack>
@@ -180,11 +190,25 @@ export default class extends React.Component {
             <DefaultButton
               text={`Reset ${appInfo.name}`}
               iconProps={{ iconName: 'Refresh' }}
-              onClick={this.handleResetBtn}
+              onClick={this.handleToggleResetDialogBtn}
             />
           </Stack>
 
         </Stack>
+
+        <Dialog
+          hidden={!this.state.resetDialogVisible}
+          dialogContentProps={{
+            type: DialogType.largeHeader,
+            title: `Reset ${appInfo.name}?`,
+            subText: `${appInfo.name} will restart, and your preferences will revert to its defaults.`
+          }}
+        >
+          <DialogFooter>
+            <DefaultButton onClick={this.handleResetBtn} text='Yes' />
+            <PrimaryButton onClick={this.handleToggleResetDialogBtn} text='No' />
+          </DialogFooter>
+        </Dialog>
 
       </Stack>
     )

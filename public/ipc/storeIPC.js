@@ -52,21 +52,9 @@ ipcMain.on('get-store', (event, key) => { event.returnValue = store.get(key) })
 
 // Show a dialog to confirm resetting the app
 ipcMain.handle('reset-store', () => {
-  const appName = app.getName()
-  dialog.showMessageBox(null, {
-    title: `Reset ${appName}`,
-    type: 'question',
-    message: `Reset ${appName}?`,
-    detail: `${appName} will restart, and your preferences will revert to its defaults.`,
-    buttons: ['Yes', 'No']
-  })
-    .then(result => {
-      if (result.response === 0) {
-        store.set('resetFlag', true)
-        app.relaunch()
-        app.exit()
-      }
-    })
+  store.set('resetFlag', true)
+  app.relaunch()
+  app.exit()
 })
 
 // Update a value in the store

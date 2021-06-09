@@ -122,7 +122,7 @@ export default class extends React.Component {
             <Text variant='xLarge' block> App blockers </Text>
 
             <Text variant='medium' block>
-              Apps in this list will block the timer from running.
+              Apps in this list that are open will block the timer from running.
             </Text>
 
             {/* Add app blockers */}
