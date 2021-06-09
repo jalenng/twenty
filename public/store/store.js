@@ -11,7 +11,7 @@ const Store = require('electron-store')
 
 const { defaultSoundsPath } = require('../constants')
 const storeSchema = require('./storeSchema')
-const { getMainWindow, sendToAllWindows } = require('../app/windowManager')
+const { mainWindow, sendToAllWindows } = require('../app/windowManager')
 
 /** Initialize the store and reset if necessary */
 
@@ -46,7 +46,7 @@ store.onDidChange('preferences.startup.startAppOnLogin', (newVal, oldVal) => {
 
 // Configure the main BrowserWindow's alwaysOnTop property when its corresponding preference option changes
 store.onDidChange('preferences.appearance.alwaysOnTop', (newVal, oldVal) => {
-  getMainWindow().setAlwaysOnTop(newVal)
+  mainWindow.get().setAlwaysOnTop(newVal)
 })
 
 // Notify the preferences window and main window when any preference changes

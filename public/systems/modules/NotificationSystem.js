@@ -6,12 +6,7 @@
 const { screen } = require('electron')
 
 const createWindow = require('../../app/createWindow')
-const {
-  getFullscreenWindows,
-  getPopupWindows,
-  setFullscreenWindows,
-  setPopupWindows
-} = require('../../app/windowManager')
+const { fullscreenOverlays, popupOverlays } = require('../../app/windowManager')
 
 /**
  * Initializes a NotificationSystem.
@@ -26,36 +21,36 @@ class NotificationSystem {
     const displays = screen.getAllDisplays()
 
     const fullscreenWindows = displays.map(this.createFullscreenWindow.bind(this))
-    setFullscreenWindows(fullscreenWindows)
+    fullscreenOverlays.set(fullscreenWindows)
 
     const popupWindows = displays.map(this.createPopupWindow.bind(this))
-    setPopupWindows(popupWindows)
+    popupOverlays.set(popupWindows)
   }
 
   /**
    * Closes all the notification windows
    */
   closeWindows () {
-    getFullscreenWindows().forEach(this.closeNotificationWindow)
-    getPopupWindows().forEach(this.closeNotificationWindow)
-    this.fullscreenWindows = []
-    this.popupWindows = []
+    fullscreenOverlays.get().forEach(this.closeNotificationWindow)
+    popupOverlays.get().forEach(this.closeNotificationWindow)
+    fullscreenOverlays.set([])
+    popupOverlays.set([])
   }
 
   /**
    * Show the fullscreen windows and hide the popup windows
    */
   maximize () {
-    getFullscreenWindows().forEach(window => window.show())
-    getPopupWindows().forEach(window => window.hide())
+    fullscreenOverlays.get().forEach(window => window.show())
+    popupOverlays.get().forEach(window => window.hide())
   }
 
   /**
    * Hide the fullscreen window and show the popup windows
    */
   minimize () {
-    getFullscreenWindows().forEach(window => window.hide())
-    getPopupWindows().forEach(window => window.show())
+    fullscreenOverlays.get().forEach(window => window.hide())
+    popupOverlays.get().forEach(window => window.show())
   }
 
   /**

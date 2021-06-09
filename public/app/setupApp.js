@@ -1,7 +1,12 @@
+/**
+ * @file Initializes the Electron app.
+ * @author jalenng
+ */
+
 const { BrowserWindow, Menu, app } = require('electron')
 
 const { appPath, isMacOS, isDev } = require('../constants')
-const { setMainWindow } = require('./windowManager')
+const { mainWindow } = require('./windowManager')
 const createWindow = require('./createWindow')
 const store = require('../store/store')
 
@@ -9,7 +14,7 @@ const { createTray } = require('./tray')
 const { menu } = require('./menu')
 require('./theming')
 
-/** Configure login item settings */
+/** isDev: Do not configure login item settings */
 if (!isDev) {
   const startAppOnLogin = store.get('preferences.startup.startAppOnLogin')
   app.setLoginItemSettings({
@@ -21,12 +26,12 @@ if (!isDev) {
 
 /** Configure app event handlers */
 app.whenReady().then(() => {
-  setMainWindow(createWindow('main')) // Create main window
+  mainWindow.set(createWindow('main')) // Create main window
 
   // macOS: Recreate a window if none are open but the dock icon is activated
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {
-      setMainWindow(createWindow('main'))
+      mainWindow.set(createWindow('main'))
     }
   })
 

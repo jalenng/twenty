@@ -1,3 +1,8 @@
+/**
+ * @file Handles the theming for the app.
+ * @author jalenng
+ */
+
 const { nativeTheme } = require('electron')
 
 const store = require('../store/store')

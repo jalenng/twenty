@@ -8,7 +8,7 @@ const path = require('path')
 
 const { isDev, isWindows, appName } = require('../constants')
 const store = require('../store/store')
-const { getMainWindow } = require('./windowManager')
+const { mainWindow } = require('./windowManager')
 
 const windowStateKeeper = require('electron-window-state')
 
@@ -110,7 +110,7 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
       // Handle the close button action by having window hide
       window.on('close', (e) => {
         e.preventDefault()
-        getMainWindow().hide()
+        mainWindow.get().hide()
       })
 
       // If not configured to hide the app on app startup, show window when ready

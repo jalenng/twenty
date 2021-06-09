@@ -1,3 +1,8 @@
+/**
+ * @file Contains IPC handlers related to the underlying systems.
+ * @author jalenng
+ */
+
 const { ipcMain } = require('electron')
 
 const { timerSystem, breakSystem, blockerSystem, appSnapshotSystem } = require('../systems/systems')

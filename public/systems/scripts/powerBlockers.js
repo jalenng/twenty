@@ -1,3 +1,7 @@
+/**
+ * @file Enables blockers to be updated based on the power state of the system.
+ * @author jalenng
+ */
 
 const { powerMonitor } = require('electron')
 

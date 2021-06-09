@@ -1,17 +1,40 @@
+/**
+ * @file Holds the references for the application's windows.
+ * @author jalenng
+ */
+
 let mainWindow
 let prefsWindow
 
-let fullscreenWindows = []
-let popupWindows = []
+let fullscreenOverlays = []
+let popupOverlays = []
 
+/**
+ * Retrieves all the app's windows
+ * @returns {Electron.BrowserWindow[]}
+ */
 function getAllWindows () {
-  return [mainWindow, prefsWindow, ...fullscreenWindows, ...popupWindows]
+  return [mainWindow, prefsWindow, ...fullscreenOverlays, ...popupOverlays]
 }
 
+/**
+ * Checks whether a window is viable for referencing and manipulating
+ * @param {Electron.BrowserWindow} window
+ * @returns {Boolean} true if the window has not been destroyed and is not null; false otherwise
+ */
+function windowStillExists (window) {
+  return window && !window.isDestroyed()
+}
+
+/**
+ * Sends an IPC message to all the windows
+ * @param {String} channel
+ * @param {*} message
+ */
 function sendToAllWindows (channel, message) {
   const allWindows = getAllWindows()
   for (const window of allWindows) {
-    if (window && !window.isDestroyed()) {
+    if (windowStillExists(window)) {
       window.webContents.send(channel, message)
     }
   }
@@ -20,17 +43,25 @@ function sendToAllWindows (channel, message) {
 /** Exports */
 module.exports = {
 
-  getMainWindow: () => mainWindow,
-  getPrefsWindow: () => prefsWindow,
+  mainWindow: {
+    get: () => mainWindow,
+    set: (window) => { mainWindow = window }
+  },
 
-  getFullscreenWindows: () => fullscreenWindows,
-  getPopupWindows: () => popupWindows,
+  prefsWindow: {
+    get: () => prefsWindow,
+    set: (window) => { prefsWindow = window }
+  },
 
-  setFullscreenWindows: (windows) => { fullscreenWindows = windows },
-  setPopupWindows: (windows) => { popupWindows = windows },
+  fullscreenOverlays: {
+    get: () => fullscreenOverlays,
+    set: (windows) => { fullscreenOverlays = windows }
+  },
 
-  setMainWindow: (window) => { mainWindow = window },
-  setPrefsWindow: (window) => { prefsWindow = window },
+  popupOverlays: {
+    get: () => popupOverlays,
+    set: (windows) => { popupOverlays = windows }
+  },
 
   sendToAllWindows: sendToAllWindows
 

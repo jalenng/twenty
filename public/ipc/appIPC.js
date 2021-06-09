@@ -1,5 +1,5 @@
 /**
- * @file Contains all the main process's IPC handlers.
+ * @file Contains IPC handlers related to the app itself.
  * @author jalenng
  */
 
@@ -7,7 +7,7 @@ const { BrowserWindow, ipcMain, app, nativeTheme } = require('electron')
 
 const { isDev } = require('../constants')
 const createWindow = require('../app/createWindow')
-const { getPrefsWindow, setPrefsWindow } = require('../app/windowManager')
+const { prefsWindow } = require('../app/windowManager')
 
 /* ------------------------------------------------------------------------- */
 /* Main */
@@ -24,11 +24,11 @@ ipcMain.handle('log-to-main', (event, content) => {
 
 // Open preferences
 ipcMain.handle('open-preferences', () => {
-  if (!getPrefsWindow() || getPrefsWindow().isDestroyed()) {
-    setPrefsWindow(createWindow('preferences', 'preferences'))
+  if (!prefsWindow.get() || prefsWindow.get().isDestroyed()) {
+    prefsWindow.set(createWindow('preferences', 'preferences'))
   } else {
-    getPrefsWindow().restore()
-    getPrefsWindow().focus()
+    prefsWindow.get().restore()
+    prefsWindow.get().focus()
   }
 })
 

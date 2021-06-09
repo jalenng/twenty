@@ -1,10 +1,15 @@
+/**
+ * @file Holds the functions needed to set up the app's system tray menu and icon.
+ * @author jalenng
+ */
+
 const path = require('path')
 
 const { app, nativeTheme, nativeImage, Menu, Tray } = require('electron')
 
 const { appName, isMacOS } = require('../constants')
 const { timerSystem } = require('../systems/systems')
-const { getMainWindow } = require('./windowManager')
+const { mainWindow } = require('./windowManager')
 
 const contextMenu = Menu.buildFromTemplate([
   { label: appName, enabled: false },
@@ -42,8 +47,8 @@ function createTray () {
   tray.setToolTip(appName)
   tray.setContextMenu(contextMenu)
   tray.on('click', () => {
-    getMainWindow().show()
-    getMainWindow().focus()
+    mainWindow.get().show()
+    mainWindow.get().focus()
   })
 
   // Update system tray icon on an interval

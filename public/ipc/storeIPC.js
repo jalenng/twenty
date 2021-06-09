@@ -1,13 +1,18 @@
+/**
+ * @file Contains IPC handlers related to the persistent storage.
+ * @author jalenng
+ */
+
 const path = require('path')
 
 const { ipcMain, app, dialog } = require('electron')
 
 const store = require('../store/store')
-const { getPrefsWindow } = require('../app/windowManager')
+const { prefsWindow } = require('../app/windowManager')
 
 // Show a dialog to import a custom sound
 ipcMain.handle('add-custom-sound', (event) => {
-  dialog.showOpenDialog(getPrefsWindow(), {
+  dialog.showOpenDialog(prefsWindow.get(), {
     title: 'Choose custom sound',
     filters: [{
       name: 'Audio files',
