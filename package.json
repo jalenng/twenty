@@ -42,10 +42,7 @@
   "dependencies": {
     "@fluentui/react": "^8.8.0",
     "electron-is-dev": "^2.0.0",
-    "electron-log": "^4.3.5",
     "electron-store": "^7.0.2",
-    "electron-unhandled": "^3.0.2",
-    "electron-updater": "^4.3.9",
     "electron-window-state": "^5.0.3",
     "hazardous": "^0.3.0",
     "node-powershell": "^4.0.0",
