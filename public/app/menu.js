@@ -1,22 +1,26 @@
-/** Menu */
-/*
-- File
-  * Preferences (Ctrl+,)
-  * Close (Alt+F4)
-- Timer
-  * Start/Stop (Ctrl+S)
-- Dev
-  * Reload (Ctrl+R)
-  * Force Reload (Ctrl+Shift+R)
-  * Toggle Developer Tools (Ctrl+Shift+I)
-  * Start break (Ctrl+E)
-- Help (F1)
-  * About
-*/
+/**
+ * @file Holds the template for the app menu.
+ * @author jalenng
+ *
+ *  - File
+ *    * Preferences (Ctrl+,)
+ *    * Close (Alt+F4)
+ *  - Timer
+ *    * Start/Stop (Ctrl+S)
+ *  - Dev
+ *    * Reload (Ctrl+R)
+ *    * Force Reload (Ctrl+Shift+R)
+ *    * Toggle Developer Tools (Ctrl+Shift+I)
+ *    * Start break (Ctrl+E)
+ *  - Help (F1)
+ *    * About
+ */
 
 const { Menu } = require('electron')
 
+const { timerSystem } = require('../systems/systems')
 const createWindow = require('./createWindow')
+const { prefsWindow } = require('./windowManager')
 
 const { isDev } = require('../constants')
 
@@ -28,11 +32,11 @@ const menu = Menu.buildFromTemplate([
         label: 'Preferences',
         accelerator: 'CmdOrCtrl+,',
         click: () => {
-          if (!global.prefsWindow || global.prefsWindow.isDestroyed()) {
-            global.prefsWindow = createWindow('preferences', 'preferences')
+          if (!prefsWindow.get() || prefsWindow.get().isDestroyed()) {
+            prefsWindow.set(createWindow('preferences', 'preferences'))
           } else {
-            global.prefsWindow.restore()
-            global.prefsWindow.focus()
+            prefsWindow.get().restore()
+            prefsWindow.get().focus()
           }
         }
       },
@@ -46,7 +50,7 @@ const menu = Menu.buildFromTemplate([
       {
         label: 'Start/Stop',
         accelerator: 'CmdOrCtrl+s',
-        click: () => { global.systems.timer.togglePause() }
+        click: () => { timerSystem.togglePause() }
       }
     ]
   },
@@ -61,7 +65,7 @@ const menu = Menu.buildFromTemplate([
           {
             label: 'Test break',
             accelerator: 'CmdOrCtrl+e',
-            click: () => { global.systems.timer.end() }
+            click: () => { timerSystem.end() }
           }
         ]
       }]
@@ -80,4 +84,4 @@ const menu = Menu.buildFromTemplate([
   }
 ])
 
-Menu.setApplicationMenu(menu)
+module.exports = { menu }

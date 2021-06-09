@@ -3,10 +3,12 @@
  * @author jalenng
  */
 
-const { BrowserWindow, screen, app, Menu } = require('electron')
+const { BrowserWindow, screen } = require('electron')
 const path = require('path')
 
 const { isDev, isWindows, appName } = require('../constants')
+const store = require('../store/store')
+const { mainWindow } = require('./windowManager')
 
 const windowStateKeeper = require('electron-window-state')
 
@@ -70,7 +72,7 @@ const POPUP_OPTIONS = {
  *                      Effective only if display is provided. Optional.
  * @returns a BrowserWindow object of the newly created window
  */
-module.exports = function createWindow (type, destination = '', display = null, isPopup = false) {
+function createWindow (type, destination = '', display = null, isPopup = false) {
   // Initialize window
   const window = new BrowserWindow({
     ...SHARED_OPTIONS,
@@ -88,35 +90,33 @@ module.exports = function createWindow (type, destination = '', display = null, 
 
   switch (type) {
     case 'main':
-      // Window state keeper for main window
-      mainWindowState = windowStateKeeper({})
 
       // Update and remember the position of the main window
+      mainWindowState = windowStateKeeper({})
+
       if (mainWindowState.x && mainWindowState.y) {
         window.setPosition(mainWindowState.x, mainWindowState.y)
       }
       mainWindowState.manage(window)
 
       // Make the main window always on top if its corresponding preference is enabled
-      window.setAlwaysOnTop(global.store.get('preferences.appearance.alwaysOnTop'))
+      window.setAlwaysOnTop(store.get('preferences.appearance.alwaysOnTop'))
 
       // Update the alwaysOnTop preference when the main window's alwaysOnTop property changes
       window.on('always-on-top-changed', (event, isAlwaysOnTop) => {
-        global.store.set('preferences.appearance.alwaysOnTop', isAlwaysOnTop)
+        store.set('preferences.appearance.alwaysOnTop', isAlwaysOnTop)
       })
 
-      // Handle the close button action
+      // Handle the close button action by having window hide
       window.on('close', (e) => {
-        if (isDev) {
-          app.exit() // Just exit the app if isDev
-        } else {
-          e.preventDefault() // Otherwise, just hide to tray
-          global.mainWindow.hide()
-        }
+        e.preventDefault()
+        mainWindow.get().hide()
       })
 
       // If not configured to hide the app on app startup, show window when ready
-      if (!global.store.get('preferences.startup.hideOnAppStartup')) { window.on('ready-to-show', () => window.show()) }
+      if (!store.get('preferences.startup.hideOnAppStartup')) {
+        window.on('ready-to-show', () => window.show())
+      }
 
       break
 
@@ -170,13 +170,6 @@ module.exports = function createWindow (type, destination = '', display = null, 
     window.setBounds({ ...position, ...size })
   }
 
-  window.on('system-context-menu', (event, point) => {
-    event.preventDefault()
-    Menu.buildFromTemplate([
-      { role: 'close' }
-    ]).popup()
-  })
-
   // On macOS, make it visible across all workspaces
   window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
 
@@ -185,3 +178,5 @@ module.exports = function createWindow (type, destination = '', display = null, 
 
   return window
 }
+
+module.exports = createWindow

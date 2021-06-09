@@ -12,7 +12,6 @@ import './css/index.css'
 import { UnselectableTextStyle } from './SharedStyles'
 
 import Container from './window/Container'
-import TitleBar from './window/TitleBar'
 
 import TutorialProvider from './mainWindow/tutorial/TutorialProvider'
 
@@ -52,7 +51,7 @@ function PreferencesWindow (props) {
 
 function FullscreenNotificationWindow (props) {
   return (
-    <Container noBorder noTitleBar>
+    <Container noBorder noTitleBar useSecondaryBackgroundColor>
       <FullscreenNotification />
     </Container>
   )

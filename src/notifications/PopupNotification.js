@@ -27,22 +27,23 @@ export default class extends React.Component {
     this.state = {
       remainingTimeString: ''
     }
-
-    breakSys.eventSystem.on('update', (event, breakStatus) => {
-      const milliseconds = breakStatus.remainingTime
-      const seconds = Math.floor((milliseconds % 60000) / 1000)
-
-      const remainingTimeString = seconds === 1 ? `${seconds} more second` : `${seconds} more seconds`
-
-      this.setState({
-        remainingTimeString: remainingTimeString
-      })
-    })
+    this.updateState = this.updateState.bind(this)
   }
 
   componentDidMount () {
-    breakSys.getStatus()
-    setInterval(breakSys.getStatus, 100)
+    // Register listener that listens to break status updates
+    breakSys.eventSystem.on('update', (event, status) => this.updateState(status))
+  }
+
+  updateState (status) {
+    const milliseconds = status.remainingTime
+    const seconds = Math.floor((milliseconds % 60000) / 1000)
+
+    const remainingTimeString = seconds === 1 ? `${seconds} more second` : `${seconds} more seconds`
+
+    this.setState({
+      remainingTimeString: remainingTimeString
+    })
   }
 
   render () {

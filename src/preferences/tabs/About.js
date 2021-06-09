@@ -11,8 +11,7 @@ import {
   DefaultButton, ActionButton,
   Image, ImageFit,
   Stack,
-  Text,
-  PrimaryButton
+  Text
 } from '@fluentui/react'
 
 import logo from '../../assets/icon.png'
@@ -29,48 +28,9 @@ export default class extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      testText: '',
-      isCheckingUpdates: false,
       licenseExpanded: false
     }
-    this.handleUpdatesBtn = this.handleUpdatesBtn.bind(this)
     this.handleToggleLicenseExpandBtn = this.handleToggleLicenseExpandBtn.bind(this)
-  }
-
-  handleUpdatesBtn () {
-    this.setState({
-      ...this.state,
-      isCheckingUpdates: true
-    })
-    checkUpdate()
-      .then((result) => {
-        if (result) {
-          this.setState({
-            ...this.state,
-            testText: `Downloading version ${result.version}...`
-          })
-          downloadUpdate().then(() => {
-            this.setState({
-              ...this.state,
-              testText: 'Download complete. Update will install upon app restart.',
-              isCheckingUpdates: true
-            })
-          })
-        } else {
-          this.setState({
-            ...this.state,
-            testText: 'No new versions found.',
-            isCheckingUpdates: false
-          })
-        }
-      })
-      .catch(() => {
-        this.setState({
-          ...this.state,
-          testText: 'There was an error. Please try again later.',
-          isCheckingUpdates: false
-        })
-      })
   }
 
   handleToggleLicenseExpandBtn () {
@@ -137,22 +97,6 @@ export default class extends React.Component {
             })}
 
           </Stack>
-
-        </Stack>
-
-        {/* Check for updates */}
-        <Stack {...StackProps.level2}>
-
-          <Stack {...StackProps.level2Horizontal}>
-            <PrimaryButton
-              text='Check for updates'
-              iconProps={{ iconName: 'Sync' }}
-              onClick={this.handleUpdatesBtn}
-              disabled={this.state.isCheckingUpdates}
-            />
-          </Stack>
-
-          <Text>{this.state.testText}</Text>
 
         </Stack>
 
@@ -236,7 +180,7 @@ export default class extends React.Component {
             <DefaultButton
               text={`Reset ${appInfo.name}`}
               iconProps={{ iconName: 'Refresh' }}
-              onClick={this.handleReset}
+              onClick={this.handleResetBtn}
             />
           </Stack>
 

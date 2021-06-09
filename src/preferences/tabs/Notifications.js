@@ -53,12 +53,12 @@ export default class extends React.Component {
   render () {
     const defaultSoundsHeader = [{
       key: 'defaultSoundsHeader',
-      text: 'Default',
+      text: 'Default sounds',
       itemType: DropdownMenuItemType.Header
     }]
     const customSoundsHeader = [{
       key: 'customSoundsHeader',
-      text: 'Custom',
+      text: 'Custom sounds',
       itemType: DropdownMenuItemType.Header
     }]
 

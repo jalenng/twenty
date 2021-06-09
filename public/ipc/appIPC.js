@@ -1,26 +1,16 @@
 /**
- * @file Contains all the main process's IPC handlers.
+ * @file Contains IPC handlers related to the app itself.
  * @author jalenng
  */
 
 const { BrowserWindow, ipcMain, app, nativeTheme } = require('electron')
 
 const { isDev } = require('../constants')
-const createWindow = require('./createWindow')
-const updater = require('./updater')
+const createWindow = require('../app/createWindow')
+const { prefsWindow } = require('../app/windowManager')
 
 /* ------------------------------------------------------------------------- */
 /* Main */
-
-// Check for app update
-ipcMain.handle('check-update', () => {
-  return updater.check()
-})
-
-// Download app update
-ipcMain.handle('download-update', () => {
-  return updater.download()
-})
 
 // Find out whether or not the app is running in a dev environment
 ipcMain.on('is-dev', (event) => {
@@ -34,11 +24,11 @@ ipcMain.handle('log-to-main', (event, content) => {
 
 // Open preferences
 ipcMain.handle('open-preferences', () => {
-  if (!global.prefsWindow || global.prefsWindow.isDestroyed()) {
-    global.prefsWindow = createWindow('preferences', 'preferences')
+  if (!prefsWindow.get() || prefsWindow.get().isDestroyed()) {
+    prefsWindow.set(createWindow('preferences', 'preferences'))
   } else {
-    global.prefsWindow.restore()
-    global.prefsWindow.focus()
+    prefsWindow.get().restore()
+    prefsWindow.get().focus()
   }
 })
 
@@ -76,39 +66,39 @@ ipcMain.on('get-about-info', (event) => {
       {
         number: 1,
         text:
-        'MIT License'
+         'MIT License'
       },
       {
         number: 2,
         text:
-        'Copyright © 2021 Jalen Ng'
+         'Copyright © 2021 Jalen Ng'
       },
       {
         number: 3,
         text:
-        `Permission is hereby granted, free of charge, to any person obtaining a copy
-        of this software and associated documentation files (the "Software"), to deal
-        in the Software without restriction, including without limitation the rights
-        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-        copies of the Software, and to permit persons to whom the Software is
-        furnished to do so, subject to the following conditions:`
+         `Permission is hereby granted, free of charge, to any person obtaining a copy
+         of this software and associated documentation files (the "Software"), to deal
+         in the Software without restriction, including without limitation the rights
+         to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+         copies of the Software, and to permit persons to whom the Software is
+         furnished to do so, subject to the following conditions:`
       },
       {
         number: 4,
         text:
-        `The above copyright notice and this permission notice shall be included in all
-            copies or substantial portions of the Software.`
+         `The above copyright notice and this permission notice shall be included in all
+             copies or substantial portions of the Software.`
       },
       {
         number: 5,
         text:
-        `THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-        SOFTWARE.`
+         `THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+         IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+         FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+         AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+         LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+         SOFTWARE.`
       }
     ]
   }

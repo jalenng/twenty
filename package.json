@@ -2,7 +2,7 @@
   "name": "twenty",
   "productName": "Twenty",
   "description": "Customizable timer that reminds you to take eye breaks",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "repository": "https://github.com/jalenng/twenty",
   "url": "https://github.com/jalenng/twenty#readme",
   "author": {
@@ -42,10 +42,7 @@
   "dependencies": {
     "@fluentui/react": "^8.8.0",
     "electron-is-dev": "^2.0.0",
-    "electron-log": "^4.3.5",
     "electron-store": "^7.0.2",
-    "electron-unhandled": "^3.0.2",
-    "electron-updater": "^4.3.9",
     "electron-window-state": "^5.0.3",
     "hazardous": "^0.3.0",
     "node-powershell": "^4.0.0",
@@ -83,8 +80,7 @@
     "build": "npm run react-build && npm run electron-build",
     "dev": "concurrently \"npm:react-start\" \"npm:electron-watch\"",
     "test": "concurrently -s first -k \"npm:react-start\" \"npm:electron-test\"",
-    "lint": "standard --fix",
-    "win-cert": "electron-builder create-self-signed-cert -p jalenng"
+    "lint": "standard --fix"
   },
   "browserslist": {
     "production": [

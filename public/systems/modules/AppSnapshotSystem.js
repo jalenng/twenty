@@ -9,7 +9,8 @@
 const PowerShell = require('node-powershell')
 const EventEmitter = require('./EventEmitter')
 
-const { isWindows, appFilePath } = require('../constants.js')
+const { isWindows, appFilePath } = require('../../constants.js')
+const store = require('../../store/store')
 
 const APP_SNAPSHOT_INTERVAL = 5000
 const POWERSHELL_GET_PROCESS_COMMAND =
@@ -77,9 +78,9 @@ module.exports = class AppSnapshotSystem extends EventEmitter {
         })
 
         // Update the app names dictionary
-        let appNamesDict = global.store.get('appNames')
+        let appNamesDict = store.get('appNames')
         appNamesDict = { ...appNamesDict, ...newAppNames }
-        global.store.set('appNames', appNamesDict)
+        store.set('appNames', appNamesDict)
       } catch (error) { console.log(error) }
     }
 

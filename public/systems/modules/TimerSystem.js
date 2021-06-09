@@ -42,6 +42,7 @@
  */
 
 const EventEmitter = require('./EventEmitter')
+const store = require('../../store/store')
 
 /** Timer states */
 const states = {
@@ -69,13 +70,10 @@ module.exports = class TimerSystem extends EventEmitter {
     this.endDate = new Date()
 
     // The total duration of the timer run in milliseconds
-    this.totalDuration = global.store.get('preferences.notifications.interval') * 60000
-
-    // Stores the remaining time when the timer is stopped or blocked (TODO: Depreciate this)
-    this.savedTime = this.totalDuration
+    this.totalDuration = store.get('preferences.notifications.interval') * 60000
 
     // Start timer on app startup if enabled in preferences
-    if (global.store.get('preferences.startup.startTimerOnAppStartup')) {
+    if (store.get('preferences.startup.startTimerOnAppStartup')) {
       this.start()
     }
   }
@@ -111,8 +109,17 @@ module.exports = class TimerSystem extends EventEmitter {
       endDate: this.endDate,
       totalDuration: this.totalDuration,
       remainingTime: (() => {
-        if (this.savedTime != null) return this.savedTime // Use this only if the timer is stopped or blocked
-        else return this.endDate - new Date() // Otherwise, calculate it dynamically
+        switch (this.getState()) {
+          case states.RUNNING: // If timer is running, calculate it dynamically
+            return this.endDate - new Date()
+
+          case states.IDLE: // If timer is idle, return zeroes
+            return 0
+
+          default:
+            // Else, just use total duration
+            return this.totalDuration
+        }
       })(),
       isBlocked: this.isBlocked,
       isStopped: this.isStopped,
@@ -126,15 +133,14 @@ module.exports = class TimerSystem extends EventEmitter {
   update () {
     switch (this.getState()) {
       case states.RUNNING:
-        if (this.savedTime === 0) this.reset()
-        else this.setup()
+
+        this.reset()
 
         break
 
       // End timer and begin break
       case states.IDLE:
 
-        this.savedTime = 0
         clearTimeout(this.timeout)
 
         this.emit('timer-end', callback => callback(this.totalDuration))
@@ -146,8 +152,7 @@ module.exports = class TimerSystem extends EventEmitter {
       case states.BLOCKED_AND_STOPPED:
       case states.STOPPED:
 
-        this.totalDuration = global.store.get('preferences.notifications.interval') * 60000
-        this.savedTime = this.totalDuration
+        this.totalDuration = store.get('preferences.notifications.interval') * 60000
         clearTimeout(this.timeout)
 
         break
@@ -162,26 +167,24 @@ module.exports = class TimerSystem extends EventEmitter {
   setup () {
     // Use JS timeouts to facilitate delay
     clearTimeout(this.timeout)
-    this.timeout = setTimeout(this.end.bind(this), this.savedTime)
+    this.timeout = setTimeout(this.end.bind(this), this.totalDuration)
 
     // Calculate the end date
     this.endDate = new Date()
-    const msLeft = this.endDate.getMilliseconds() + this.savedTime
+    const msLeft = this.endDate.getMilliseconds() + this.totalDuration
     this.endDate.setMilliseconds(msLeft)
-
-    this.savedTime = null
   }
 
   /**
    * Resets the interval for sending timer updates
    */
   resetSendingInterval () {
+    this.emit('timer-update', callback => callback(this.getStatus()))
+
     clearInterval(this.sendingInterval)
 
-    if (global.mainWindow && !global.mainWindow.isDestroyed()) { global.mainWindow.webContents.send('receive-timer-status', this.getStatus()) }
-
     this.sendingInterval = setInterval(() => {
-      if (global.mainWindow && !global.mainWindow.isDestroyed()) { global.mainWindow.webContents.send('receive-timer-status', this.getStatus()) }
+      this.emit('timer-update', callback => callback(this.getStatus()))
     }, 1000)
   }
 
@@ -189,10 +192,8 @@ module.exports = class TimerSystem extends EventEmitter {
    * Resets the timer
    */
   reset () {
-    this.totalDuration = global.store.get('preferences.notifications.interval') * 60000
-    this.savedTime = this.totalDuration
-
-    if (this.getState() === states.RUNNING) this.setup()
+    this.totalDuration = store.get('preferences.notifications.interval') * 60000
+    this.setup()
   }
 
   /**

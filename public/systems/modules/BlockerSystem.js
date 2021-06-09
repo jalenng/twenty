@@ -8,6 +8,7 @@
  */
 
 const EventEmitter = require('./EventEmitter')
+const store = require('../../store/store')
 
 /**
  * Initializes a BlockerSystem.
@@ -73,7 +74,7 @@ module.exports = class BlockerSystem extends EventEmitter {
    * @param {Object[]} openProcesses - The list of open processes to filter from
    */
   removeClosedBlockedApps (openProcesses) {
-    const blockedApps = global.store.get('preferences.blockers.apps')
+    const blockedApps = store.get('preferences.blockers.apps')
 
     const filterFunction = blocker => {
       if (blocker.type !== 'app') return true
@@ -100,8 +101,8 @@ module.exports = class BlockerSystem extends EventEmitter {
    * @param {Object[]} openProcesses
    */
   addOpenBlockedApps (openProcesses) {
-    const appNamesDict = global.store.get('appNames')
-    const blockedApps = global.store.get('preferences.blockers.apps')
+    const appNamesDict = store.get('appNames')
+    const blockedApps = store.get('preferences.blockers.apps')
 
     // Iterate through list of open processes
     openProcesses.forEach(process => {

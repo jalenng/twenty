@@ -5,56 +5,52 @@
 
 const { screen } = require('electron')
 
-const createWindow = require('../app/createWindow')
+const createWindow = require('../../app/createWindow')
+const { fullscreenOverlays, popupOverlays } = require('../../app/windowManager')
 
 /**
  * Initializes a NotificationSystem.
  * @class
  */
 class NotificationSystem {
-  constructor () {
-    this.fullscreenWindows = []
-    this.popupWindows = []
-  }
-
   /**
    * Creates the notification windows
    */
   createWindows () {
     // Get displays and create notification windows
     const displays = screen.getAllDisplays()
-    this.fullscreenWindows = displays.map(this.createFullscreenWindow.bind(this))
-    this.popupWindows = displays.map(this.createPopupWindow.bind(this))
+
+    const fullscreenWindows = displays.map(this.createFullscreenWindow.bind(this))
+    fullscreenOverlays.set(fullscreenWindows)
+
+    const popupWindows = displays.map(this.createPopupWindow.bind(this))
+    popupOverlays.set(popupWindows)
   }
 
   /**
    * Closes all the notification windows
    */
   closeWindows () {
-    this.fullscreenWindows.map(this.closeNotificationWindow)
-    this.popupWindows.map(this.closeNotificationWindow)
-    this.fullscreenWindows = []
-    this.popupWindows = []
+    fullscreenOverlays.get().forEach(this.closeNotificationWindow)
+    popupOverlays.get().forEach(this.closeNotificationWindow)
+    fullscreenOverlays.set([])
+    popupOverlays.set([])
   }
 
   /**
    * Show the fullscreen windows and hide the popup windows
    */
   maximize () {
-    this.fullscreenWindows.map(window => window.show())
-    this.popupWindows.map(window => window.hide())
+    fullscreenOverlays.get().forEach(window => window.show())
+    popupOverlays.get().forEach(window => window.hide())
   }
 
   /**
    * Hide the fullscreen window and show the popup windows
    */
   minimize () {
-    try {
-      this.fullscreenWindows.map(window => window.hide())
-      this.popupWindows.map(window => window.show())
-    } catch (error) {
-      console.log(error)
-    }
+    fullscreenOverlays.get().forEach(window => window.hide())
+    popupOverlays.get().forEach(window => window.show())
   }
 
   /**

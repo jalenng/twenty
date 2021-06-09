@@ -20,7 +20,9 @@ const path = require('path')
 const { screen } = require('electron')
 const soundPlayer = require('sound-play')
 
+const { defaultSoundsPath } = require('../../constants')
 const EventEmitter = require('./EventEmitter')
+const store = require('../../store/store')
 
 const BREAK_DURATION = 20000
 const POPUP_NOTIF_DURATION = 5000
@@ -65,7 +67,7 @@ module.exports = class BreakSystem extends EventEmitter {
 
     this.isOnBreak = true
 
-    if (global.store.get('preferences.notifications.enableSound') === true) { this.playSound() }
+    if (store.get('preferences.notifications.enableSound') === true) { this.playSound() }
 
     this.setupTimes()
 
@@ -103,6 +105,8 @@ module.exports = class BreakSystem extends EventEmitter {
       // Call break-intermediate listeners after POPUP_NOTIF_DURATION
       this.emit('break-intermediate')
     }, POPUP_NOTIF_DURATION)
+
+    this.resetSendingInterval()
   }
 
   /**
@@ -110,7 +114,7 @@ module.exports = class BreakSystem extends EventEmitter {
    */
   end () {
     if (this.isOnBreak) {
-      if (global.store.get('preferences.notifications.enableSound') === true) { this.playSound() }
+      if (store.get('preferences.notifications.enableSound') === true) { this.playSound() }
 
       clearTimeout(this.mainTimeout)
       clearTimeout(this.intermediateTimeout)
@@ -126,12 +130,25 @@ module.exports = class BreakSystem extends EventEmitter {
    * Plays the sound stored in the store under preferences.notifications.sound
    */
   playSound () {
-    const soundKey = global.store.get('preferences.notifications.sound')
-    const volume = global.store.get('preferences.notifications.soundVolume') / 100
+    const soundKey = store.get('preferences.notifications.sound')
+    const volume = store.get('preferences.notifications.soundVolume') / 100
 
     const fullFilepath = path.isAbsolute(soundKey)
       ? soundKey
-      : path.join(__dirname, soundKey)
+      : path.join(defaultSoundsPath, soundKey)
     soundPlayer.play(fullFilepath, volume)
+  }
+
+  /**
+   * Resets the interval for sending break countdown updates
+   */
+  resetSendingInterval () {
+    this.emit('break-update', callback => callback(this.getStatus()))
+
+    clearInterval(this.sendingInterval)
+
+    this.sendingInterval = setInterval(() => {
+      this.emit('break-update', callback => callback(this.getStatus()))
+    }, 1000)
   }
 }
