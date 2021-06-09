@@ -20,6 +20,7 @@ const path = require('path')
 const { screen } = require('electron')
 const soundPlayer = require('sound-play')
 
+const { defaultSoundsPath } = require('../../constants')
 const EventEmitter = require('./EventEmitter')
 const store = require('../../store/store')
 
@@ -132,7 +133,7 @@ module.exports = class BreakSystem extends EventEmitter {
 
     const fullFilepath = path.isAbsolute(soundKey)
       ? soundKey
-      : path.join(__dirname, soundKey)
+      : path.join(defaultSoundsPath, soundKey)
     soundPlayer.play(fullFilepath, volume)
   }
 }

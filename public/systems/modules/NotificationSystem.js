@@ -6,33 +6,38 @@
 const { screen } = require('electron')
 
 const createWindow = require('../../app/createWindow')
+const {
+  getFullscreenWindows,
+  getPopupWindows,
+  setFullscreenWindows,
+  setPopupWindows
+} = require('../../app/windowManager')
 
 /**
  * Initializes a NotificationSystem.
  * @class
  */
 class NotificationSystem {
-  constructor () {
-    this.fullscreenWindows = []
-    this.popupWindows = []
-  }
-
   /**
    * Creates the notification windows
    */
   createWindows () {
     // Get displays and create notification windows
     const displays = screen.getAllDisplays()
-    this.fullscreenWindows = displays.map(this.createFullscreenWindow.bind(this))
-    this.popupWindows = displays.map(this.createPopupWindow.bind(this))
+
+    const fullscreenWindows = displays.map(this.createFullscreenWindow.bind(this))
+    setFullscreenWindows(fullscreenWindows)
+
+    const popupWindows = displays.map(this.createPopupWindow.bind(this))
+    setPopupWindows(popupWindows)
   }
 
   /**
    * Closes all the notification windows
    */
   closeWindows () {
-    this.fullscreenWindows.map(this.closeNotificationWindow)
-    this.popupWindows.map(this.closeNotificationWindow)
+    getFullscreenWindows().forEach(this.closeNotificationWindow)
+    getPopupWindows().forEach(this.closeNotificationWindow)
     this.fullscreenWindows = []
     this.popupWindows = []
   }
@@ -41,20 +46,16 @@ class NotificationSystem {
    * Show the fullscreen windows and hide the popup windows
    */
   maximize () {
-    this.fullscreenWindows.map(window => window.show())
-    this.popupWindows.map(window => window.hide())
+    getFullscreenWindows().forEach(window => window.show())
+    getPopupWindows().forEach(window => window.hide())
   }
 
   /**
    * Hide the fullscreen window and show the popup windows
    */
   minimize () {
-    try {
-      this.fullscreenWindows.map(window => window.hide())
-      this.popupWindows.map(window => window.show())
-    } catch (error) {
-      console.log(error)
-    }
+    getFullscreenWindows().forEach(window => window.hide())
+    getPopupWindows().forEach(window => window.show())
   }
 
   /**

@@ -3,6 +3,8 @@
  * @author jalenng
  */
 
+const path = require('path')
+
 const { app } = require('electron')
 
 module.exports = {
@@ -11,5 +13,7 @@ module.exports = {
   isDev: require('electron-is-dev'),
 
   appName: app.getName(),
-  appFilePath: app.getPath('exe')
+  appFilePath: app.getPath('exe'),
+
+  defaultSoundsPath: path.join(__dirname, '..', 'sounds')
 }

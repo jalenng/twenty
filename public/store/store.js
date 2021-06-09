@@ -3,9 +3,13 @@
  * @author jalenng
  */
 
+const fs = require('fs')
+const path = require('path')
+
 const { nativeTheme, app } = require('electron')
 const Store = require('electron-store')
 
+const { defaultSoundsPath } = require('../constants')
 const storeSchema = require('./storeSchema')
 const { getMainWindow, sendToAllWindows } = require('../app/windowManager')
 
@@ -17,6 +21,17 @@ const store = new Store({
 })
 
 if (store.get('resetFlag')) store.clear() // Reset store if the reset flag is enabled
+
+/** Update the default sounds */
+const defaultSoundFiles = fs.readdirSync(defaultSoundsPath)
+const defaultSoundEntries = defaultSoundFiles.map((file) => {
+  const fileExtension = path.extname(file)
+  return {
+    key: file,
+    text: path.basename(file, fileExtension)
+  }
+})
+store.set('sounds.defaultSounds', defaultSoundEntries)
 
 /** Configure event handlers to handle changes to the store */
 
@@ -37,7 +52,6 @@ store.onDidChange('preferences.appearance.alwaysOnTop', (newVal, oldVal) => {
 // Notify the preferences window and main window when any preference changes
 store.onDidChange('preferences', () => {
   sendToAllWindows('store-changed', 'preferences')
-
 })
 
 // Notify the preferences and main window when there is an update to the list of sounds

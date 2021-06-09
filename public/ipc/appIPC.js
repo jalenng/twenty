@@ -132,4 +132,3 @@ ipcMain.handle('set-movable', (event, status) => {
   const senderWindow = BrowserWindow.fromWebContents(event.sender)
   senderWindow.setMovable(status)
 })
-
