@@ -25,7 +25,7 @@ const sliderSubtextOptions = {
   15: '😊 Close adherence to the 20-20-20 rule.',
   20: '😊 Perfect adherence to the 20-20-20 rule.',
   25: '😊 When 20 minutes is slightly too short.',
-  30: '😊 Two breaks an hour—nice.',
+  30: '😊 Two breaks every hour. Nice.',
   35: '⚖️ A good balance between preventing eye strain and maintaining focus.',
   40: '⚖️ A good balance between preventing eye strain and maintaining focus.',
   45: '⚖️ A good balance between preventing eye strain and maintaining focus.',
