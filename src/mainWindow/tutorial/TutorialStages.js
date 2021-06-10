@@ -28,7 +28,7 @@ module.exports = [
       headline: 'Timer',
       target: '#timer'
     },
-    contents: 'This timer keeps track of the 20-minute intervals for you. When the timer ends, you will be reminded and the timer will be restarted automatically. '
+    contents: 'This timer keeps track of the 20-minute intervals for you. When the timer ends, you will be notified and the timer will be restarted automatically. '
   },
 
   {
@@ -56,7 +56,7 @@ module.exports = [
       headline: 'Close button',
       target: '#closeBtn'
     },
-    contents: `Hides the timer window to the tray. ${appName} will run in the background. You can quit ${appName} from the system tray.`
+    contents: `Hides the timer window to the tray. ${appName} will keep running in the background until you quit it from the system tray.`
   },
 
   {

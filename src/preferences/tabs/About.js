@@ -176,7 +176,7 @@ export default class extends React.Component {
                 : { iconName: 'Sell' }
             }
             text={this.state.licenseExpanded ? 'Show less' : 'Show more'}
-            onClick={this.handleToggleResetDialogBtn}
+            onClick={this.handleToggleLicenseExpandBtn}
           />
 
         </Stack>
@@ -205,8 +205,8 @@ export default class extends React.Component {
           }}
         >
           <DialogFooter>
-            <DefaultButton onClick={this.handleResetBtn} text='Yes' />
-            <PrimaryButton onClick={this.handleToggleResetDialogBtn} text='No' />
+            <DefaultButton onClick={this.handleToggleResetDialogBtn} text='No' />
+            <PrimaryButton onClick={this.handleResetBtn} text='Yes' />
           </DialogFooter>
         </Dialog>
 

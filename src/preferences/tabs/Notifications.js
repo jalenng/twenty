@@ -20,8 +20,8 @@ import {
 import { StackProps } from '../../SharedProps'
 
 const sliderSubtextOptions = {
-  5: '👁️ Taking your eye-care game to a whole new level, hun?',
-  10: '👁️ Taking your eye-care game to a whole new level, hun?',
+  5: '👁️ Taking your eye-care game to a whole new level, huh?',
+  10: '👁️ Taking your eye-care game to a whole new level, huh?',
   15: '😊 Close adherence to the 20-20-20 rule.',
   20: '😊 Perfect adherence to the 20-20-20 rule.',
   25: '😊 When 20 minutes is slightly too short.',

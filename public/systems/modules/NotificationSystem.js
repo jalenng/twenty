@@ -6,7 +6,7 @@
 const { screen } = require('electron')
 
 const createWindow = require('../../app/createWindow')
-const { fullscreenOverlays, popupOverlays } = require('../../app/windowManager')
+const { fullscreenOverlays, popupOverlays, windowStillExists } = require('../../app/windowManager')
 
 /**
  * Initializes a NotificationSystem.
@@ -41,16 +41,24 @@ class NotificationSystem {
    * Show the fullscreen windows and hide the popup windows
    */
   maximize () {
-    fullscreenOverlays.get().forEach(window => window.show())
-    popupOverlays.get().forEach(window => window.hide())
+    fullscreenOverlays.get().forEach(window => {
+      if (windowStillExists(window)) window.show()
+    })
+    popupOverlays.get().forEach(window => {
+      if (windowStillExists(window)) window.hide()
+    })
   }
 
   /**
    * Hide the fullscreen window and show the popup windows
    */
   minimize () {
-    fullscreenOverlays.get().forEach(window => window.hide())
-    popupOverlays.get().forEach(window => window.show())
+    fullscreenOverlays.get().forEach(window => {
+      if (windowStillExists(window)) window.hide()
+    })
+    popupOverlays.get().forEach(window => {
+      if (windowStillExists(window)) window.show()
+    })
   }
 
   /**
@@ -76,8 +84,10 @@ class NotificationSystem {
    * @param {BrowserWindow} window - The window to close
    */
   closeNotificationWindow (window) {
-    window.removeAllListeners('close')
-    window.close()
+    if (windowStillExists(window)) {
+      window.removeAllListeners('close')
+      window.close()
+    }
   }
 }
 
