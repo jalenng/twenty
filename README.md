@@ -81,7 +81,7 @@ Installs the required dependencies.
 Starts the React development environment and Electron process.
 
 ### `npm run build`
-Packages Twenty for production
+Packages Twenty for production.
 
 <br/>
 
