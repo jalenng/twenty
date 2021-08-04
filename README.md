@@ -1,4 +1,4 @@
-<img src="icon.png" width="128" height="128">
+![Logo](https://i.imgur.com/J0h9nsJ.png)
   
 # Twenty
 **Customizable timer that reminds you to take eye breaks**
