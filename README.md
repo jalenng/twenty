@@ -1,5 +1,5 @@
 <!-- Icon: https://github.com/jalenng/twenty/raw/main/icon.png -->
-<img src="https://github.com/jalenng/twenty/raw/main/icon.png" width="128" height="128">
+<img src="https://github.com/jalenng/twenty/raw/main/icon.png" width="64" height="64">
   
 # Twenty
 **Customizable timer that reminds you to take eye breaks**
