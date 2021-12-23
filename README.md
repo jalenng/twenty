@@ -1,4 +1,5 @@
-![Logo](https://i.imgur.com/J0h9nsJ.png)
+<!-- Icon: https://github.com/jalenng/twenty/raw/main/icon.png -->
+<img src="https://github.com/jalenng/twenty/raw/main/icon.png" width="128" height="128">
   
 # Twenty
 **Customizable timer that reminds you to take eye breaks**
