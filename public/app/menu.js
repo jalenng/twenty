@@ -12,8 +12,6 @@
  *    * Force Reload (Ctrl+Shift+R)
  *    * Toggle Developer Tools (Ctrl+Shift+I)
  *    * Start break (Ctrl+E)
- *  - Help (F1)
- *    * About
  */
 
 const { Menu } = require('electron')
@@ -69,19 +67,7 @@ const menu = Menu.buildFromTemplate([
           }
         ]
       }]
-    : []),
-  {
-    role: 'help',
-    submenu: [
-      {
-        label: 'About',
-        click: async () => {
-          const { shell } = require('electron')
-          await shell.openExternal('https://electronjs.org')
-        }
-      }
-    ]
-  }
+    : [])
 ])
 
 module.exports = { menu }
