@@ -62,9 +62,9 @@ store.onDidChange('preferences.notifications.interval', () => {
 
 /** Export the systems */
 module.exports = {
-  timerSystem: timerSystem,
-  breakSystem: breakSystem,
-  notificationSystem: notificationSystem,
-  appSnapshotSystem: appSnapshotSystem,
-  blockerSystem: blockerSystem
+  timerSystem,
+  breakSystem,
+  notificationSystem,
+  appSnapshotSystem,
+  blockerSystem
 }

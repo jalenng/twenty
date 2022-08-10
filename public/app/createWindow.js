@@ -3,10 +3,10 @@
  * @author jalenng
  */
 
-const { BrowserWindow, screen } = require('electron')
+const { BrowserWindow } = require('electron')
 const path = require('path')
 
-const { isDev, isWindows, appName } = require('../constants')
+const { isDev, appName } = require('../constants')
 const store = require('../store/store')
 const { mainWindow } = require('./windowManager')
 
@@ -35,8 +35,8 @@ const SHARED_OPTIONS = {
 // Type-specific options
 const TYPE_OPTIONS = {
   main: {
-    width: 280,
-    height: 360,
+    width: 240,
+    height: 310,
     title: appName
   },
   preferences: {

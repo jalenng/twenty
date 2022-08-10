@@ -20,7 +20,7 @@ const sharedStackProps = {
   horizontal: true,
   verticalAlign: 'center',
   styles: { root: { height: '36px' } },
-  tokens: { childrenGap: '6px' }
+  tokens: { childrenGap: '3px' }
 }
 
 const topLeftStyle = {
@@ -49,22 +49,29 @@ export default class extends React.Component {
       isPinned: false
     }
     this.handlePin = this.handlePin.bind(this)
-    this.updatePinnedState = this.updatePinnedState.bind(this)
+    this.updateState = this.updateState.bind(this)
+  }
+
+  componentDidMount () {
+    // Update this component's state when preferences are updated
+    store.preferences.eventSystem.on('changed', () => {
+      this.updateState()
+    })
   }
 
   handleClose () {
     window.close()
   }
 
-  updatePinnedState (isPinned) {
+  updateState (isPinned) {
     this.setState({
       ...this.state,
-      isPinned: isPinned
+      isPinned: store.preferences.getAll().appearance.alwaysOnTop
     })
   }
 
   handlePin () {
-    togglePin().then(isPinned => { this.updatePinnedState(isPinned) })
+    togglePin()
   }
 
   render () {
@@ -79,7 +86,7 @@ export default class extends React.Component {
         {/* Handle decor */}
         <Stack {...sharedStackProps} style={topCenterStyle}>
           <DefaultButton
-            style={{ borderRadius: '20px', width: '16px', height: '8px', margin: '0px 8px' }}
+            style={{ borderRadius: '20px', width: '16px', height: '5px', margin: '0px 8px' }}
             disabled
           />
         </Stack>

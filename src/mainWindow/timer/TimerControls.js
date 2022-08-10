@@ -17,7 +17,7 @@ import {
 } from '@fluentui/react'
 
 const buttonStyle = { borderRadius: '20px', width: '40px', height: '40px' }
-const buttonIconClass = mergeStyles({ fontSize: 22, height: 22, width: 22 })
+const buttonIconClass = mergeStyles({ fontSize: 20, height: 20, width: 20 })
 
 export default class extends React.Component {
   constructor (props) {

@@ -6,7 +6,7 @@
 /* eslint-disable no-undef */
 
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import ReactDOM from 'react-dom'
 import './css/index.css'
 
 import { UnselectableTextStyle } from './SharedStyles'
@@ -66,8 +66,7 @@ function PopupNotificationWindow (props) {
 }
 
 /* Render the application */
-const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(
+ReactDOM.render(
   <div style={{ ...UnselectableTextStyle, width: '100%', height: '100%' }}>
     <React.StrictMode>
       <HashRouter>
@@ -81,5 +80,6 @@ root.render(
         </Routes>
       </HashRouter>
     </React.StrictMode>
-  </div>
+  </div>,
+  document.getElementById('root')
 )

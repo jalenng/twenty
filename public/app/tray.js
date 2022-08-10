@@ -59,5 +59,5 @@ function createTray () {
 
 /** Export tray reference and function to create tray */
 module.exports = {
-  createTray: createTray
+  createTray
 }

@@ -2,7 +2,7 @@
   "name": "twenty",
   "productName": "Twenty",
   "description": "Customizable timer that reminds you to take eye breaks",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "repository": "https://github.com/jalenng/twenty",
   "url": "https://github.com/jalenng/twenty#readme",
   "author": {
@@ -40,16 +40,15 @@
     }
   },
   "dependencies": {
-    "@fluentui/react": "^8.8.0",
+    "@fluentui/react": "^8.87.1",
     "electron-is-dev": "^2.0.0",
     "electron-store": "^8.1.0",
     "electron-window-state": "^5.0.3",
     "hazardous": "^0.3.0",
     "node-powershell": "^4.0.0",
-    "npm": "^8.15.1",
-    "react": "^18.2.0",
+    "react": "^17.0.2",
     "react-circle": "^1.1.1",
-    "react-dom": "^18.2.0",
+    "react-dom": "^17.0.2",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "sound-play": "^1.1.0"
