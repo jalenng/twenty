@@ -18,7 +18,7 @@ const { Menu } = require('electron')
 
 const { timerSystem } = require('../systems/systems')
 const createWindow = require('./createWindow')
-const { prefsWindow } = require('./windowManager')
+const { prefsWindow, windowStillExists } = require('./windowManager')
 
 const { isDev } = require('../constants')
 
@@ -30,11 +30,11 @@ const menu = Menu.buildFromTemplate([
         label: 'Preferences',
         accelerator: 'CmdOrCtrl+,',
         click: () => {
-          if (!prefsWindow.get() || prefsWindow.get().isDestroyed()) {
-            prefsWindow.set(createWindow('preferences', 'preferences'))
-          } else {
+          if (windowStillExists(prefsWindow.get())) {
             prefsWindow.get().restore()
             prefsWindow.get().focus()
+          } else {
+            prefsWindow.set(createWindow('preferences', 'preferences'))
           }
         }
       },

@@ -72,10 +72,10 @@ export default class extends React.Component {
 
             <img
               src={logo}
-              style={{ objectFit: 'contain', width: 36, height: 36 }}
+              style={{ objectFit: 'contain', width: 32, height: 32 }}
             />
 
-            <Text variant='xxLarge' style={{ fontSize: '32px' }} block>
+            <Text variant='xxLarge' block>
               {`${appInfo.name} ${appInfo.version}`}
             </Text>
 

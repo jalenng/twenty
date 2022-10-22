@@ -16,6 +16,8 @@ import {
   getTheme
 } from '@fluentui/react'
 
+import { DraggableStyle } from '../SharedStyles'
+
 const sharedStackProps = {
   horizontal: true,
   verticalAlign: 'center',
@@ -81,7 +83,8 @@ export default class extends React.Component {
 
     return (
 
-      <div style={{ display: 'inline-block', height: '42px', WebkitAppRegion: 'drag' }}>
+      // Make the title bar draggable
+      <div style={{ display: 'inline-block', height: '42px', ...DraggableStyle }}>
 
         {/* Handle decor */}
         <Stack {...sharedStackProps} style={topCenterStyle}>

@@ -7,7 +7,7 @@ const { BrowserWindow, ipcMain, app, nativeTheme } = require('electron')
 
 const { isDev } = require('../constants')
 const createWindow = require('../app/createWindow')
-const { prefsWindow } = require('../app/windowManager')
+const { prefsWindow, windowStillExists } = require('../app/windowManager')
 
 /* ------------------------------------------------------------------------- */
 /* Main */
@@ -24,11 +24,10 @@ ipcMain.handle('log-to-main', (event, content) => {
 
 // Open preferences
 ipcMain.handle('open-preferences', () => {
-  if (!prefsWindow.get() || prefsWindow.get().isDestroyed()) {
-    prefsWindow.set(createWindow('preferences', 'preferences'))
+  if (windowStillExists(prefsWindow.get())) {
+    prefsWindow.get().show()
   } else {
-    prefsWindow.get().restore()
-    prefsWindow.get().focus()
+    prefsWindow.set(createWindow('preferences', 'preferences'))
   }
 })
 

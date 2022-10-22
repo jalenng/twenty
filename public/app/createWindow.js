@@ -83,7 +83,7 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
   window.loadURL(
     isDev
       ? `http://localhost:3000#/${destination}`
-      : `file://${path.join(__dirname, `../../build/index.html#${destination}`)}`
+      : `file://${__dirname}/../../build/index.html#/${destination}` // eslint-disable-line n/no-path-concat
   )
 
   let mainWindowState

@@ -5,7 +5,8 @@
 
 const { app } = require('electron')
 
-const { mainWindow } = require('./app/windowManager')
+const createWindow = require('./app/createWindow')
+const { mainWindow, windowStillExists } = require('./app/windowManager')
 
 // Try to acquire the single instance lock
 const gotLock = app.requestSingleInstanceLock()
@@ -15,7 +16,9 @@ if (!gotLock) { // Quit the app if another app has the lock
 
 // Show first instance if a second instance is requested
 app.on('second-instance', () => {
-  if (mainWindow.get() && !mainWindow.get().isDestroyed()) {
+  if (windowStillExists(mainWindow.get())) {
     mainWindow.get().show()
+  } else {
+    mainWindow.set(createWindow('main'))
   }
 })

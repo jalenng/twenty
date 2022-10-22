@@ -5,7 +5,7 @@
 
 const { BrowserWindow, Menu, app } = require('electron')
 
-const { appPath, isMacOS, isDev } = require('../constants')
+const { appPath, isDev } = require('../constants')
 const { mainWindow } = require('./windowManager')
 const createWindow = require('./createWindow')
 const store = require('../store/store')
@@ -40,13 +40,8 @@ app.whenReady().then(() => {
   Menu.setApplicationMenu(menu) // Create menu
 })
 
-// macOS: Dock should still show that the app is open even if all windows are closed.
-// That means if not on macOS, exit the app if all windows are closed.
-app.on('window-all-closed', function () {
-  if (!isMacOS) {
-    app.exit()
-  }
-})
+// Prevent app from quitting
+app.on('will-quit', (event) => { event.preventDefault() })
 
 // Prevent loading of new websites
 app.on('web-contents-created', (event, contents) => {
