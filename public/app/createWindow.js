@@ -3,10 +3,10 @@
  * @author jalenng
  */
 
-const { BrowserWindow, screen } = require('electron')
+const { BrowserWindow } = require('electron')
 const path = require('path')
 
-const { isDev, isWindows, appName } = require('../constants')
+const { isDev, appName } = require('../constants')
 const store = require('../store/store')
 const { mainWindow } = require('./windowManager')
 
@@ -35,8 +35,8 @@ const SHARED_OPTIONS = {
 // Type-specific options
 const TYPE_OPTIONS = {
   main: {
-    width: 280,
-    height: 360,
+    width: 240,
+    height: 310,
     title: appName
   },
   preferences: {
@@ -83,7 +83,7 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
   window.loadURL(
     isDev
       ? `http://localhost:3000#/${destination}`
-      : `file://${path.join(__dirname, `../../build/index.html#${destination}`)}`
+      : `file://${__dirname}/../../build/index.html#/${destination}` // eslint-disable-line n/no-path-concat
   )
 
   let mainWindowState
@@ -145,15 +145,12 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
     const bounds = isPopup ? display.workArea : display.bounds
 
     // Calculate the top-left position based on type of notification
-    let position = isPopup
+    const position = isPopup
       ? {
           x: bounds.x + bounds.width - POPUP_OPTIONS.size.width - POPUP_OPTIONS.gapFromEdge,
           y: bounds.y + bounds.height - POPUP_OPTIONS.size.height - POPUP_OPTIONS.gapFromEdge
         }
       : { x: bounds.x, y: bounds.y }
-
-    // Windows: Account for DPI differences and convert position
-    if (isWindows) { position = screen.dipToScreenPoint(position) }
 
     // Decide window size to use
     const size = isPopup

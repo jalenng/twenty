@@ -9,7 +9,8 @@ const { app, nativeTheme, nativeImage, Menu, Tray } = require('electron')
 
 const { appName, isMacOS } = require('../constants')
 const { timerSystem } = require('../systems/systems')
-const { mainWindow } = require('./windowManager')
+const createWindow = require('./createWindow')
+const { mainWindow, windowStillExists } = require('./windowManager')
 
 const contextMenu = Menu.buildFromTemplate([
   { label: appName, enabled: false },
@@ -47,8 +48,11 @@ function createTray () {
   tray.setToolTip(appName)
   tray.setContextMenu(contextMenu)
   tray.on('click', () => {
-    mainWindow.get().show()
-    mainWindow.get().focus()
+    if (windowStillExists(mainWindow.get())) {
+      mainWindow.get().show()
+    } else {
+      mainWindow.set(createWindow('main'))
+    }
   })
 
   // Update system tray icon on an interval
@@ -59,5 +63,5 @@ function createTray () {
 
 /** Export tray reference and function to create tray */
 module.exports = {
-  createTray: createTray
+  createTray
 }

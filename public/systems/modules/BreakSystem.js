@@ -53,7 +53,7 @@ module.exports = class BreakSystem extends EventEmitter {
       isOnBreak: this.isOnBreak,
       endTime: this.endTime,
       duration: this.totalDuration,
-      remainingTime: remainingTime
+      remainingTime
     }
 
     return breakStatus

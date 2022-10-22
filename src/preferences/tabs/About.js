@@ -9,7 +9,6 @@ import React from 'react'
 
 import {
   DefaultButton, PrimaryButton, ActionButton,
-  Image, ImageFit,
   Stack,
   Dialog, DialogFooter, DialogType,
   Text
@@ -66,26 +65,27 @@ export default class extends React.Component {
     return (
       <Stack {...StackProps.level1} id='about'>
 
-        {/* Version info */}
+        {/* App banner */}
         <Stack {...StackProps.level2}>
 
-          {/* App banner */}
           <Stack {...StackProps.level2Horizontal}>
 
-            <Image
-              imageFit={ImageFit.centerContain}
+            <img
               src={logo}
-              width={96}
-              height={96}
+              style={{ objectFit: 'contain', width: 32, height: 32 }}
             />
 
-            <Text variant='xxLarge' style={{ fontSize: '3.5rem' }} block>
+            <Text variant='xxLarge' block>
               {`${appInfo.name} ${appInfo.version}`}
             </Text>
 
           </Stack>
 
-          {/* Chips for Electron, Chrome, Node, and v8 engine */}
+        </Stack>
+
+        {/* Chips for Electron, Chrome, Node, and v8 engine versions */}
+        <Stack {...StackProps.level2Horizontal}>
+
           <Stack {...StackProps.level2Horizontal}>
 
             {versionComponents.map((component) => {

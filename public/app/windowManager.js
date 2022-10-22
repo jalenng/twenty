@@ -63,7 +63,7 @@ module.exports = {
     set: (windows) => { popupOverlays = windows }
   },
 
-  windowStillExists: windowStillExists,
-  sendToAllWindows: sendToAllWindows
+  windowStillExists,
+  sendToAllWindows
 
 }

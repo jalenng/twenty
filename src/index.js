@@ -21,7 +21,7 @@ import PopupNotification from './notifications/PopupNotification'
 import MainWindowContent from './mainWindow/MainWindowContent'
 import PreferencesContent from './preferences/PreferencesContent'
 
-import { HashRouter, Route, Switch } from 'react-router-dom'
+import { HashRouter, Route, Routes } from 'react-router-dom'
 import { initializeIcons } from '@fluentui/react'
 
 initializeIcons()
@@ -70,14 +70,14 @@ ReactDOM.render(
   <div style={{ ...UnselectableTextStyle, width: '100%', height: '100%' }}>
     <React.StrictMode>
       <HashRouter>
-        <Switch>
-          <Route path='/' exact component={MainWindow} />
+        <Routes>
+          <Route path='/' exact element={<MainWindow />} />
 
-          <Route path='/fullscreenNotification' exact component={FullscreenNotificationWindow} />
-          <Route path='/popupNotification' exact component={PopupNotificationWindow} />
+          <Route path='/fullscreenNotification' exact element={<FullscreenNotificationWindow />} />
+          <Route path='/popupNotification' exact element={<PopupNotificationWindow />} />
 
-          <Route path='/preferences' exact component={PreferencesWindow} />
-        </Switch>
+          <Route path='/preferences' exact element={<PreferencesWindow />} />
+        </Routes>
       </HashRouter>
     </React.StrictMode>
   </div>,

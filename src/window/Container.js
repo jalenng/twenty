@@ -50,8 +50,8 @@ export default class extends React.Component {
           id='container'
           style={{
             background: this.props.useSecondaryBackgroundColor ? theme.secondaryBackground : theme.background,
-            width: width,
-            height: height,
+            width,
+            height,
             border: noBorder ? '0px' : `1px solid ${theme.palette.neutralLight}`,
             borderRadius: noBorder ? '0px' : '8px',
             boxSizing: 'border-box',

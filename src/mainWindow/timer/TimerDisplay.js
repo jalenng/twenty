@@ -19,8 +19,8 @@ import Chip from './Chip'
 const circleProps = {
   animate: true,
   animationDuration: '1s',
-  size: 240,
-  lineWidth: 20,
+  size: 200,
+  lineWidth: 10,
   roundedStroke: true,
   showPercentage: false
 }
@@ -75,7 +75,7 @@ export default class extends React.Component {
           <Stack vertical horizontalAlign='center'>
 
             {/* Remaining time */}
-            <Text variant='xxLarge' style={{ fontSize: '3.5rem' }} block>
+            <Text variant='xLarge' style={{ fontSize: '3rem' }} block>
               <div id='remainingTimeText'>
                 {timerString}
               </div>

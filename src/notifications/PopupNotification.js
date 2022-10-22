@@ -42,7 +42,7 @@ export default class extends React.Component {
     const remainingTimeString = seconds === 1 ? `${seconds} more second` : `${seconds} more seconds`
 
     this.setState({
-      remainingTimeString: remainingTimeString
+      remainingTimeString
     })
   }
 
