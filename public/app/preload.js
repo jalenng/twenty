@@ -108,6 +108,10 @@ window.breakSys = {
   eventSystem: new EventSystem()
 }
 
+window.cancelBreak = () => ipcRenderer.invoke('cancel-break')
+window.delayBreak = (minutes) => ipcRenderer.invoke('delay-break', minutes)
+window.triggerBreak = () => ipcRenderer.invoke('trigger-break')
+
 window.blockerSys = {
   getBlockers: () => { ipcRenderer.send('get-blockers') },
   clear: () => { ipcRenderer.invoke('clear-blockers') },

@@ -8,7 +8,7 @@
  *
  * The break system is also an event emitter that emits the following events:
  *  - break-start: when the break begins
- *  - break-times-set: when the break countdown resets (due to the user moving their mouse)
+ *  - break-times-set: when the break countdown resets (due to user input - mouse or keyboard)
  *  - break-intermediate: when the break reaches an intermediate mark (5 seconds)
  *  - break-end: when the break countdown reaches to zero
  */
@@ -17,7 +17,7 @@ require('hazardous') // Needs to be imported before importing 'path'
 
 const path = require('path')
 
-const { screen } = require('electron')
+const { powerMonitor, screen } = require('electron')
 const soundPlayer = require('sound-play')
 
 const { defaultSoundsPath } = require('../../constants')
@@ -38,16 +38,14 @@ module.exports = class BreakSystem extends EventEmitter {
     this.isOnBreak = false
     this.totalDuration = 0
     this.endTime = new Date()
-  };
+  }
 
   /**
    * Gets the status of the break system
    * @returns an object
    */
   getStatus () {
-    const remainingTime = this.isOnBreak
-      ? this.endTime - new Date()
-      : this.totalDuration
+    const remainingTime = this.isOnBreak ? this.endTime - new Date() : this.totalDuration
 
     const breakStatus = {
       isOnBreak: this.isOnBreak,
@@ -57,7 +55,7 @@ module.exports = class BreakSystem extends EventEmitter {
     }
 
     return breakStatus
-  };
+  }
 
   /**
    * Starts the break. Calls this.setupTimes in the process.
@@ -67,23 +65,34 @@ module.exports = class BreakSystem extends EventEmitter {
 
     this.isOnBreak = true
 
-    if (store.get('preferences.notifications.enableSound') === true) { this.playSound() }
+    if (store.get('preferences.notifications.enableSound') === true) {
+      this.playSound()
+    }
+
+    // Emit break-start first so notification windows are created before setupTimes() is called
+    this.emit('break-start')
 
     this.setupTimes()
 
-    // Set interval to continuously check mouse position
+    // Set interval to continuously check for user input (mouse or keyboard)
+    // Using getSystemIdleTime() which resets to 0 on any user activity system-wide
     this.oldMousePos = screen.getCursorScreenPoint()
-    this.checkMousePositionInterval = setInterval(() => {
+    this.lastInputResetAt = 0
+    this.checkUserInputInterval = setInterval(() => {
       const newMousePos = screen.getCursorScreenPoint()
       const mouseMoved = newMousePos.x !== this.oldMousePos.x || newMousePos.y !== this.oldMousePos.y
+      const currentIdleSeconds = powerMonitor.getSystemIdleTime()
+      const isActive = currentIdleSeconds === 0
+      const now = Date.now()
 
-      if (mouseMoved) {
+      // Reset on any activity; throttle to avoid excessive resets while active
+      if ((mouseMoved || isActive) && now - this.lastInputResetAt >= 250) {
         this.setupTimes()
-        this.oldMousePos = newMousePos
+        this.lastInputResetAt = now
       }
-    }, 100)
 
-    this.emit('break-start')
+      this.oldMousePos = newMousePos
+    }, 250)
   }
 
   /**
@@ -114,11 +123,13 @@ module.exports = class BreakSystem extends EventEmitter {
    */
   end () {
     if (this.isOnBreak) {
-      if (store.get('preferences.notifications.enableSound') === true) { this.playSound() }
+      if (store.get('preferences.notifications.enableSound') === true) {
+        this.playSound()
+      }
 
       clearTimeout(this.mainTimeout)
       clearTimeout(this.intermediateTimeout)
-      clearInterval(this.checkMousePositionInterval)
+      clearInterval(this.checkUserInputInterval)
 
       this.emit('break-end')
 
@@ -133,9 +144,7 @@ module.exports = class BreakSystem extends EventEmitter {
     const soundKey = store.get('preferences.notifications.sound')
     const volume = store.get('preferences.notifications.soundVolume') / 100
 
-    const fullFilepath = path.isAbsolute(soundKey)
-      ? soundKey
-      : path.join(defaultSoundsPath, soundKey)
+    const fullFilepath = path.isAbsolute(soundKey) ? soundKey : path.join(defaultSoundsPath, soundKey)
     soundPlayer.play(fullFilepath, volume)
   }
 
@@ -143,12 +152,12 @@ module.exports = class BreakSystem extends EventEmitter {
    * Resets the interval for sending break countdown updates
    */
   resetSendingInterval () {
-    this.emit('break-update', callback => callback(this.getStatus()))
+    this.emit('break-update', (callback) => callback(this.getStatus()))
 
     clearInterval(this.sendingInterval)
 
     this.sendingInterval = setInterval(() => {
-      this.emit('break-update', callback => callback(this.getStatus()))
+      this.emit('break-update', (callback) => callback(this.getStatus()))
     }, 1000)
   }
 }

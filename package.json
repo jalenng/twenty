@@ -2,7 +2,7 @@
   "name": "twenty",
   "productName": "Twenty",
   "description": "Customizable timer that reminds you to take eye breaks",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "repository": "https://github.com/jalenng/twenty",
   "url": "https://github.com/jalenng/twenty#readme",
   "author": {
@@ -55,6 +55,8 @@
     "win32-api": "^19.8.1"
   },
   "devDependencies": {
+    "prettier": "^3.0.0",
+    "prettier-plugin-space-before-function-paren": "^0.0.10",
     "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
     "electron": "^20.0.0",

@@ -65,6 +65,14 @@ export default class extends React.Component {
               store.preferences.set('startup.hideOnAppStartup', checked)
             }}
           />
+          <Toggle
+            label={`Automatically restart the timer at 6 AM when ${appName} was stopped`}
+            onText='On' offText='Off'
+            checked={this.state.autoRestartTimer}
+            onChange={(event, checked) => {
+              store.preferences.set('startup.autoRestartTimer', checked)
+            }}
+          />
         </Stack>
 
       </Stack>

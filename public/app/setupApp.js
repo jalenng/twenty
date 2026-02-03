@@ -9,6 +9,7 @@ const { appPath, isDev } = require('../constants')
 const { mainWindow } = require('./windowManager')
 const createWindow = require('./createWindow')
 const store = require('../store/store')
+const waitForDevServer = require('./waitForDevServer')
 
 const { createTray } = require('./tray')
 const { menu } = require('./menu')
@@ -25,7 +26,12 @@ if (!isDev) {
 }
 
 /** Configure app event handlers */
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  if (isDev) {
+    // Wait for the dev server to be ready
+    await waitForDevServer()
+  }
+  
   mainWindow.set(createWindow('main')) // Create main window
 
   // macOS: Recreate a window if none are open but the dock icon is activated

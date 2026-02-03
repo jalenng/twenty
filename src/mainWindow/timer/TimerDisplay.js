@@ -60,6 +60,7 @@ export default class extends React.Component {
         justifyContent: 'center',
         alignItems: 'center'
       }}
+      onDoubleClick={() => window.triggerBreak()}
       >
 
         {/* Circular progress bar */}

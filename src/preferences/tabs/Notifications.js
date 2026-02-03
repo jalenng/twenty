@@ -117,6 +117,21 @@ export default class extends React.Component {
         </Stack>
 
         <Stack {...StackProps.level2}>
+          <Text variant='xLarge' block> Snooze </Text>
+
+          <Slider
+            id='snoozeSlider'
+            label='Snooze duration'
+            min={10} max={300} step={10}
+            showValue snapToStep
+            valueFormat={(number) => `${number} seconds`}
+            styles={{ root: { maxWidth: 300 } }}
+            value={this.state.notifications.snoozeSeconds}
+            onChange={number => store.preferences.set('notifications.snoozeSeconds', number)}
+          />
+        </Stack>
+
+        <Stack {...StackProps.level2}>
           <Text variant='xLarge' block> Sound </Text>
 
           <Toggle

@@ -24,7 +24,7 @@ import PreferencesContent from './preferences/PreferencesContent'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { initializeIcons } from '@fluentui/react'
 
-initializeIcons()
+initializeIcons('./assets/fonts/')
 
 /* Function components for the windows */
 function MainWindow (props) {

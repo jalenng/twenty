@@ -45,7 +45,7 @@ export default class extends React.Component {
             onClick={this.handleToggleBtn}
             style={buttonStyle}
             onRenderText={() => {
-              return <FontIcon iconName={primaryButtonIconName} className={buttonIconClass} />
+              return <FontIcon key={primaryButtonIconName} iconName={primaryButtonIconName} className={buttonIconClass} />
             }}
           />
         </TooltipHost>
@@ -58,7 +58,7 @@ export default class extends React.Component {
             style={buttonStyle}
             onClick={openPrefs}
             onRenderText={() => {
-              return <FontIcon iconName='Settings' className={buttonIconClass} />
+              return <FontIcon key="Settings" iconName='Settings' className={buttonIconClass} />
             }}
           />
         </TooltipHost>
