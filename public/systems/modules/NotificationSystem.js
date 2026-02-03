@@ -41,10 +41,10 @@ class NotificationSystem {
    * Show the fullscreen windows and hide the popup windows
    */
   maximize () {
-    fullscreenOverlays.get().forEach(window => {
-      if (windowStillExists(window)) window.show()
+    fullscreenOverlays.get().forEach((window) => {
+      if (windowStillExists(window)) window.showInactive()
     })
-    popupOverlays.get().forEach(window => {
+    popupOverlays.get().forEach((window) => {
       if (windowStillExists(window)) window.hide()
     })
   }
@@ -53,10 +53,10 @@ class NotificationSystem {
    * Hide the fullscreen window and show the popup windows
    */
   minimize () {
-    fullscreenOverlays.get().forEach(window => {
+    fullscreenOverlays.get().forEach((window) => {
       if (windowStillExists(window)) window.hide()
     })
-    popupOverlays.get().forEach(window => {
+    popupOverlays.get().forEach((window) => {
       if (windowStillExists(window)) window.showInactive()
     })
   }

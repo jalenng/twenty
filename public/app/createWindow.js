@@ -81,16 +81,13 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
 
   // Load URL
   window.loadURL(
-    isDev
-      ? `http://localhost:3000#/${destination}`
-      : `file://${__dirname}/../../build/index.html#/${destination}` // eslint-disable-line n/no-path-concat
+    isDev ? `http://localhost:3000#/${destination}` : `file://${__dirname}/../../build/index.html#/${destination}` // eslint-disable-line n/no-path-concat
   )
 
   let mainWindowState
 
   switch (type) {
     case 'main':
-
       // Update and remember the position of the main window
       mainWindowState = windowStateKeeper({})
 
@@ -127,7 +124,7 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
       // If notification is a popup window, show when ready and set always-on-top level
       if (isPopup) {
         window.setAlwaysOnTop(true, 'screen-saver')
-        window.on('ready-to-show', () => window.show())
+        window.on('ready-to-show', () => window.showInactive())
       }
 
       break
@@ -171,7 +168,9 @@ function createWindow (type, destination = '', display = null, isPopup = false) 
   window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
 
   // Prevent opening new windows
-  window.webContents.setWindowOpenHandler('new-window', () => { return ({ action: 'deny' }) })
+  window.webContents.setWindowOpenHandler('new-window', () => {
+    return { action: 'deny' }
+  })
 
   return window
 }
