@@ -55,6 +55,8 @@
     "win32-api": "^19.8.1"
   },
   "devDependencies": {
+    "prettier": "^3.0.0",
+    "prettier-plugin-space-before-function-paren": "^0.0.10",
     "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
     "electron": "^20.0.0",
